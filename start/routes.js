@@ -17,7 +17,7 @@
 const Route = use('Route')
 
 Route.get('/', ({ view }) => {
-    return view.render('index')
+    return view.render('main.index')
 })
 /*
 Route.get('/:v', async ({ params, view }) => {
@@ -28,12 +28,12 @@ Route.get('/:v', async ({ params, view }) => {
 })
 */
 Route.get('/index.html', ({ view }) => {
-    return view.render('index')
+    return view.render('main.index')
 })
 Route.get('/Imaqjournals.html', ({ view }) => {
-    return view.render('imaqjournals')
+    return view.render('pages.imaqjournals')
 })
 Route.get('/iMaQBlog.html', ({ view }) => {
-    return view.render('iMaQBlog')
+    return view.render('pages.iMaQBlog')
 })
 // Route.on('/').render('welcome')
