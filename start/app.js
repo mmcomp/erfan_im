@@ -58,4 +58,12 @@ const aliases = {}
 */
 const commands = []
 
-module.exports = { providers, aceProviders, aliases, commands }
+const globalMiddleware = [
+  'Adonis/Middleware/AuthInit'
+]
+
+const namedMiddleware = {
+  auth: 'Adonis/Middleware/Auth'
+}
+
+module.exports = { providers, aceProviders, aliases, commands, globalMiddleware, namedMiddleware }
