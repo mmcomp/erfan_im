@@ -1,9 +1,8 @@
 'use strict'
 
-const Hash = use('Hash')
-
 class UserController {
-    async logout ({ auth, view, response }) {
+    async logout ({ auth, view, response, session }) {
+        session.clear()
         try{
             await auth.logout()
         }catch(e) {
@@ -13,7 +12,7 @@ class UserController {
         return response.redirect('/')
     }
 
-    async login ({ request, auth, view, response }) {
+    async login ({ request, auth, view, response, session }) {
         const { email, password } = request.all()
         let msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
         try{
@@ -24,10 +23,15 @@ class UserController {
             logedIn = false
         }
         if(!logedIn) {
+            session.clear()
+
             try{
                 await auth.remember(rememberme).attempt(email, password)
                 msg = 'Logged in successfully'
                 logedIn = true;
+                let user = await auth.getUser()
+                session.put('user', user.id)
+
             }catch(e) {
                 // console.log('Login Error')
                 // console.log(e)
@@ -35,7 +39,7 @@ class UserController {
         }else {
             msg = 'Already Loged In'
         }
-        // return msg;
+        session.put('msg', msg)
         return response.route('home', {message: msg, isLogged: logedIn})
     }
 

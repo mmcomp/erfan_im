@@ -16,16 +16,20 @@
 /** @type {import('@adonisjs/framework/src/Route/Manager'} */
 const Route = use('Route')
 
+/*
 Route
   .get('users/:id', 'UserController.show')
   .middleware('auth')
+*/
+
+Route.get('journals', 'JournalController.index')
 
 Route.post('login', 'UserController.login')
 
 Route.get('logout', 'UserController.logout')
 
 
-Route.get('/', async ({ view, auth, request }) => {
+Route.get('/', async ({ view, auth, request, session }) => {
     let loggedIn = true
     try{
         await auth.check()
@@ -33,9 +37,11 @@ Route.get('/', async ({ view, auth, request }) => {
         loggedIn = false
     }
 
-    // console.log(request.all())
+    console.log(session.all())
+    let msg = session.get('msg')
+    session.forget('msg')
 
-    return view.render('main.index', { isLogged: loggedIn})
+    return view.render('main.index', { isLogged: loggedIn, msg: msg})
 }).as('home')
 /*
 Route.get('/:v', async ({ params, view }) => {
@@ -45,6 +51,7 @@ Route.get('/:v', async ({ params, view }) => {
     return view.render('index')
 })
 */
+/*
 Route.get('/index.html', async ({ view, auth }) => {
     let loggedIn = true
     try{
@@ -61,6 +68,7 @@ Route.get('/Imaqjournals.html', ({ view }) => {
 Route.get('/iMaQBlog.html', ({ view }) => {
     return view.render('pages.iMaQBlog')
 })
+*/
 // Route.on('/').render('welcome')
 Route.any('*', async ({ view, auth }) => {
     let loggedIn = true
@@ -70,5 +78,9 @@ Route.any('*', async ({ view, auth }) => {
         loggedIn = false
     }
 
-    return view.render('main.index', { isLogged: loggedIn})
+    console.log(session.all())
+    let msg = session.get('msg')
+    session.forget('msg')
+
+    return view.render('main.index', { isLogged: loggedIn, msg: msg})
 })

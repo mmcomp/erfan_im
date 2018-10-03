@@ -1,0 +1,141 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken})
+<!-- BEGIN: PAGE CONTAINER -->
+<div class="c-layout-page">
+	<!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+	<div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold">
+		<div class="container">
+			<div class="c-page-title c-pull-left">
+				<h3 class="c-font-uppercase c-font-bold">iMaQ Journals</h3>
+			</div>
+			<ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+				<li>
+					<a href="page-extended-portfolio.html">iMaQPress</a>
+				</li>
+				<li>
+					/
+				</li>
+				<li>
+					<a href="#">Journals</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+	<!-- BEGIN: PAGE CONTENT -->
+		<!-- Begin: Content box -->
+		<div class="c-content-box c-size-md">
+			<div class="container">
+				<!-- Begin: Cubeportfolio grid -->
+				<div class="cbp-panel">
+					<div id="filters-container" class="cbp-l-filters-buttonCenter">
+						<div data-filter="*" class="cbp-filter-item-active cbp-filter-item">
+								All Journals
+							<div class="cbp-filter-counter">
+							</div>
+						</div>
+						<div data-filter=".biomedicals" class="cbp-filter-item">
+								Bio-Medicals
+							<div class="cbp-filter-counter">
+							</div>
+						</div>
+						<div data-filter=".engineering" class="cbp-filter-item">
+								Engineering
+							<div class="cbp-filter-counter">
+							</div>
+						</div>
+						<div data-filter=".multidisciplinary" class="cbp-filter-item">
+								Multidiciplinary / Others
+							<div class="cbp-filter-counter">
+							</div>
+						</div>
+					</div>
+					<div id="grid-container" class="cbp cbp-l-grid-masonry-projects">
+						<div class="cbp-item biomedicals">
+							<div class="cbp-caption">
+								<div class="cbp-caption-defaultWrap">
+									<img src="static/img/GnC-cover.jpg" alt="">
+								</div>
+								<div class="cbp-caption-activeWrap">
+									<div class="c-masonry-border">
+									</div>
+									<div class="cbp-l-caption-alignCenter">
+										<div class="cbp-l-caption-body">
+											<a href="http://genesandcells.com/journal" class="cbp-singlePage cbp-l-caption-buttonLeft btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase">Journal Homepage</a>
+											<a href="static/img/GnC-cover.jpg" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="Dashboard<br>by Paul Flavius Nechita">Journal Cover</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<a href="ajax/projects/project1.html" class="cbp-singlePage cbp-l-grid-masonry-projects-title">Journal of Genes and Cells</a>
+							<div class="cbp-l-grid-masonry-projects-desc">
+								ISSN: 0000-0000
+							</div>
+						</div>
+						<div class="cbp-item multidisciplinary">
+							<div class="cbp-caption">
+								<div class="cbp-caption-defaultWrap">
+									<img src="static/img/tcp-cover.jpg" alt="">
+								</div>
+								<div class="cbp-caption-activeWrap">
+									<div class="c-masonry-border">
+									</div>
+									<div class="cbp-l-caption-alignCenter">
+										<div class="cbp-l-caption-body">
+											<a href="http://thecancerpress.com" class="cbp-singlePage cbp-l-caption-buttonLeft btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase">Journal Homepage</a>
+											<a href="static/img/tcp-cover.jpg" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="World clock widget<br>by Paul Flavius Nechita">Journal Cover</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<a href="ajax/projects/project2.html" class="cbp-singlePage cbp-l-grid-masonry-projects-title">The Cancer Press</a>
+							<div class="cbp-l-grid-masonry-projects-desc">
+								ISSN: 0000-0000
+							</div>
+						</div>
+						<div class="cbp-item multidisciplinary">
+							<div class="cbp-caption">
+								<div class="cbp-caption-defaultWrap">
+									<img src="static/img/eBiology-cover.jpg" alt="">
+								</div>
+								<div class="cbp-caption-activeWrap">
+									<div class="c-masonry-border">
+									</div>
+									<div class="cbp-l-caption-alignCenter">
+										<div class="cbp-l-caption-body">
+											<a href="http://e-biology.com" class="cbp-singlePage cbp-l-caption-buttonLeft btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase">Journal Homepage</a>
+											<a href="static/img/eBiology-cover.jpg" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="To-Do dashboard<br>by Tiberiu Neamu">Journal Cover</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<a href="ajax/projects/project3.html" class="cbp-singlePage cbp-l-grid-masonry-projects-title">e-Biology: A LifeSciences Journal</a>
+							<div class="cbp-l-grid-masonry-projects-desc">
+								ISSN: 0000-0000
+							</div>
+						</div>
+
+					</div>
+					<div id="loadMore-container" class="cbp-l-loadMore-button c-margin-t-60">
+						<a href="#" class="cbp-l-loadMore-link btn c-btn-square c-btn-border-2x c-btn-dark c-btn-bold c-btn-uppercase">
+						<span class="cbp-l-loadMore-defaultText">SEE ALL JOURNALS</span>
+						<span class="cbp-l-loadMore-loadingText">LOADING...</span>
+						<span class="cbp-l-loadMore-noMoreLoading">NO MORE JOURNALS</span>
+						</a>
+					</div>
+				</div>
+				<!-- End-->
+			</div>
+		</div>
+		<!-- End-->
+	<!-- END: PAGE CONTENT -->
+</div>
+<!-- END: PAGE CONTAINER -->
+
+
+@!component('components.foot')
+
+@!component('components.journals_scripts')
+
+</body>
+</html>
+
