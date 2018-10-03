@@ -1,4 +1,4 @@
-@!component('components.head')
+@!component('components.head', { isLogged: isLogged})
     <!-- BEGIN: CONTENT/USER/FORGET-PASSWORD-FORM -->
     <div class="modal fade c-content-login-form" id="forget-password-form" role="dialog">
         <div class="modal-dialog">
@@ -91,18 +91,19 @@
                     <p>
                         Let's make today a great day!
                     </p>
-                    <form>
+                    <form action="/login" method="POST" >
+                        {{ csrfField() }}
                         <div class="form-group">
                             <label for="login-email" class="hide">Email</label>
-                            <input type="email" class="form-control input-lg c-square" id="login-email" placeholder="Email">
+                            <input type="email" name="email" class="form-control input-lg c-square" id="login-email" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <label for="login-password" class="hide">Password</label>
-                            <input type="password" class="form-control input-lg c-square" id="login-password" placeholder="Password">
+                            <input type="password"  name="password" class="form-control input-lg c-square" id="login-password" placeholder="Password">
                         </div>
                         <div class="form-group">
                             <div class="c-checkbox">
-                                <input type="checkbox" id="login-rememberme" class="c-check">
+                                <input type="checkbox" id="login-rememberme" class="c-check" name="rememberme">
                                 <label for="login-rememberme" class="c-font-thin c-font-17">
 							<span></span>
 							<span class="check"></span>
@@ -799,6 +800,11 @@
         @!component('components.foot')
 
         @!component('components.scripts')
+
+        <script>
+            console.log('{{message}}');
+            console.log('isLogged', {{ isLogged}})
+        </script>
 </body>
 
 </html>

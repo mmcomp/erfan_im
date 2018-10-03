@@ -158,9 +158,15 @@ Follow: www.twitter.com/themehats
                             <li class="c-search-toggler-wrapper">
                                 <a href="#" class="c-btn-icon c-search-toggler"><i class="fa fa-search"></i></a>
                             </li>
+                            @loggedIn
+                            <li>
+                                <a href="/logout" class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-white c-btn-circle c-btn-uppercase c-btn-sbold"><i class="icon-user"></i> Sign Out</a>
+                            </li>
+                            @else
                             <li>
                                 <a href="javascript:;" data-toggle="modal" data-target="#login-form" class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-white c-btn-circle c-btn-uppercase c-btn-sbold"><i class="icon-user"></i> Sign In</a>
                             </li>
+                            @endloggedIn
 
                         </ul>
                         <!-- END MEGA MENU -->

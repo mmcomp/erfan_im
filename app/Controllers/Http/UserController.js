@@ -3,16 +3,36 @@
 const Hash = use('Hash')
 
 class UserController {
-    async login ({ request, auth }) {
-        const { email, password } = request.all()
+    async logout ({ auth, view, response }) {
         try{
-            await auth.attempt(email, password)
-            return 'Logged in successfully'
+            await auth.logout()
         }catch(e) {
-            console.log(e)
-            return 'not login<br/>' + thePassword
-    
+
         }
+        // return view.render('main.index')
+        return response.redirect('/')
+    }
+
+    async login ({ request, auth, view, response }) {
+        const { email, password } = request.all()
+        let msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
+        try{
+            await auth.check()
+        }catch(e) {
+            logedIn = false
+        }
+        if(!logedIn) {
+            try{
+                await auth.remember(rememberme).attempt(email, password)
+                msg = 'Logged in successfully'
+                logedIn = true;
+            }catch(e) {
+            }
+        }else {
+            msg = 'Already Loged In'
+        }
+        // return view.render('main.index', {message: msg, isLogged: logedIn})
+        return response.route('home', {message: msg, isLogged: logedIn})
     }
 
     show ({ auth, params }) {

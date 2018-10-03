@@ -20,12 +20,23 @@ Route
   .get('users/:id', 'UserController.show')
   .middleware('auth')
 
-Route.any('login', 'UserController.login')
+Route.post('login', 'UserController.login')
+
+Route.get('logout', 'UserController.logout')
 
 
-Route.get('/', ({ view }) => {
-    return view.render('main.index')
-})
+Route.get('/', async ({ view, auth, request }) => {
+    let loggedIn = true
+    try{
+        await auth.check()
+    }catch(e) {
+        loggedIn = false
+    }
+
+    // console.log(request.all())
+
+    return view.render('main.index', { isLogged: loggedIn})
+}).as('home')
 /*
 Route.get('/:v', async ({ params, view }) => {
     console.log('params')
@@ -34,8 +45,15 @@ Route.get('/:v', async ({ params, view }) => {
     return view.render('index')
 })
 */
-Route.get('/index.html', ({ view }) => {
-    return view.render('main.index')
+Route.get('/index.html', async ({ view, auth }) => {
+    let loggedIn = true
+    try{
+        await auth.check()
+    }catch(e) {
+        loggedIn = false
+    }
+
+    return view.render('main.index', { isLogged: loggedIn})
 })
 Route.get('/Imaqjournals.html', ({ view }) => {
     return view.render('pages.imaqjournals')
@@ -44,3 +62,13 @@ Route.get('/iMaQBlog.html', ({ view }) => {
     return view.render('pages.iMaQBlog')
 })
 // Route.on('/').render('welcome')
+Route.any('*', async ({ view, auth }) => {
+    let loggedIn = true
+    try{
+        await auth.check()
+    }catch(e) {
+        loggedIn = false
+    }
+
+    return view.render('main.index', { isLogged: loggedIn})
+})
