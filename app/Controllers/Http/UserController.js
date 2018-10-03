@@ -19,6 +19,8 @@ class UserController {
         try{
             await auth.check()
         }catch(e) {
+            console.log('Check Error')
+            console.log(e)
             logedIn = false
         }
         if(!logedIn) {
@@ -27,6 +29,8 @@ class UserController {
                 msg = 'Logged in successfully'
                 logedIn = true;
             }catch(e) {
+                console.log('Login Error')
+                console.log(e)
             }
         }else {
             msg = 'Already Loged In'
