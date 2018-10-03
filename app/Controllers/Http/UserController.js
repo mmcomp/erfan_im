@@ -31,7 +31,7 @@ class UserController {
         }else {
             msg = 'Already Loged In'
         }
-        // return view.render('main.index', {message: msg, isLogged: logedIn})
+        return msg;
         return response.route('home', {message: msg, isLogged: logedIn})
     }
 
