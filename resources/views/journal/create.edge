@@ -1,0 +1,242 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">'})
+	<script>
+		var country = {{{ country }}};
+		var plainCountries = {{{ plainCountries }}};
+		var city = {{{ city }}};
+	</script>
+    <!-- BEGIN: PAGE CONTAINER -->
+    <div class="c-layout-page">
+        <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-3 -->
+        <div class="c-layout-breadcrumbs-1 c-bgimage c-subtitle c-fonts-uppercase c-fonts-bold c-bg-img-center" style="background-image: url(assets/base/img/content/backgrounds/bg-9.jpg)">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-bold c-font-dark c-font-20 c-font-slim">You Are Joining the Fastest Growing Academic Publishing Network</h3>
+                    <h4 class="c-font-dark c-font-slim"> iMaQPress is the fastest growing network of academic publishers around the world. <br> We believe on the global visibility of scientific articles published by the iMaQPress.  </h4>
+                </div>
+                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li>
+                        <a href="#" class="c-font-dark">Home</a>
+                    </li>
+                    <li class="c-font-dark">
+                        /
+                    </li>
+                    <li class="c-state_active c-font-dark">
+                        Journal Submission
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-3 -->
+        <!-- BEGIN: PAGE CONTENT -->
+        <!-- BEGIN: CONTENT/MISC/ABOUT-2 -->
+        <div class="c-content-box c-size-md c-overflow-hide c-bg-grey-1">
+            <div class="c-container">
+                <div class="c-content-tab-3 c-opt-1">
+                    <div>
+                        <ul class="nav c-theme-nav">
+                            <li class="active">
+                                <a class="c-font-16 c-font-bold" href="#c-tab3-1" data-toggle="tab">Journal Hosting and Consultancy</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="c-tab-content">
+                        <div class="container">
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="c-tab3-1">
+                                    <div class="col-md-6 col-sm-12">
+										<form method="post"  class="form-horizontal">
+											<ul class="c-items">
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Journal Name</label>
+														<div class="col-md-6">
+															<input name="name" class="form-control c-square c-theme" type="text" placeholder="Journal Name or Proposed Name">
+															<span class="help-block">Write down the current or proposed name of journal</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">ISSN</label>
+														<div class="col-md-6">
+															<input name="issn" class="form-control c-square c-theme" type="text" placeholder="0000:0000">
+															<span class="help-block">Leave blank if it is proposed journal</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Frequency</label>
+														<div class="col-md-6">
+															<input name="frequency" class="form-control c-square c-theme" type="text" placeholder="input">
+															<span class="help-block">A block of help text.</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Publisher</label>
+														<div class="col-md-6">
+															<input name="publisher" class="form-control c-square c-theme" type="text" placeholder="Write the publishing organization or person"> 
+															<span class="help-block">A block of help text.</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Publishing Country</label>
+														<div class="col-md-6">
+															<input class="form-control c-square c-theme" id="country_id" type="text" placeholder="Choose a country from list">
+															<!--
+															<select class="form-control c-square c-theme the-country-select2">
+																{{{ countries }}}
+															</select>
+															--> 
+															<img src="static/img/loading_blue.gif" id="city-loading" style="height:40px;float:right;display:none;" />
+															<input class="form-control c-square c-theme" id="fake_city_id" type="text" placeholder="Choose a city from list">
+															<input type="hidden" name="city_id" id="city_id" />
+															<!--
+															<select class="form-control c-square c-theme the-city-select2">
+															</select>
+															-->
+															<span class="help-block">A block of help text.</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Aim & Scope of Journal</label>
+														<div class="col-md-6">
+															<textarea class="form-control c-square c-theme" rows="3"></textarea>
+														</div>
+													</div>
+												</li>
+												<li>
+														<div class="form-group">
+															<label class="col-md-4 control-label">Contact Name</label>
+															<div class="col-md-6">
+																<input class="form-control c-square c-theme" type="text" placeholder="ّFirst Name"> 
+																<input class="form-control c-square c-theme" type="text" placeholder="Last Name">
+																<input class="form-control c-square c-theme" type="text" placeholder="Position in Journal">                                                                                                                                 
+																<span class="help-block">A block of help text.</span>
+															</div>
+														</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Contact Person's ID Document</label>
+														<div class="col-md-6">
+															<input class="form-control c-square c-theme" type="text" placeholder="Name the communication officer"> 
+															<span class="help-block">A block of help text.</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Cell/Mobile Number</label>
+														<div class="col-md-6">
+															<input class="form-control c-square c-theme" type="text" placeholder="Write your active mobile number"> 
+															<span class="help-block">Preferable way of communication</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Email</label>
+														<div class="col-md-6">
+															<input class="form-control c-square c-theme" type="text" placeholder="Write your communication email id"> 
+															<span class="help-block">Preferable way of communication</span>
+														</div>
+													</div>
+												</li>
+											</ul>
+											<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+											<button class="btn btn-lg c-btn-green c-btn-square c-btn-bold" >Submit Publishing Request</button>
+										</form>
+								</div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <ul class="c-photos">
+                                            <li>
+                                                <div>
+                                                    <div class="c-content-media-1" style="height: 380px;">
+                                                        <div class="c-content-label c-font-uppercase c-font-bold c-theme-bg">
+                                                            Why to publish with us?
+                                                        </div>
+                                                        <a href="#" class="c-title c-font-uppercase c-font-bold c-theme-on-hover">Global visibility and high Citations</a>
+                                                        <p>
+                                                            We, at iMaQ, are aimed "Show your words of science to the whole world". Our main focus is on the global visibility of articles published in your journal.
+                                                        </p>
+                                                        <div class="c-author">
+                                                            <div class="c-portrait" style="background-image: url(assets/base/img/content/team/irfan.jpg)">
+                                                            </div>
+                                                            <div class="c-name c-font-uppercase">
+                                                                Dr. M. Irfan-Maqsood, CEO
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: CONTENT/MISC/ABOUT-2 -->
+
+
+
+        <!-- BEGIN: CONTENT/SLIDERS/TESTIMONIALS-3 -->
+        <div class="c-content-box c-size-lg c-bg-parallax" style="background-image: url(assets/base/img/content/backgrounds/bg-3.jpg)">
+            <div class="container">
+                <!-- Begin: testimonials 1 component -->
+                <div class="c-content-testimonials-1" data-slider="owl" data-single-item="true" data-auto-play="5000">
+                    <!-- Begin: Title 1 component -->
+                    <div class="c-content-title-1">
+                        <h3 class="c-center c-font-white c-font-uppercase c-font-bold">Let's See What Our Partners Say</h3>
+                        <div class="c-line-center c-theme-bg">
+                        </div>
+                    </div>
+                    <!-- End-->
+                    <!-- Begin: Owlcarousel -->
+                    <div class="owl-carousel owl-theme c-theme">
+                        <div class="item">
+                            <div class="c-testimonial">
+                                <p>
+                                    Publishing with iMaQ was an amazing experience as our journal received several ISI citations within first year of publishing.
+                                </p>
+                                <h3>
+                                    <span class="c-name c-theme">Prof. Dr. Muhammad Aslamkhan</span>, Editor @  Journal of Genes and Cells </h3>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="c-testimonial">
+                                <p>
+                                    It was difficult for us to launch the journal as name, logo, theme, presentation, board members and alot of stuff is inculed but iMaQPress solved all in days. 
+                                </p>
+                                <h3>
+                                    <span class="c-name c-theme">Dr. Majid Ebrahimi-Warkiani</span>, Chief Editor, The Cancer Press </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End-->
+                </div>
+                <!-- End-->
+            </div>
+        </div>
+        <!-- END: CONTENT/SLIDERS/TESTIMONIALS-3 -->
+        <!-- END: PAGE CONTENT -->
+    </div>
+    <!-- END: PAGE CONTAINER -->
+
+
+@!component('components.foot')
+
+@!component('components.journals_create_scripts')
+
+</body>
+</html>
+
