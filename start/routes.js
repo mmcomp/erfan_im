@@ -26,6 +26,8 @@ Route.get('journals', 'JournalController.index').as('journals')
 
 Route.any('journal_submission', 'JournalController.create').as('journal_create')
 
+Route.any('artical_submission', 'ArticalController.create').as('artical_create')
+
 Route.post('login', 'UserController.login')
 
 Route.get('logout', 'UserController.logout')
