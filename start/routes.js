@@ -22,7 +22,7 @@ Route
   .middleware('auth')
 */
 
-Route.get('journals', 'JournalController.index')
+Route.get('journals', 'JournalController.index').as('journals')
 
 Route.any('journal_submission', 'JournalController.create').as('journal_create')
 

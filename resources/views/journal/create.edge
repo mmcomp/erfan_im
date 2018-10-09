@@ -44,7 +44,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="c-tab3-1">
                                     <div class="col-md-6 col-sm-12">
-										<form method="post"  class="form-horizontal">
+										<form method="post"  class="form-horizontal" enctype="multipart/form-data">
 											<ul class="c-items">
 												<li>
 													<div class="form-group">
@@ -107,26 +107,26 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Aim & Scope of Journal</label>
 														<div class="col-md-6">
-															<textarea class="form-control c-square c-theme" rows="3"></textarea>
+															<textarea name="description" class="form-control c-square c-theme" rows="3"></textarea>
 														</div>
 													</div>
 												</li>
 												<li>
-														<div class="form-group">
-															<label class="col-md-4 control-label">Contact Name</label>
-															<div class="col-md-6">
-																<input class="form-control c-square c-theme" type="text" placeholder="ّFirst Name"> 
-																<input class="form-control c-square c-theme" type="text" placeholder="Last Name">
-																<input class="form-control c-square c-theme" type="text" placeholder="Position in Journal">                                                                                                                                 
-																<span class="help-block">A block of help text.</span>
-															</div>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Contact Name</label>
+														<div class="col-md-6">
+															<input name="contact_fname" class="form-control c-square c-theme" type="text" placeholder="ّFirst Name"> 
+															<input name="contact_lname" class="form-control c-square c-theme" type="text" placeholder="Last Name">
+															<input name="contact_position" class="form-control c-square c-theme" type="text" placeholder="Position in Journal">                                                                                                                                 
+															<span class="help-block">A block of help text.</span>
 														</div>
+													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label class="col-md-4 control-label">Contact Person's ID Document</label>
 														<div class="col-md-6">
-															<input class="form-control c-square c-theme" type="text" placeholder="Name the communication officer"> 
+															<input name="communication_officer" class="form-control c-square c-theme" type="text" placeholder="Name the communication officer"> 
 															<span class="help-block">A block of help text.</span>
 														</div>
 													</div>
@@ -135,7 +135,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Cell/Mobile Number</label>
 														<div class="col-md-6">
-															<input class="form-control c-square c-theme" type="text" placeholder="Write your active mobile number"> 
+															<input name="tell" class="form-control c-square c-theme" type="text" placeholder="Write your active mobile number"> 
 															<span class="help-block">Preferable way of communication</span>
 														</div>
 													</div>
@@ -144,8 +144,26 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Email</label>
 														<div class="col-md-6">
-															<input class="form-control c-square c-theme" type="text" placeholder="Write your communication email id"> 
+															<input name="email" class="form-control c-square c-theme" type="text" placeholder="Write your communication email id"> 
 															<span class="help-block">Preferable way of communication</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Web Site</label>
+														<div class="col-md-6">
+															<input name="web_site" class="form-control c-square c-theme" type="text" placeholder="Write your website URL"> 
+															<span class="help-block">Web Site Complete Address</span>
+														</div>
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Cover Photo</label>
+														<div class="col-md-6">
+															<input name="cover_image" class="form-control c-square c-theme" type="file" > 
+															<span class="help-block">Image must be 304 × 427</span>
 														</div>
 													</div>
 												</li>
