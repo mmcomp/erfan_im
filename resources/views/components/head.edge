@@ -224,33 +224,37 @@ Follow: www.twitter.com/themehats
                             <p>
                                 Please fill in below form to create an account with us
                             </p>
-                            <form>
-                                    <div class="form-group">
-                                            <label for="signup-email" class="hide">Email</label>
-                                            <input type="email" class="form-control input-lg c-square" id="signup-email" placeholder="Your email will be username">
-                                        </div>
-                                        <div class="form-group">
-                                                <label for="signup-password" class="hide">Password</label>
-                                                <input type="email" class="form-control input-lg c-square" id="signup-password" placeholder="Password should be alphanumeric + one symbol">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="signup-firstname" class="hide">First Name</label>
-                                            <input type="email" class="form-control input-lg c-square" id="signup-firstname" placeholder="First Name">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="signup-lastname" class="hide">Last Name</label>
-                                            <input type="email" class="form-control input-lg c-square" id="signup-lastname" placeholder="Last/Family Name">
-                                        </div>
-                                        <div class="form-group">
-                                                <label for="signup-affiliation" class="hide">University/Institute</label>
-                                                <input type="email" class="form-control input-lg c-square" id="signup-affiliation" placeholder="Affiliation e.g. Harvard University">
-                                            </div>
-                                        <div class="form-group">
-                                            <label for="signup-country" class="hide">Country</label>
-                                            <select class="form-control input-lg c-square" id="signup-country">
-                                            <option value="1">Country</option>
-                                        </select>
-                                        </div>
+                            <form action="/signup" method="POST" id="signup-form" >
+                                <input type="hidden" name="_csrf" value="{{ csrf }}">
+                                <div class="form-group">
+                                    <label for="signup-email" class="hide">Email</label>
+                                    <input name="email" type="email" class="form-control input-lg c-square" id="signup-email" placeholder="Your email will be username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-password" class="hide">Password</label>
+                                    <input name="password" type="password" class="form-control input-lg c-square" id="signup-password" placeholder="Password should be alphanumeric + one symbol">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-firstname" class="hide">First Name</label>
+                                    <input name="fname" type="text" class="form-control input-lg c-square" id="signup-firstname" placeholder="First Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-lastname" class="hide">Last Name</label>
+                                    <input name="lname" type="text" class="form-control input-lg c-square" id="signup-lastname" placeholder="Last/Family Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-affiliation" class="hide">University/Institute</label>
+                                    <input name="university_institute" type="text" class="form-control input-lg c-square" id="signup-affiliation" placeholder="Affiliation e.g. Harvard University">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-country" class="hide">Country</label>
+                                    <select name="country_id" class="form-control input-lg c-square" id="signup-country">
+                                        <option>Country</option>
+                                        @each(county in country)
+                                        <option value="{{ county.id }}">{{ county.COUNTRY_NAME }}</option>
+                                        @endeach
+                                    </select>
+                                </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Signup</button>
                                     <a href="javascript:;" class="c-btn-forgot" data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
@@ -295,9 +299,10 @@ Follow: www.twitter.com/themehats
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Login</button>
-                                    <a href="javascript:;" data-toggle="modal" data-target="#forget-password-form" data-dismiss="modal" class="c-btn-forgot">Forgot Your Password ?</a>
+                                    <!-- <a href="javascript:;" data-toggle="modal" data-target="#forget-password-form" data-dismiss="modal" class="c-btn-forgot">Forgot Your Password ?</a> -->
                                 </div>
                                 <div class="clearfix">
+                                    <!--
                                     <div class="c-content-divider c-divider-sm c-icon-bg c-bg-grey c-margin-b-20">
                                         <span style="width: 110px">or signup with</span>
                                     </div>
@@ -328,6 +333,7 @@ Follow: www.twitter.com/themehats
                                                 <i class="fa fa-orcid"></i> ORCID </a>
                                         </li>
                                     </ul>
+                                    -->
                                 </div>
                             </form>
                         </div>

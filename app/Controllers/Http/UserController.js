@@ -1,5 +1,8 @@
 'use strict'
 
+const Country = use('App/Models/Country')
+const User = use('App/Models/User')
+
 class UserController {
     async logout ({ auth, view, response, session }) {
         session.clear()
@@ -43,11 +46,52 @@ class UserController {
         return response.route('home', {message: msg, isLogged: logedIn})
     }
 
-    show ({ auth, params }) {
-        if (auth.user.id !== Number(params.id)) {
-            return 'You cannot see someone else\'s profile'
+    async home ({ view, auth, session }) {
+        let loggedIn = true
+        let country = []
+        try{
+            await auth.check()
+        }catch(e) {
+            loggedIn = false
+            country = await Country.all()
+            country = country.toJSON()
         }
-        return auth.user
+    
+        console.log('session', session.all())
+        // console.log('country', country)
+        let msg = session.get('msg')
+        session.forget('msg')
+    
+        return view.render('main.index', { isLogged: loggedIn, msg: msg, country: country})
+    }
+
+    async signup ({ request, auth, view, response, session }) {
+        console.log('Request')
+        console.log(request.all())
+        let email = request.all()['email']
+        let password = request.all()['password']
+        let fname = request.all()['fname']
+        let lname = request.all()['lname']
+        let country_id = request.all()['country_id']
+        let university_institute = request.all()['university_institute']
+        let user = await User.query().where('email', email).first()
+        if(user) {
+            session.put('msg', 'Email exists in our Directory, please select another email!')
+            return response.redirect('/')
+        }
+
+        user = new User
+        user.email = email
+        user.password = password
+        user.fname = fname
+        user.lname = lname
+        user.country_id = country_id
+        user.university_institute = university_institute
+        await user.save()
+
+        session.put('msg', 'You are Signed Up. Now you can Login with you email and password')
+
+        return response.redirect('/')
     }
 }
 

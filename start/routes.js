@@ -30,9 +30,15 @@ Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
 Route.post('login', 'UserController.login')
 
+Route.post('signup', 'UserController.signup')
+
 Route.get('logout', 'UserController.logout')
 
+Route.get('/', 'UserController.home').as('home')
 
+Route.get('*', 'UserController.home')
+
+/*
 Route.get('/', async ({ view, auth, request, session }) => {
     let loggedIn = true
     try{
@@ -47,33 +53,7 @@ Route.get('/', async ({ view, auth, request, session }) => {
 
     return view.render('main.index', { isLogged: loggedIn, msg: msg})
 }).as('home')
-/*
-Route.get('/:v', async ({ params, view }) => {
-    console.log('params')
-    console.log(params)
-    view.share(params)
-    return view.render('index')
-})
-*/
-/*
-Route.get('/index.html', async ({ view, auth }) => {
-    let loggedIn = true
-    try{
-        await auth.check()
-    }catch(e) {
-        loggedIn = false
-    }
 
-    return view.render('main.index', { isLogged: loggedIn})
-})
-Route.get('/Imaqjournals.html', ({ view }) => {
-    return view.render('pages.imaqjournals')
-})
-Route.get('/iMaQBlog.html', ({ view }) => {
-    return view.render('pages.iMaQBlog')
-})
-*/
-// Route.on('/').render('welcome')
 Route.any('*', async ({ view, auth }) => {
     let loggedIn = true
     try{
@@ -88,3 +68,4 @@ Route.any('*', async ({ view, auth }) => {
 
     return view.render('main.index', { isLogged: loggedIn, msg: msg})
 })
+*/
