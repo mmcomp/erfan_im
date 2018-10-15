@@ -1,4 +1,4 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">'})
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user:user, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">'})
 	<script>
 		var country = {{{ country }}};
 		var plainCountries = {{{ plainCountries }}};

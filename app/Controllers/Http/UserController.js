@@ -79,6 +79,7 @@ class UserController {
         let msg = session.get('msg')
         let msg_type = (session.get('msg_type')?session.get('msg_type'):'')
         session.forget('msg')
+        session.forget('msg_type')
         if(loggedIn) {
             user = session.get('user')
         }

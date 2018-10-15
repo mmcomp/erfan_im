@@ -56,9 +56,14 @@ class JournalController {
     }
 
     async create ({ view, response, session, request }) {
-        let isLogged = false
+        let isLogged = false, user = {}
         if(session.get('user')) {
             isLogged = true
+            user = session.get('user')
+        }else {
+            session.put('msg', 'You need to Login first')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
         }
 
         if(request.method()=='GET') {
@@ -96,13 +101,17 @@ class JournalController {
                 // }
                 return city
             }
+            if(isLogged) {
+                user = session.get('user')
+            }
 
             return view.render('journal.create', { 
                 isLogged: isLogged, 
                 country: JSON.stringify(theCountries), 
                 city: JSON.stringify(city),
                 countries: countries,
-                plainCountries: JSON.stringify(plainCountries)
+                plainCountries: JSON.stringify(plainCountries),
+                user: user
             })
         }
 

@@ -1,5 +1,7 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">'})
-
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user:user, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">'})
+<h1>
+	Msg : {{msg}}
+</h1>
 <!-- BEGIN: PAGE CONTAINER -->
 <div class="c-layout-page">
 	<!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-3 -->
@@ -41,15 +43,15 @@
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="c-tab3-1">
 									<div class="col-md-6 col-sm-12">
-										<ul class="c-items">
+										<form class="form-horizontal"  enctype="multipart/form-data" method="post">
+											<ul class="c-items">
 												<li>
-														
 													<div class=" form-group form-c-checkboxes">
 														<label class="col-md-4 control-label">Type of Article</label>
 														<div class="col-md-6">
 															<div class="c-checkbox-inline">
 																<div class="c-checkbox">
-																	<input type="checkbox" id="checkbox6-444" class="c-check">
+																	<input name="type_research" type="checkbox" id="checkbox6-444" class="c-check" value="research">
 																	<label for="checkbox6-444">
 																		<span></span>
 																		<span class="check"></span>
@@ -57,55 +59,58 @@
 																		Research (100 USD)</label>
 																</div>
 																<div class="c-checkbox">
-																	<input type="checkbox" id="checkbox7-444" class="c-check" checked>
+																	<input name="type_non-research" type="checkbox" id="checkbox7-444" class="c-check" checked  value="non-research">
 																	<label for="checkbox7-444">
 																		<span></span>
 																		<span class="check"></span>
 																		<span class="box"></span>
 																		Non-Research (150 USD)</label>
 																</div>
-														
 															</div>
 														</div>
-													</div>
-														
+													</div>	
 												</li>
-											<li>
-												<form class="form-horizontal">
+												<li>
 													<div class="form-group">
 														<label class="col-md-4 control-label">Full Title of Article</label>
 														<div class="col-md-6">
-															<input class="form-control c-square c-theme" type="text" placeholder="Article Title of 11-13 Words">
+															<input name="full_title" class="form-control c-square c-theme" type="text" placeholder="Article Title of 11-13 Words">
 															<span class="help-block">Write down the full title of article</span>
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="col-md-4 control-label">Running Title of Article</label>
 														<div class="col-md-6">
-															<input class="form-control c-square c-theme" type="text" placeholder="Article Title of 3-5 Words">
+															<input name="running_title" class="form-control c-square c-theme" type="text" placeholder="Article Title of 3-5 Words">
 															<span class="help-block">Write down the full title of article</span>
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="col-md-4 control-label">One Sentence Summary of Article</label>
 														<div class="col-md-6">
-															<textarea class="form-control c-square c-theme" rows="3"></textarea>
+															<textarea name="summery" class="form-control c-square c-theme" rows="3"></textarea>
 															<span class="help-block">Write down the summary of 70-150 characters</span>
 														</div>
 													</div>
 													<div class="form-group">
-															<label class="col-md-4 control-label">Graphical Abstract</label>
-															<div class="col-md-6">
-																<input class="form-control c-square c-theme" type="text" placeholder="Browse file/upload file">
-																<span class="help-block">Graphical abstract should be in JPG, PNG, GIF format only</span>
-															</div>
+														<label class="col-md-4 control-label">Graphical Abstract</label>
+														<div class="col-md-6">
+															<input name="abstract_image_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
+															<span class="help-block">Graphical abstract should be in JPG, PNG, GIF format only and atmost 2MB</span>
+														</div>
 													</div>
-
-												</form>
-											</li>
-																									
-										</ul>
-										<button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">Submit and Pay the APC</button>
+													<div class="form-group">
+														<label class="col-md-4 control-label">Artical File</label>
+														<div class="col-md-6">
+															<input name="file_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
+															<span class="help-block">Artical File should be in Microsoft Word DOC or DOCX format only</span>
+														</div>
+													</div>	
+												</li>												
+											</ul>
+											<input type="hidden" name="_csrf" value="{{ csrfToken }}">
+											<button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">Submit and Pay the APC</button>
+										</form>
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<ul class="c-photos">
@@ -205,8 +210,7 @@
 
 @!component('components.foot')
 
-@!component('components.journals_create_scripts')
-
+@!component('components.articals_create_scripts', {msg: msg, msg_type: msg_type})
 </body>
 </html>
 
