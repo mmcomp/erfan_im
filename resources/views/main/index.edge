@@ -1,4 +1,4 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, country: country})
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, country: country, user: user})
     <!-- BEGIN: PAGE CONTAINER -->
     <div class="c-layout-page">
         <!-- BEGIN: PAGE CONTENT -->
@@ -580,10 +580,9 @@
         <script>
             $(document).ready(function() {
                 let msg = '{{msg}}';
-                console.log('msg', '{{msg}}');
-                console.log('isLogged', {{ isLogged}})
+                let msg_type = '{{msg_type}}';
                 if(msg.trim()!='') {
-                    alert(msg);
+                    $('body').append('<div class="alert alert-' + ((msg_type!='')?msg_type:'success') + ' new-alert hideMe" role="alert" >' + msg + '</div>');
                 }
             });
         </script>

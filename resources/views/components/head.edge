@@ -43,11 +43,11 @@ Follow: www.twitter.com/themehats
     <link href="assets/base/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
     <link href="assets/base/css/themes/default.css" rel="stylesheet" id="style_theme" type="text/css" />
     <link href="assets/base/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="static/css/new_style.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico" />
     {{{ extra_css }}}
 </head>
-
 <body class="c-layout-header-fixed c-layout-header-fullscreen c-layout-header-topbar">
     <!-- BEGIN: LAYOUT/HEADERS/HEADER-1 -->
     <!-- BEGIN: HEADER -->
@@ -144,20 +144,28 @@ Follow: www.twitter.com/themehats
                                 <a href="iMaQBlog.html" class="c-link dropdown-toggle">Blog</a>
 
                             </li>
+                            @if((user && user.permissions['all'])||(user && user.permissions['submit_journal'])||(user && user.permissions['submit_article'])||(user && user.permissions['submit_blog']))
                             <li class="c-menu-type-classic">
                                 <a href="#" class="c-link dropdown-toggle">Publish With Us</a>
                                 <ul class="dropdown-menu c-menu-type-classic c-pull-left">
+                                    @if((user && user.permissions['all'])||(user && user.permissions['submit_journal']))
                                     <li>
                                         <a href="/journal_submission">Submit Journal</a>
                                     </li>
+                                    @endif
+                                    @if((user && user.permissions['all'])||(user && user.permissions['submit_article']))
                                     <li>
                                         <a href="/artical_submission">Submit Article</a>
                                     </li>
+                                    @endif
+                                    @if((user && user.permissions['all'])||(user && user.permissions['submit_blog']))
                                     <li>
                                         <a href="Blogsubmission.html">Submit Blog</a>
                                     </li>
+                                    @endif
                                 </ul>
                             </li>
+                            @endif
                             <li class="c-search-toggler-wrapper">
                                 <a href="#" class="c-btn-icon c-search-toggler"><i class="fa fa-search"></i></a>
                             </li>

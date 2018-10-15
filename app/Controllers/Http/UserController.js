@@ -5,7 +5,9 @@ const User = use('App/Models/User')
 
 class UserController {
     async logout ({ auth, view, response, session }) {
+        console.log('Log Out')
         session.clear()
+        console.log('session', session.all())
         try{
             await auth.logout()
         }catch(e) {
@@ -17,7 +19,7 @@ class UserController {
 
     async login ({ request, auth, view, response, session }) {
         const { email, password } = request.all()
-        let msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
+        let msg_type ='', msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
         try{
             await auth.check()
         }catch(e) {
@@ -32,23 +34,38 @@ class UserController {
                 await auth.remember(rememberme).attempt(email, password)
                 msg = 'Logged in successfully'
                 logedIn = true;
-                let user = await auth.getUser()
-                session.put('user', user.id)
 
+                let user = await User.query().where('id', auth.user.id).with('permissions').first()
+                console.log('User', user.toJSON())
+                user = user.toJSON()
+                let permissions = {}
+                for(let i = 0;i < user.permissions.length;i++) {
+                    permissions[user.permissions[i].permission_key] = true
+                }
+                user.permissions = permissions
+                console.log(user)
+                session.put('user', user)
+                
             }catch(e) {
                 // console.log('Login Error')
                 // console.log(e)
+                msg = 'Login information is wrong'
+                msg_type = 'danger'
             }
         }else {
+            msg_type = 'primary'
             msg = 'Already Loged In'
         }
+
         session.put('msg', msg)
+        session.put('msg_type', msg_type)
+
         return response.route('home', {message: msg, isLogged: logedIn})
     }
 
     async home ({ view, auth, session }) {
         let loggedIn = true
-        let country = []
+        let country = [], user = {}
         try{
             await auth.check()
         }catch(e) {
@@ -60,9 +77,12 @@ class UserController {
         console.log('session', session.all())
         // console.log('country', country)
         let msg = session.get('msg')
+        let msg_type = (session.get('msg_type')?session.get('msg_type'):'')
         session.forget('msg')
-    
-        return view.render('main.index', { isLogged: loggedIn, msg: msg, country: country})
+        if(loggedIn) {
+            user = session.get('user')
+        }
+        return view.render('main.index', { isLogged: loggedIn, msg: msg, msg_type:msg_type, country: country, user: user})
     }
 
     async signup ({ request, auth, view, response, session }) {
