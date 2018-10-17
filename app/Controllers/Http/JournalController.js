@@ -8,13 +8,19 @@ const Helpers = use('Helpers')
 class JournalController {
     async index ({ view, response, session }) {
         let isLogged = false
+        let country = [], user = {}
         if(session.get('user')) {
             isLogged = true
+            user = session.get('user')
+        }else{
+            loggedIn = false
+            country = await Country.all()
+            country = country.toJSON()
         }
         let theFrequencies = ''
         let jours = ''
         let freqs = []
-        let journals = await Journal.all()
+        let journals = await Journal.query().where('status', 'aproved').fetch()
         journals = journals.toJSON()
         console.log('Journals')
         console.log(journals)
@@ -52,7 +58,7 @@ class JournalController {
 
         console.log('theFreq', theFrequencies)
 
-        return view.render('journal.index', { isLogged: isLogged, frequencies: theFrequencies, jours: jours })
+        return view.render('journal.index', { isLogged: isLogged, frequencies: theFrequencies, jours: jours, country: country, user: user })
     }
 
     async create ({ view, response, session, request }) {
@@ -154,6 +160,26 @@ class JournalController {
         
         // return view.render('journal.index', { isLogged: isLogged })
         return response.route('journals', {isLogged: isLogged})
+    }
+
+    async profile ({ view, response, session, request, params }) {
+        console.log('Params', params)
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+        let theJournal = await Journal.find(params.journal_id)
+        if(!theJournal) {
+            session.put('msg', 'Journal Not Found')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        
+        return view.render('journal.profile', { isLogged: isLogged, user: user, title: theJournal.name, journal: theJournal.toJSON()})
     }
 }
 

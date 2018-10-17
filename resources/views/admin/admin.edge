@@ -1,0 +1,198 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user: user})
+    <!-- BEGIN: PAGE CONTAINER -->
+    <div class="c-layout-page">
+        <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-3 -->
+        <div class="c-layout-breadcrumbs-1 c-bgimage c-subtitle c-fonts-uppercase c-fonts-bold c-bg-img-center" style="background-image: url(assets/base/img/content/backgrounds/bg-9.jpg)">
+            <div class="container" style="margin-top: 100px;">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-bold c-font-dark c-font-20 c-font-slim">Important Notifications</h3>
+                    <h4 class="c-font-dark c-font-slim">
+                        {{notifications}}
+                        <!--
+                        1. iMaQPress is the fastest growing network of academic publishers around the world. <br>
+                        2. We believe on the global visibility of scientific articles published by the iMaQPress. <br>
+                        3. We believe on the global visibility of scientific articles published by the iMaQPress. <br>
+                        4. We believe on the global visibility of scientific articles published by the iMaQPress.  <br>
+                        5. We believe on the global visibility of scientific articles published by the iMaQPress.  <br></h4>
+                        [See All]
+                        -->
+                </div>
+                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li>
+                        <a href="/" class="c-font-dark">Home</a>
+                    </li>
+                    <li class="c-font-dark">
+                        /
+                    </li>
+                    <li class="c-state_active c-font-dark">
+                        Admin Dashboard
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-3 -->
+        <!-- BEGIN: PAGE CONTENT -->
+
+                <!-- BEGIN: CONTENT/MISC/SERVICES-1-1 -->
+        <div class="c-content-box c-size-md c-bg-grey-1 ">
+            <div class="container">
+                <div class="c-content-feature-2-grid" data-auto-height="true" data-mode="base-height">
+                    <div class="c-content-title-1">
+                        <h3 class="c-font-uppercase c-center c-font-bold">Director's Admin Panel</h3>
+                        <div class="c-line-center">
+                        </div>
+                    </div>
+                    		<div class="c-content-panel">
+				<div class="c-label">
+					Statistics and Settings
+				</div>
+				<div class="c-body">
+					<div class="c-content-ver-nav">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="c-content-ver-nav">
+									<ul class="c-menu">
+										<li>
+                                            <a href="#">Directors <span class="badge c-bg-blue">{{statics.directors.length}}</span></a>
+										</li>
+										<li>
+											<a href="#">Chief Editors <span class="badge c-bg-green">{{statics.chiefEditors.length}}</span></a>
+                                        </li>
+                                        <!--
+										<li>
+											<a href="#">Associate Editors <span class="badge c-bg-red">0</span></a>
+                                        </li>
+                                        -->
+										<li>
+											<a href="#">Managing Editors <span class="badge c-bg-purple">{{statics.managingEditors.length}}</span></a>
+										</li>
+										<li>
+											<a href="#">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{statics.editorials.length}}</span></a>
+										</li>
+                                        <li>
+											<a href="#">Institutes/Universities <span class="badge c-bg-yellow">{{statics.institutesUniversities.length}}</span></a>
+										</li>
+                                        <li>
+											<a href="#">Authors & Co-authors <span class="badge c-bg-yellow">{{statics.authors.length}}</span></a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="c-content-ver-nav">
+									<ul class="c-menu c-arrow-dot">
+										<li class="c-bg-before-blue">
+                                            <a href="#">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
+										</li>
+										<li class="c-bg-before-red">
+											<a href="#">Article Views <span class="badge c-bg-green-1">{{statics.articleViews}}</span></a>
+										</li>
+										<li class="c-bg-before-green">
+											<a href="#">Downloads  <span class="badge c-bg-red-1">{{statics.articleDownloads}}</span></a>
+										</li>
+										<li class="c-bg-before-purple">
+											<a href="#">Citations  <span class="badge c-bg-purple-1">0</span></a>
+										</li>
+										<li class="c-bg-before-yellow">
+											<a href="#">Cities <span class="badge c-bg-yellow-1">{{statics.cities.length}}</span></a>
+										</li>
+                                        <li class="c-bg-before-yellow">
+											<a href="#">Countries <span class="badge c-bg-yellow-1">{{statics.countries.length}}</span></a>
+                                        </li>
+                                        <!--
+                                        <li class="c-bg-before-yellow">
+											<a href="#">Blog Posts <span class="badge c-bg-yellow-1">6</span></a>
+                                        </li>
+                                        -->
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="c-content-ver-nav">
+									<ul class="c-menu c-theme c-font-sentence">
+										<li>
+											<a href="#">All DOIs <span class="badge c-bg-blue-2">0</span></a>
+										</li>
+										<li>
+											<a href="#">Registered DOIs <span class="badge c-bg-green-2">0</span></a>
+										</li>
+										<li>
+											<a href="#">Pending DOIs <span class="badge c-bg-red-2">0</span></a>
+										</li>
+										<li>
+											<a href="#">Misc DOIs <span class="badge c-bg-yellow-2">0</span></a>
+										</li>
+										<li>
+											<a href="#">Miscellaneous <span class="badge c-bg-purple-2">0</span></a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+            <div class="c-content-panel">
+				<div class="c-label">
+					Journal's Management Panel
+				</div>
+				<div class="c-body">
+					<div class="row">
+						<div class="col-md-4">
+							<p>
+								<span class="label label-danger c-font-slim c-font-uppercase c-font-bold">Journal's Requests ({{request_count}}) </span>
+							</p>
+							<ul class="c-content-list-1 c-separator-dot">
+                                @each(journal in journals)
+                                @if(journal.status=='requested')
+                                <li>
+                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                </li>
+                                @endif
+                                @endeach
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<p>
+								<span class="label label-success c-font-slim c-font-uppercase c-font-bold">List of Current iMaQPress Journals </span>
+							</p>
+                            <ul class="c-content-list-1 c-separator-dot">
+                                @each(journal in journals)
+                                @if(journal.status=='aproved')
+                                <li>
+                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                </li>
+                                @endif
+                                @endeach
+							</ul>
+						</div>
+						<div class="col-md-4">
+							<p>
+								<span class="label label-warning c-font-slim c-font-uppercase c-font-bold">Pending Approval of Submitted Journals</span>
+							</p>
+                            <ul class="c-content-list-1 c-separator-dot">
+                                @each(journal in journals)
+                                @if(journal.status=='requested')
+                                <li>
+                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                </li>
+                                @endif
+                                @endeach
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+        <!-- END: CONTENT/MISC/SERVICES-1-1 -->
+        <!-- END: PAGE CONTENT -->
+    </div>
+    <!-- END: PAGE CONTAINER -->
+    @!component('components.foot')
+
+    @!component('components.scripts')
+</body>
+
+</html>

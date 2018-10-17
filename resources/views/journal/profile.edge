@@ -1,0 +1,337 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user: user, title: title})
+    <!-- BEGIN: PAGE CONTAINER -->
+    <div class="c-layout-page">
+        <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+        <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold">
+            <div class="container">
+                <div class="c-page-title c-pull-left">
+                    <h3 class="c-font-uppercase c-font-bold">{{journal.name}}</h3>
+                </div>
+                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+                    <li>
+                        <a href="/journals">Journals</a>
+                    </li>
+                    <li>
+                        /
+                    </li>
+                    <li class="c-state_active">
+                            {{journal.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+        <!-- BEGIN: PAGE CONTENT -->
+
+        <!-- BEGIN: CONTENT/BARS/BAR-5 -->
+        <div class="c-content-box c-size-md c-bg-parallax" style="background-image: url(/assets/base/img/content/backgrounds/bg-29.jpg); padding:250px !important;">
+
+        </div>
+        <!-- END: CONTENT/BARS/BAR-5 -->
+
+
+        <!-- BEGIN: CONTENT/BARS/BAR-2 -->
+        <div class="c-content-box c-size-md c-bg-grey-1">
+            <div class="container">
+                <div class="c-content-bar-2 c-opt-1">
+                    <div class="row" data-auto-height="true">
+                        <div class="col-md-6">
+                            <!-- Begin: Title 1 component -->
+                            <div class="c-content-title-1" data-height="height">
+                                <h3 class="c-font-uppercase c-font-bold">{{journal.name}}</h3>
+                                <p class="c-font-uppercase c-font-sbold">
+                                    {{journal.description}}
+                                </p>
+                                <!--
+                                <button type="button" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</button>
+                                -->
+                            </div>
+                            <!-- End-->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="c-content-v-center c-bg-red" data-height="height">
+                                <div class="c-wrapper">
+                                    <div class="c-body">
+                                        <h3 class="c-font-white c-font-bold">Indexed in Google Scholar, DOAJ, DOI, CrossRef, HINARI etc.</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: CONTENT/BARS/BAR-2 -->
+        <br/>
+
+        <div class="container">
+            <div class="c-content-panel ">
+
+                <div class="c-body ">
+                    <div class="c-content-tab-1 ">
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3 col-xs-3">
+                                <ul class="nav nav-tabs tabs-left c-font-uppercase ">
+                                    <li class="">
+                                        <a href="#tab_16_1" data-toggle="tab">Abstractions</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_16_2" data-toggle="tab">Journal Policy</a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#tab_16_3" data-toggle="tab" aria-expanded="true">
+										Publisher Info </a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_16_4" data-toggle="tab">
+										More </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-md-9 col-sm-9 col-xs-9">
+                                <div class="tab-content c-padding-sm">
+                                    <div class="tab-pane fade" id="tab_16_1">
+                                        <p>
+                                            {{journal.name}}
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_16_2">
+                                        <p>
+                                            {{journal.description}}
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane active" id="tab_16_3">
+                                        <p>
+                                            {{journal.publisher}}
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane fade" id="tab_16_4">
+                                        <p>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- BEGIN: CONTENT/BLOG/RECENT-POSTS-2 -->
+        <div class="c-content-box c-size-md c-bg-white">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-md-9">
+                        <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+                            <h3 class="c-font-bold c-font-uppercase">Articles</h3>
+                        </div>
+                        <div class="c-content-tab-1 c-theme c-margin-t-30">
+                            <div class="nav-justified">
+                                <ul class="nav nav-tabs nav-justified">
+                                    <li class="active">
+                                        <a href="#blog_recent_posts_2" data-toggle="tab">Recent Posts</a>
+                                    </li>
+                                    <li>
+                                        <a href="#blog_popular_posts_2" data-toggle="tab">Popular Posts</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="blog_recent_posts_2">
+                                        <ul class="c-content-recent-posts-1">
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												UX Design Expo 2015... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/08.jpg" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												Latest Jango Showcast... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/07.jpg" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												Latest Design Trends... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/32.jpg" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												Perfec Web Development Tools... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-pane" id="blog_popular_posts_2">
+                                        <ul class="c-content-recent-posts-1">
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/34.jpg" class="img-responsive" alt="" />
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												UX Design Expo 2015... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/37.jpg" class="img-responsive" alt="" />
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												UX Design Expo 2015... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/32.jpg" class="img-responsive" alt="" />
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												UX Design Expo 2015... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="/assets/base/img/content/stock/54.jpg" class="img-responsive" alt="" />
+                                                </div>
+                                                <div class="c-post">
+                                                    <a href="" class="c-title">
+												UX Design Expo 2015... </a>
+                                                    <div class="c-date">
+                                                        27 Jan 2015
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="c-body">
+                            <ul class="c-content-pagination c-theme">
+                                <li class="c-prev">
+                                    <a href="#"><i class="fa fa-angle-left"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#">1</a>
+                                </li>
+                                <li class="c-active">
+                                    <a href="#">2</a>
+                                </li>
+                                <li>
+                                    <a href="#">3</a>
+                                </li>
+                                <li>
+                                    <a href="#">4</a>
+                                </li>
+                                <li>
+                                    <a href="#">5</a>
+                                </li>
+                                <li>
+                                    <a href="#">6</a>
+                                </li>
+                                <li>
+                                    <a href="#">7</a>
+                                </li>
+                                <li>
+                                    <a href="#">8</a>
+                                </li>
+                                <li>
+                                    <a href="#">9</a>
+                                </li>
+                                <li>
+                                    <a href="#">10</a>
+                                </li>
+                                <li class="c-next">
+                                    <a href="#"><i class="fa fa-angle-right"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- BEGIN: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
+                        <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+                            <h3 class="c-font-bold c-font-uppercase">Filters</h3>
+                        </div>
+                        <form action="#" method="post">
+                            <div class="input-group">
+                                <input type="text" class="form-control c-square c-theme-border" placeholder="Search blog...">
+                                <span class="input-group-btn">
+							<button class="btn c-theme-btn c-theme-border c-btn-square" type="button">Go!</button>
+							</span>
+                            </div>
+                        </form>
+                        <div class="c-content-ver-nav">
+                            <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+
+                                <div class="c-line-left c-theme-bg">
+                                </div>
+                            </div>
+                            <ul class="c-menu c-arrow-dot1 c-theme">
+                                <li>
+                                    <a href="#">Sort by Date</a>
+                                </li>
+                                <li>
+                                    <a href="#">Sort by X</a>
+                                </li>
+                                <li>
+                                    <a href="#">Sort by Y</a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <!-- END: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- END: PAGE CONTENT -->
+    </div>
+    <!-- END: PAGE CONTAINER -->
+    @!component('components.foot')
+
+    @!component('components.scripts')
+</body>
+
+</html>

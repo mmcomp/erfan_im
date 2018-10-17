@@ -15,7 +15,14 @@ Follow: www.twitter.com/themehats
 
 <head>
     <meta charset="utf-8" />
-    <title>iMaQPress - Introducing Innovations in Academic Publishing System</title>
+    <title>
+        iMaQPress - 
+        @if(title && title!='')
+        {{title}}
+        @else
+        Introducing Innovations in Academic Publishing System
+        @endif
+    </title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -23,27 +30,27 @@ Follow: www.twitter.com/themehats
     <meta content="" name="author" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700&amp;subset=all' rel='stylesheet' type='text/css'>
-    <link href="assets/plugins/socicon/socicon.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/bootstrap-social/bootstrap-social.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/animate/animate.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/socicon/socicon.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap-social/bootstrap-social.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/animate/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
     <!-- BEGIN: BASE PLUGINS  -->
-    <link href="assets/plugins/revo-slider/css/settings.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/cubeportfolio/css/cubeportfolio.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/owl-carousel/owl.transitions.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/revo-slider/css/settings.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/cubeportfolio/css/cubeportfolio.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/owl-carousel/owl.carousel.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/owl-carousel/owl.theme.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/owl-carousel/owl.transitions.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/plugins/fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css" />
     <!-- END: BASE PLUGINS -->
     <!-- BEGIN THEME STYLES -->
-    <link href="assets/base/css/plugins.css" rel="stylesheet" type="text/css" />
-    <link href="assets/base/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
-    <link href="assets/base/css/themes/default.css" rel="stylesheet" id="style_theme" type="text/css" />
-    <link href="assets/base/css/custom.css" rel="stylesheet" type="text/css" />
-    <link href="static/css/new_style.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/base/css/plugins.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/base/css/components.css" id="style_components" rel="stylesheet" type="text/css" />
+    <link href="/assets/base/css/themes/default.css" rel="stylesheet" id="style_theme" type="text/css" />
+    <link href="/assets/base/css/custom.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/new_style.css" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico" />
     {{{ extra_css }}}
@@ -97,10 +104,10 @@ Follow: www.twitter.com/themehats
                 <!-- BEGIN: BRAND -->
                 <div class="c-navbar-wrapper clearfix">
                     <div class="c-brand c-pull-left">
-                        <a href="index.html" class="c-logo">
-                            <img src="assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-desktop-logo">
-                            <img src="assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-desktop-logo-inverse">
-                            <img src="assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-mobile-logo">
+                        <a href="/" class="c-logo">
+                            <img src="/assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-desktop-logo">
+                            <img src="/assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-desktop-logo-inverse">
+                            <img src="/assets/base/img/layout/logos/logo-1.png" alt="JANGO" class="c-mobile-logo">
                         </a>
                         <button class="c-hor-nav-toggler" type="button" data-target=".c-mega-menu">
 				<span class="c-line"></span>
@@ -133,17 +140,19 @@ Follow: www.twitter.com/themehats
 
                             </li>
                             <li class="c-menu-type-classic">
-                                <a href="journals" class="c-link dropdown-toggle">Journals</a>
+                                <a href="/journals" class="c-link dropdown-toggle">Journals</a>
 
                             </li>
                             <li class="c-menu-type-classic">
                                 <a href="#" class="c-link dropdown-toggle">Partners</a>
 
                             </li>
+                            <!--
                             <li class="c-menu-type-classic">
                                 <a href="iMaQBlog.html" class="c-link dropdown-toggle">Blog</a>
 
                             </li>
+                            -->
                             @if((user && user.permissions['all'])||(user && user.permissions['submit_journal'])||(user && user.permissions['submit_article'])||(user && user.permissions['submit_blog']))
                             <li class="c-menu-type-classic">
                                 <a href="#" class="c-link dropdown-toggle">Publish With Us</a>
@@ -158,7 +167,7 @@ Follow: www.twitter.com/themehats
                                         <a href="/artical_submission">Submit Article</a>
                                     </li>
                                     @endif
-                                    @if((user && user.permissions['all'])||(user && user.permissions['submit_blog']))
+                                    @if(false && (user && user.permissions['all'])||(user && user.permissions['submit_blog']))
                                     <li>
                                         <a href="Blogsubmission.html">Submit Blog</a>
                                     </li>
@@ -176,7 +185,11 @@ Follow: www.twitter.com/themehats
                                     <a href="javascript:;" data-toggle="modal" data-target="#login-form" class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-white c-btn-circle c-btn-uppercase c-btn-sbold"><i class="icon-user"></i> Sign In</a>
                                 @endif
                             </li>
-
+                            @if(isLogged)
+                            <li>
+                                <a href="/admin"  class="c-btn-border-opacity-04 c-btn btn-no-focus c-btn-header btn btn-sm c-btn-border-1x c-btn-white c-btn-circle c-btn-uppercase c-btn-sbold"><i class="icon-home"></i> &nbsp;Admin&nbsp;&nbsp; </a>
+                            </li>
+                            @endif
                         </ul>
                         <!-- END MEGA MENU -->
                     </nav>

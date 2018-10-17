@@ -2,9 +2,11 @@
 
 const Country = use('App/Models/Country')
 const User = use('App/Models/User')
+const Journal = use('App/Models/Journal')
+const Artical = use('App/Models/Artical')
 
 class UserController {
-    async logout ({ auth, view, response, session }) {
+    async logout ({ auth, response, session }) {
         console.log('Log Out')
         session.clear()
         console.log('session', session.all())
@@ -17,7 +19,7 @@ class UserController {
         return response.redirect('/')
     }
 
-    async login ({ request, auth, view, response, session }) {
+    async login ({ request, auth, response, session }) {
         const { email, password } = request.all()
         let msg_type ='', msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
         try{
@@ -86,7 +88,7 @@ class UserController {
         return view.render('main.index', { isLogged: loggedIn, msg: msg, msg_type:msg_type, country: country, user: user})
     }
 
-    async signup ({ request, auth, view, response, session }) {
+    async signup ({ request, response, session }) {
         console.log('Request')
         console.log(request.all())
         let email = request.all()['email']
@@ -113,6 +115,92 @@ class UserController {
         session.put('msg', 'You are Signed Up. Now you can Login with you email and password')
 
         return response.redirect('/')
+    }
+
+    async admin ({ request, auth, view, response, session }) {
+        if(!session.get('user')) {
+            var msg = 'You must Login first', msg_type = 'danger'
+
+            session.put('msg', msg)
+            session.put('msg_type', msg_type)
+    
+            return response.route('home', {message: msg, isLogged: false})
+        }
+
+        let user = session.get('user')
+
+        if(user.group_id==1) {
+            // Admin
+            let journals = await Journal.all()
+            journals = journals.toJSON()
+            let requestCount = 0
+            let cities = []
+            for(let journal of journals) {
+                if(journal.status == 'requested') {
+                    requestCount++
+                }
+                if(journal.status == 'aproved' && journal.city_id && cities.indexOf(journal.city_id)<0) {
+                    cities.push(journal.city_id)
+                }
+            }
+            let users = await User.all()
+            users = users.toJSON()
+            let directors = []
+            let chiefEditors = []
+            // let associateEditors = []
+            let managingEditors = []
+            let editorials = []
+            let institutesUniversities = []
+            let authors = []
+            let countries = []
+
+            for(let theUser of users) {
+                if(theUser.group_id == 1) {
+                    directors.push(theUser)
+                }else if(theUser.group_id == 2) {
+                    chiefEditors.push(theUser)
+                }else if(theUser.group_id == 3) {
+                    managingEditors.push(theUser)
+                }else if(theUser.group_id == 4) {
+                    editorials.push(theUser)
+                }else if(theUser.group_id == 5) {
+                    authors.push(theUser)
+                }
+                if(theUser.university_institute && institutesUniversities.indexOf(theUser.university_institute)<0) {
+                    institutesUniversities.push(theUser.university_institute)
+                }
+                if(theUser.country_id && countries.indexOf(theUser.country_id)<0) {
+                    countries.push(theUser.country_id)
+                }
+            }
+            let articles = await Artical.all()
+            articles = articles.toJSON()
+            let articleViews = 0
+            let articleDownloads = 0
+            let dois = []
+            for(let art of articles) {
+                articleViews += art.views
+                articleDownloads += art.downloads
+                if(art.doi && dois.indexOf(art.doi)<0) {
+                    dois.push(art.doi)
+                }
+            }
+            let statics = {
+                directors: directors,
+                chiefEditors: chiefEditors,
+                managingEditors: managingEditors,
+                editorials: editorials,
+                institutesUniversities: institutesUniversities,
+                authors: authors,
+                articles: articles,
+                articleViews: articleViews,
+                articleDownloads: articleDownloads,
+                cities: cities,
+                countries: countries,
+                dois: dois
+            }
+            return view.render('admin.admin', { isLogged: true, user: user, journals: journals, request_count: requestCount, statics: statics})
+        }
     }
 }
 

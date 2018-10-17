@@ -34,6 +34,10 @@ Route.post('signup', 'UserController.signup')
 
 Route.get('logout', 'UserController.logout')
 
+Route.get('admin', 'UserController.admin')
+
+Route.get('jouranl_request/:journal_id', 'JournalController.profile')
+
 Route.get('/', 'UserController.home').as('home')
 
 Route.get('*', 'UserController.home')
