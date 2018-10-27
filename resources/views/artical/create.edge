@@ -77,7 +77,11 @@
 															<select name="journal_id" class="form-control c-square c-theme" >
 																<option>Journal</option>
 																@each(jour in journals)
-																<option value="{{ jour.id }}">{{ jour.name }}</option>
+																	@if(jour.id==thejournal_id)
+																	<option value="{{ jour.id }}" selected>{{ jour.name }}</option>
+																	@else
+																	<option value="{{ jour.id }}">{{ jour.name }}</option>
+																	@endif
 																@endeach
 															</select>
 															<span class="help-block">Write down the full title of article</span>

@@ -174,7 +174,17 @@ class JournalController {
             return response.route('home')
         }
 
-        
+        if(request.method()=='GET') {
+            if(theJournal.status == 'requested') {
+                theJournal.status = 'pending'
+                await theJournal.save()
+            }
+        }else {
+            theJournal.director_note = request.all()['director_note']
+            theJournal.status = request.all()['status']
+            await theJournal.save()
+        }
+
         return view.render('journal.profile', { isLogged: isLogged, user: user, title: theJournal.name, journal: theJournal.toJSON()})
     }
 }

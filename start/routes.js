@@ -36,7 +36,7 @@ Route.get('logout', 'UserController.logout')
 
 Route.get('admin', 'UserController.admin')
 
-Route.get('jouranl_request/:journal_id', 'JournalController.profile')
+Route.any('jouranl_request/:journal_id', 'JournalController.profile')
 
 Route.get('author/:author_name', 'UserController.profile')
 

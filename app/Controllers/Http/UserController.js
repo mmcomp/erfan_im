@@ -148,7 +148,7 @@ class UserController {
             users = users.toJSON()
             let directors = []
             let chiefEditors = []
-            // let associateEditors = []
+            let assocEditors = []
             let managingEditors = []
             let editorials = []
             let institutesUniversities = []
@@ -166,6 +166,8 @@ class UserController {
                     editorials.push(theUser)
                 }else if(theUser.group_id == 5) {
                     authors.push(theUser)
+                }else if(theUser.group_id == 6) {
+                    assocEditors.push(theUser)
                 }
                 if(theUser.university_institute && institutesUniversities.indexOf(theUser.university_institute)<0) {
                     institutesUniversities.push(theUser.university_institute)
@@ -189,6 +191,7 @@ class UserController {
             let statics = {
                 directors: directors,
                 chiefEditors: chiefEditors,
+                assocEditors: assocEditors,
                 managingEditors: managingEditors,
                 editorials: editorials,
                 institutesUniversities: institutesUniversities,

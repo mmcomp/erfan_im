@@ -71,13 +71,15 @@ class JournalController {
 
         if(request.method()=='GET') {
             let journals = await Journal.all()
+            let theJournalId  = (request.all()['thejournal_id'])?parseInt(request.all()['thejournal_id'],10):-1
 
             return view.render('artical.create', { 
                 isLogged: isLogged,
                 user: user,
                 msg: msg,
                 msg_type: msg_type,
-                journals: journals.toJSON()
+                journals: journals.toJSON(),
+                thejournal_id: theJournalId
             })
         }else {
             console.log('Request', request.all())

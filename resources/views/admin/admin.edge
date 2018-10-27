@@ -53,27 +53,74 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu">
 										<li>
-                                            <a href="#">Directors <span class="badge c-bg-blue">{{statics.directors.length}}</span></a>
+											<a href="javascript:$('#directors').toggle()">Directors <span class="badge c-bg-blue">{{statics.directors.length}}</span></a>
+											<ul id="directors" style="display:none">
+												@each(directo in statics.directors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
 										</li>
 										<li>
-											<a href="#">Chief Editors <span class="badge c-bg-green">{{statics.chiefEditors.length}}</span></a>
+											<a href="javascript:$('#chiefs').toggle()">Chief Editors <span class="badge c-bg-green">{{statics.chiefEditors.length}}</span></a>
+											<ul id="chiefs" style="display:none">
+												@each(directo in statics.chiefEditors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
                                         </li>
-                                        <!--
 										<li>
-											<a href="#">Associate Editors <span class="badge c-bg-red">0</span></a>
+											<a href="javascript:$('#assoc').toggle()">Associate Editors <span class="badge c-bg-red">{{statics.assocEditors.length}}</span></a>
+											<ul id="assoc" style="display:none">
+												@each(directo in statics.assocEditors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
                                         </li>
-                                        -->
 										<li>
-											<a href="#">Managing Editors <span class="badge c-bg-purple">{{statics.managingEditors.length}}</span></a>
+											<a href="javascript:$('#manage').toggle()">Managing Editors <span class="badge c-bg-purple">{{statics.managingEditors.length}}</span></a>
+											<ul id="manage" style="display:none">
+												@each(directo in statics.managingEditors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
 										</li>
 										<li>
-											<a href="#">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{statics.editorials.length}}</span></a>
+											<a href="javascript:$('#editor').toggle()">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{statics.editorials.length}}</span></a>
+											<ul id="editor" style="display:none">
+												@each(directo in statics.editorials)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>	
 										</li>
                                         <li>
-											<a href="#">Institutes/Universities <span class="badge c-bg-yellow">{{statics.institutesUniversities.length}}</span></a>
+											<a href="javascript:$('#instit').toggle()">Institutes/Universities <span class="badge c-bg-yellow">{{statics.institutesUniversities.length}}</span></a>
+											<ul id="instit" style="display:none">
+												@each(directo in statics.institutesUniversities)
+												<li>
+													{{ directo }}
+												</li>
+												@endeach
+											</ul>	
 										</li>
                                         <li>
-											<a href="#">Authors & Co-authors <span class="badge c-bg-yellow">{{statics.authors.length}}</span></a>
+											<a href="javascript:$('#author').toggle()">Authors & Co-authors <span class="badge c-bg-yellow">{{statics.authors.length}}</span></a>
+											<ul id="author" style="display:none">
+												@each(directo in statics.authors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>	
 										</li>
 									</ul>
 								</div>
@@ -82,10 +129,10 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-arrow-dot">
 										<li class="c-bg-before-blue">
-                                            <a href="#">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
+											<a href="#">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
 										</li>
 										<li class="c-bg-before-red">
-											<a href="#">Article Views <span class="badge c-bg-green-1">{{statics.articleViews}}</span></a>
+											<a href="#">Article Views <span class="badge c-bg-green-1">{{statics.articleViews}}</span></a>	
 										</li>
 										<li class="c-bg-before-green">
 											<a href="#">Downloads  <span class="badge c-bg-red-1">{{statics.articleDownloads}}</span></a>
@@ -174,7 +221,7 @@
 							</p>
                             <ul class="c-content-list-1 c-separator-dot">
                                 @each(journal in journals)
-                                @if(journal.status=='requested')
+                                @if(journal.status=='pending')
                                 <li>
                                     <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
                                 </li>

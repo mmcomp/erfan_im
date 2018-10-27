@@ -25,7 +25,28 @@
 
         <!-- BEGIN: CONTENT/BARS/BAR-5 -->
         <div class="c-content-box c-size-md c-bg-parallax" style="background-image: url(/assets/base/img/content/backgrounds/bg-29.jpg); padding:250px !important;">
-
+            @if(isLogged && user.group_id==1)
+            <form method="post" >
+                {{ csrfField() }}
+                <h3 style="color: #fff;">
+                    Director Note :
+                </h3>
+                <textarea name="director_note" rows="10" cols="110">{{ (journal.director_note)?journal.director_note:'' }}</textarea>
+                <br/>
+                <select name="status" class="form-control c-square c-theme">
+                    <option value="pending"> Still Pending </option>
+                    @if(journal.status=='aproved')
+                    <option value="aproved" selected> Approved </option>
+                    @else
+                    <option value="aproved"> Approved </option>
+                    @endif
+                </select>
+                <br/>
+                <button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">
+                    Save
+                </button>
+            </form>
+            @endif
         </div>
         <!-- END: CONTENT/BARS/BAR-5 -->
 
@@ -42,9 +63,7 @@
                                 <p class="c-font-uppercase c-font-sbold">
                                     {{journal.description}}
                                 </p>
-                                <!--
-                                <button type="button" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</button>
-                                -->
+                                <a href="/artical_submission?thejournal_id={{ journal.id }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</a>
                             </div>
                             <!-- End-->
                         </div>
