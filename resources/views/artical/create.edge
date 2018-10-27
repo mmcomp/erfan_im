@@ -72,6 +72,18 @@
 												</li>
 												<li>
 													<div class="form-group">
+														<label class="col-md-4 control-label">Journal</label>
+														<div class="col-md-6">
+															<select name="journal_id" class="form-control c-square c-theme" >
+																<option>Journal</option>
+																@each(jour in journals)
+																<option value="{{ jour.id }}">{{ jour.name }}</option>
+																@endeach
+															</select>
+															<span class="help-block">Write down the full title of article</span>
+														</div>
+													</div>
+													<div class="form-group">
 														<label class="col-md-4 control-label">Full Title of Article</label>
 														<div class="col-md-6">
 															<input name="full_title" class="form-control c-square c-theme" type="text" placeholder="Article Title of 11-13 Words">

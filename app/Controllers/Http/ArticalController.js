@@ -1,7 +1,7 @@
 'use strict'
 
 const Artical = use('App/Models/Artical')
-const Database = use('Database')
+const Journal = use('App/Models/Journal')
 const Helpers = use('Helpers')
 
 class JournalController {
@@ -70,11 +70,14 @@ class JournalController {
         }
 
         if(request.method()=='GET') {
+            let journals = await Journal.all()
+
             return view.render('artical.create', { 
                 isLogged: isLogged,
                 user: user,
                 msg: msg,
-                msg_type: msg_type
+                msg_type: msg_type,
+                journals: journals.toJSON()
             })
         }else {
             console.log('Request', request.all())

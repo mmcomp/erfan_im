@@ -244,6 +244,23 @@ class UserController {
             return response.route('home')
         }
     }
+
+    async profile ({ request, auth, view, response, session, params }) {
+        let user = session.get('user')
+        console.log('params', params)
+        let author_name = params.author_name.split('-')
+        console.log('Author Name', author_name, author_name.length)
+        let fname = (author_name.length==2)?author_name[0]:''
+        let lname = (author_name.length==2)?author_name[1]:author_name[0]
+        console.log('Fname', fname, 'Lname', lname)
+        let selected_user = await User.query().where('fname', fname).where('lname', lname).first()
+        if(!selected_user) {
+            session.put('msg', 'Author Not Found')
+            session.put('msg_type', 'danger')
+            return response.redirect('/')
+        }
+        return selected_user.fname + ' ' + selected_user.lname 
+    }
 }
 
 module.exports = UserController

@@ -38,9 +38,15 @@ Route.get('admin', 'UserController.admin')
 
 Route.get('jouranl_request/:journal_id', 'JournalController.profile')
 
+Route.get('author/:author_name', 'UserController.profile')
+
 Route.get('/', 'UserController.home').as('home')
 
-Route.get('*', 'UserController.home')
+Route.get('*', async ({response, session}) => {
+    session.put('msg', 'URL not found')
+    session.put('msg_type', 'danger')
+    return response.redirect('/')
+})
 
 /*
 Route.get('/', async ({ view, auth, request, session }) => {
