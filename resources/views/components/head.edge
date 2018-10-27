@@ -153,15 +153,12 @@ Follow: www.twitter.com/themehats
 
                             </li>
                             -->
-                            @if((user && user.permissions['all'])||(user && user.permissions['submit_journal'])||(user && user.permissions['submit_article'])||(user && user.permissions['submit_blog']))
                             <li class="c-menu-type-classic">
                                 <a href="#" class="c-link dropdown-toggle">Publish With Us</a>
                                 <ul class="dropdown-menu c-menu-type-classic c-pull-left">
-                                    @if((user && user.permissions['all'])||(user && user.permissions['submit_journal']))
                                     <li>
                                         <a href="/journal_submission">Submit Journal</a>
                                     </li>
-                                    @endif
                                     @if((user && user.permissions['all'])||(user && user.permissions['submit_article']))
                                     <li>
                                         <a href="/artical_submission">Submit Article</a>
@@ -174,7 +171,6 @@ Follow: www.twitter.com/themehats
                                     @endif
                                 </ul>
                             </li>
-                            @endif
                             <li class="c-search-toggler-wrapper">
                                 <a href="#" class="c-btn-icon c-search-toggler"><i class="fa fa-search"></i></a>
                             </li>
@@ -243,7 +239,7 @@ Follow: www.twitter.com/themehats
                         <div class="modal-body">
                             <h3 class="c-font-24 c-font-sbold">Create An Account</h3>
                             <p>
-                                Please fill in below form to create an account with us
+                                Please fill in below form to create an account with us to submit article
                             </p>
                             <form action="/signup" method="POST" id="signup-form" >
                                 <input type="hidden" name="_csrf" value="{{ csrf }}">

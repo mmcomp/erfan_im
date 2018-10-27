@@ -13,7 +13,7 @@ class JournalController {
             isLogged = true
             user = session.get('user')
         }else{
-            loggedIn = false
+            isLogged = false
             country = await Country.all()
             country = country.toJSON()
         }
@@ -66,10 +66,6 @@ class JournalController {
         if(session.get('user')) {
             isLogged = true
             user = session.get('user')
-        }else {
-            session.put('msg', 'You need to Login first')
-            session.put('msg_type', 'danger')
-            return response.route('home', {isLogged: isLogged})
         }
 
         if(request.method()=='GET') {

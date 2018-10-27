@@ -33,6 +33,7 @@ class UserController {
             session.clear()
 
             try{
+                console.log('Remember Me : ', rememberme)
                 await auth.remember(rememberme).attempt(email, password)
                 msg = 'Logged in successfully'
                 logedIn = true;
@@ -49,8 +50,8 @@ class UserController {
                 session.put('user', user)
                 
             }catch(e) {
-                // console.log('Login Error')
-                // console.log(e)
+                console.log('Login Error')
+                console.log(e)
                 msg = 'Login information is wrong'
                 msg_type = 'danger'
             }
