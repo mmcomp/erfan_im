@@ -28,6 +28,8 @@ Route.any('journal_submission', 'JournalController.create').as('journal_create')
 
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
+Route.any('article_id/:article_id', 'ArticalController.profile')
+
 Route.post('login', 'UserController.login')
 
 Route.post('signup', 'UserController.signup')
@@ -39,6 +41,25 @@ Route.get('admin', 'UserController.admin')
 Route.any('jouranl_request/:journal_id', 'JournalController.profile')
 
 Route.get('author/:author_name', 'UserController.profile')
+
+Route.any('privacy', async ({view, session}) => {
+    let loggedIn = true, user = {}
+    if(session.get('user')) {
+        user = session.get('user')
+        loggedIn = true
+    }
+    return view.render('components.privacy', { isLogged: loggedIn, user: user })
+})
+
+Route.any('developer', async ({view, session}) => {
+    let loggedIn = true, user = {}
+    if(session.get('user')) {
+        user = session.get('user')
+        loggedIn = true
+    }
+    return view.render('components.mehrdad', { isLogged: loggedIn, user: user })
+})
+
 
 Route.get('/', 'UserController.home').as('home')
 

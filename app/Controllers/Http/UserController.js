@@ -205,17 +205,38 @@ class UserController {
             }
             return view.render('admin.admin', { isLogged: true, user: user, journals: journals, request_count: requestCount, statics: statics})
         }else if(user.group_id==2){
-            let articles = await Artical.query().where('status', 'submitted').orderBy('created_at', 'desc').limit(10).fetch()
-            let newlySubmitedArticles = articles.toJSON()
-            articles = await Artical.query().where('status', 'under_review').orderBy('created_at', 'desc').limit(10).fetch()
-            let underReviewArticles = articles.toJSON()
-            articles = await Artical.query().where('status', 'published').orderBy('created_at', 'desc').limit(10).fetch()
-            let publishedArticles = articles.toJSON()
+            let cities = [], countries = []
+            let journals = await Journal.all()
+            journals = journals.toJSON()
+            for(let jour of journals) {
+                if(cities.indexOf(jour.city_id)<0) {
+                    cities.push(jour.city_id)
+                }
+            }
+            console.log('Cities', cities)
+            let articles = await Artical.all()
+            articles = articles.toJSON()
+            let newlySubmitedArticles = [], underReviewArticles = [], publishedArticles = [], articleViews = 0
+            let articleDownloads = 0, articleCitiations = 0
+            for(let art of articles) {
+                if(art.status == 'submitted') {
+                    newlySubmitedArticles.push(art)
+                }else if(art.status == 'under_review') {
+                    underReviewArticles.push(art)
+                }else if(art.status == 'published') {
+                    publishedArticles.push(art)
+                    articleViews += art.views
+                    articleDownloads += art.downloads
+                    articleCitiations += art.citiations
+                }
+            }
+            console.log('ArticleViews', articleViews)
             let users = await User.query().whereNotIn('group_id', [1, 2]).fetch()
             users = users.toJSON()
             let statics = {
                 registeredUsers: users,
                 managingEdiors: [],
+                assocEditors: [],
                 reviewers: [],
                 institutesUniversities: [],
                 authors: []
@@ -227,18 +248,39 @@ class UserController {
                     statics.reviewers.push(user)
                 }else if(user.group_id==5) {
                     statics.authors.push(user)
+                }else if(user.group_id==6) {
+                    statics.assocEditors.push(user)
                 }
                 if(user.university_institute && statics.institutesUniversities.indexOf(user.university_institute)<0) {
                     statics.institutesUniversities.push(user.university_institute)
                 }
+                if(countries.indexOf(user.country_id)<0) {
+                    countries.push(user.country_id)
+                }
             }
+            console.log('Countries', countries)
+            let msg = session.get('msg')
+            let msg_type = session.get('msg_type')
+            session.forget('msg')
+            session.forget('msg_type')
             return view.render('admin.chiefeditor', { 
                 isLogged: true, 
                 user: user, 
+                articles: articles,
+                articleViews: String(articleViews),
+                articleDownloads: String(articleDownloads),
+                articleCitiations: String(articleCitiations),
                 newlySubmitedArticles: newlySubmitedArticles,
                 underReviewArticles: underReviewArticles,
                 publishedArticles: publishedArticles,
-                statics : statics
+                acceptedArticles: [],
+                rejectedArticles: [],
+                invitedArticles: newlySubmitedArticles,
+                statics : statics,
+                cities: cities,
+                countries: countries,
+                msg: msg,
+                msg_type: msg_type
             })
         }else {
             session.put('msg', 'You Are Not Authorized to use Dashboard')

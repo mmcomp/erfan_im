@@ -57,7 +57,7 @@
 							<ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in newlySubmitedArticles)
                                 <li>
-                                <a href="/article/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.created_at}} ) </a>
+                                <a href="/article_id/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.created_at}} ) </a>
                                 </li>
                                 @endeach
 							</ul>
@@ -69,7 +69,7 @@
                             <ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in underReviewArticles)
                                 <li>
-                                <a href="/article/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.updated_at}} ) </a>
+                                <a href="/article_id/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.updated_at}} ) </a>
                                 </li>
                                 @endeach
 							</ul>
@@ -81,7 +81,7 @@
                             <ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in publishedArticles)
                                 <li>
-                                <a href="/article/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.updated_at}} ) </a>
+                                <a href="/article_id/{{ newArticle.id }}">{{ ($loop.index + 1) }}. {{newArticle.full_title}} ( {{newArticle.updated_at}} ) </a>
                                 </li>
                                 @endeach
 							</ul>
@@ -100,24 +100,64 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu">
 										<li>
-                                            <a href="#">All Registered Users <span class="badge c-bg-blue">{{ statics.registeredUsers.length }}</span></a>
+											<a href="javascript:$('#allusers').toggle()">All Registered Users <span class="badge c-bg-blue">{{ statics.registeredUsers.length }}</span></a>
+											<ul id="allusers" style="display:none">
+												@each(directo in statics.registeredUsers)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
 										</li>
                                         <li>
-											<a href="#">Managing Editors <span class="badge c-bg-purple">{{ statics.managingEdiors.length }}</span></a>
+											<a href="javascript:$('#maneditor').toggle()">Managing Editors <span class="badge c-bg-purple">{{ statics.managingEdiors.length }}</span></a>
+											<ul id="maneditor" style="display:none">
+												@each(directo in statics.managingEdiors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
                                         </li>
-                                        <!--
 										<li>
-											<a href="#">Associate Editors <span class="badge c-bg-red">5</span></a>
+											<a href="javascript:$('#asseditor').toggle()">Associate Editors <span class="badge c-bg-red">{{ statics.assocEditors.length }}</span></a>
+											<ul id="asseditor" style="display:none">
+												@each(directo in statics.assocEditors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
                                         </li>
-                                        -->
 										<li>
-											<a href="#">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{ statics.reviewers.length }}</span></a>
+											<a href="javascript:$('#revi').toggle()">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{ statics.reviewers.length }}</span></a>
+											<ul id="revi" style="display:none">
+												@each(directo in statics.reviewers)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
 										</li>
                                         <li>
-											<a href="#">Institutes/Universities <span class="badge c-bg-yellow">{{ statics.institutesUniversities.length }}</span></a>
+											<a href="javascript:$('#inst').toggle()">Institutes/Universities <span class="badge c-bg-yellow">{{ statics.institutesUniversities.length }}</span></a>
+											<ul id="inst" style="display:none">
+												@each(directo in statics.institutesUniversities)
+												<li>
+													{{ directo }}
+												</li>
+												@endeach
+											</ul>
 										</li>
                                         <li>
-											<a href="#">Authors & Co-authors <span class="badge c-bg-yellow">{{ statics.authors.length }}</span></a>
+											<a href="javascript:$('#author').toggle()">Authors & Co-authors <span class="badge c-bg-yellow">{{ statics.authors.length }}</span></a>
+											<ul id="author" style="display:none">
+												@each(directo in statics.authors)
+												<li>
+													{{ directo.fname }} {{ directo.lname }}
+												</li>
+												@endeach
+											</ul>
 										</li>
 									</ul>
 								</div>
@@ -126,22 +166,22 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-arrow-dot">
 										<li class="c-bg-before-blue">
-											<a href="#">Total Articles  <span class="badge c-bg-blue-1">3</span></a>
+											<a href="#">Total Articles  <span class="badge c-bg-blue-1">{{ articles.length }}</span></a>
 										</li>
 										<li class="c-bg-before-red">
-											<a href="#">Article Views <span class="badge c-bg-green-1">4</span></a>
+											<a href="#">Article Views <span class="badge c-bg-green-1">{{ articleViews }}</span></a>
 										</li>
 										<li class="c-bg-before-green">
-											<a href="#">Downloads  <span class="badge c-bg-red-1">5</span></a>
+											<a href="#">Downloads  <span class="badge c-bg-red-1">{{ articleDownloads }}</span></a>
 										</li>
 										<li class="c-bg-before-purple">
-											<a href="#">Citations  <span class="badge c-bg-purple-1">2</span></a>
+											<a href="#">Citations  <span class="badge c-bg-purple-1">{{ articleCitiations }}</span></a>
 										</li>
 										<li class="c-bg-before-yellow">
-											<a href="#">Cities <span class="badge c-bg-yellow-1">6</span></a>
+											<a href="#">Cities <span class="badge c-bg-yellow-1">{{ cities.length }}</span></a>
 										</li>
                                         <li class="c-bg-before-yellow">
-											<a href="#">Countries <span class="badge c-bg-yellow-1">6</span></a>
+											<a href="#">Countries <span class="badge c-bg-yellow-1">{{ countries.length }}</span></a>
 										</li>
 									</ul>
 								</div>
@@ -150,19 +190,19 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-theme c-font-uppercase">
 										<li>
-											<a href="#">Published Articles <span class="badge c-bg-blue-2">3</span></a>
+											<a href="#">Published Articles <span class="badge c-bg-blue-2">{{ publishedArticles.length }}</span></a>
 										</li>
 										<li>
-											<a href="#">Accepted Articles <span class="badge c-bg-green-2">3</span></a>
+											<a href="#">Accepted Articles <span class="badge c-bg-green-2">{{ acceptedArticles.length }}</span></a>
 										</li>
 										<li>
-											<a href="#">Under Review Articles <span class="badge c-bg-red-2">3</span></a>
+											<a href="#">Under Review Articles <span class="badge c-bg-red-2">{{ underReviewArticles.length }}</span></a>
 										</li>
 										<li>
-											<a href="#">Rejected Articles <span class="badge c-bg-yellow-2">3</span></a>
+											<a href="#">Rejected Articles <span class="badge c-bg-yellow-2">{{ rejectedArticles.length }}</span></a>
 										</li>
 										<li>
-											<a href="#">Invited Articles <span class="badge c-bg-purple-2">3</span></a>
+											<a href="#">Invited Articles <span class="badge c-bg-purple-2">{{ invitedArticles.length }}</span></a>
 										</li>
 									</ul>
 								</div>
@@ -181,7 +221,7 @@
 
 @!component('components.foot')
 
-@!component('components.scripts')
+@!component('components.scripts', {msg: msg, msg_type: msg_type})
 </body>
 
 </html>

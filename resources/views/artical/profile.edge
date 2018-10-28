@@ -1,0 +1,646 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user: user})
+
+    <!-- BEGIN: PAGE CONTAINER -->
+    <div class="c-layout-page" style="margin-top: 100px !important;">
+
+        <!-- BEGIN: CONTENT/BARS/BAR-3 -->
+        <div class="c-content-box c-size-md c-bg-dark">
+            <div class="container">
+                <div class="c-content-bar-3">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="c-content-title-1">
+                                <h3 class="c-font-uppercase c-font-bold">{{ article.full_title }}</h3>
+                                <p class="c-font-uppercase">
+                                    {{ article.type }}
+                                </p>
+                                <p class="c-font-sentence">
+                                    {{ article.created_at }}
+                                </p>
+                                <p><a href="/{{ article.file_path }}" target="_blank" type="button" class="btn btn-md c-btn-square c-btn-border-2x c-theme-btn c-btn-uppercase c-btn-bold"> <i class="glyphicon glyphicon-save"></i>Download Article File (.doc or .docx)</a></p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-md-offset-2">
+                            <div class="c-content-v-center" style="height: 90px;">
+                                <div class="c-wrapper">
+                                    <div class="c-body">
+                                        <button type="button" class="btn btn-md btn-{{ status_color }} c-btn-square c-btn-border-2x c-btn-sentence c-btn-bold  c-btn-uppercase"><i class="icon-direction"></i>{{ article.status }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: CONTENT/BARS/BAR-3 -->
+
+        <!-- BEGIN: PAGE CONTENT -->
+            <!-- BEGIN: CONTENT/MISC/SERVICES-1-1 -->
+            <div class="c-content-box c-size-md c-bg-grey-1 ">
+                <div class="container">
+                    <div class="c-content-feature-2-grid" data-auto-height="true" data-mode="base-height">
+                        <div class="c-content-title-1">
+                            <h3 class="c-font-uppercase c-center c-font-bold">Article Processing Page</h3>
+                            <div class="c-line-center">
+                            </div>
+                        </div>
+
+                        <div class="c-content-panel">
+                    <div class="c-label">
+                        Atricle's HTML Version
+                    </div>
+                    <div class="c-body">
+                        <div class="c-content-tab-1 c-theme c-margin-t-30">
+                            <div class="clearfix">
+                                <ul class="nav nav-tabs c-font-uppercase c-font-bold">
+                                    <li class="active">
+                                        <a href="#tab_1_1_content" data-toggle="tab">AuthorsInfo</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_2_content" data-toggle="tab">Abstract</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_3_content" data-toggle="tab">Introduction</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_4_content" data-toggle="tab">Material/Methods</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_5_content" data-toggle="tab">Results</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_6_content" data-toggle="tab">Disc./Conc.</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_7_content" data-toggle="tab">Acknowl.</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab_1_8_content" data-toggle="tab">References</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content c-bordered c-padding-lg">
+                                <div class="tab-pane active" id="tab_1_1_content">
+                                    <p>
+                                        Author's Names and Affiliations will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#authorModel-1" data-whatever="bootstrap">Add/Edit Corresponding Author</button>
+                                    <div class="modal fade" id="authorModel-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write author info as exampled</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-salut" class="control-label">Write Salutation here e.g. Dr./Prof./Prof.Dr./Mr</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-salut">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-name" class="control-label"> First, Last Name e.g. Muhammad, Irfan</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-department" class="control-label">Department e.g. Department of Biology</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-department">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-university" class="control-label">Institute/University e.g. University of Oxford</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-university">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-email">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="corresponding-number" class="control-label">Corresponding number e.g. +10123456789</label>
+                                                        <input type="text" class="form-control c-square" id="corresponding-number">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+
+                                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#authorModel-2" data-whatever="bootstrap">Add/Edit First Author</button>
+                                    <div class="modal fade" id="authorModel-2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write first author carefully as per example</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-salut" class="control-label">Write Salutation here e.g. Dr./Prof./Prof.Dr./Mr</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-salut">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-name" class="control-label"> First, Last Name e.g. Muhammad, Irfan</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-department" class="control-label">Department e.g. Department of Biology</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-department">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-university" class="control-label">Institute/University e.g. University of Oxford</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-university">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-email">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="firstauthor-number" class="control-label">First author number e.g. +40123456789</label>
+                                                        <input type="text" class="form-control c-square" id="firstauthor-number">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#authorModel-3" data-whatever="bootstrap">Add/Edit Co-Authors</button>
+                                    <div class="modal fade" id="authorModel-3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write author info as exampled</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="coauthor-1-name" class="control-label"> First, Last Name e.g. Muhammad, Irfan</label>
+                                                        <input type="text" class="form-control c-square" id="coauthor-1-name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="coauthor-1-university" class="control-label">Institute/University e.g. University of Oxford</label>
+                                                        <input type="text" class="form-control c-square" id="coauthor-1-university">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+
+                                <div class="tab-pane" id="tab_1_2_content">
+                                        <p>
+                                        Abstract of 250 words will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#abstractModel" data-whatever="bootstrap">Add/Edit Abstract</button>
+                                    <div class="modal fade" id="abstractModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write abstract here of maximum 250 words</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Abstract:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_3_content">
+                                    <p>Introduction text will appear here.</p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#introductionModel" data-whatever="bootstrap">Add/Edit Introduction</button>
+                                    <div class="modal fade" id="introductionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write introduction with formatted references here</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Introduction:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_4_content">
+                                            <p>
+                                        Materials and Methodologies in formatted references and table will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#materialModel" data-whatever="bootstrap">Add/Edit Materials/Methodologies</button>
+                                    <div class="modal fade" id="materialModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please write materials and methods in formated references and tables</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Materials & Methodologies:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_5_content">
+                                            <p>
+                                        Results will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#resultModel" data-whatever="bootstrap">Add/Edit Results</button>
+                                    <div class="modal fade" id="resultModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please paste results with formated table and references here</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Results:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_6_content">
+                                            <p>
+                                        Discussion and Conclusion will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#discussionModel" data-whatever="bootstrap">Add/Edit Discussion/Conclusion</button>
+                                    <div class="modal fade" id="discussionModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please paste discussion and conclusion in formated table and references</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Discussion & Conclusion:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_7_content">
+                                            <p>
+                                        Acknowledgement will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#acknowledgeModel" data-whatever="bootstrap">Add/Edit Acknowledgements</button>
+                                    <div class="modal fade" id="acknowledgeModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please paste acknowledgement here</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">Acknowledgement:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                                <div class="tab-pane" id="tab_1_8_content">
+
+                                            <p>
+                                        References will appear here.
+                                    </p>
+                                <p>
+                                <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-toggle="modal" data-target="#referenceModel" data-whatever="bootstrap">Add/Edit References</button>
+                                    <div class="modal fade" id="referenceModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content c-square">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span></button>
+                                                <h4 class="modal-title" id="exampleModalLabel">Please check the formated references and click on save button</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="control-label">References:</label>
+                                                        <textarea class="form-control c-square" id="message-text"></textarea>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                                                <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="c-content-panel">
+                    <div class="c-label">
+                        Article's Review Panel
+                    </div>
+                    <div class="c-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p>
+                                    <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">List of Assigned Reviewers and Editors </span>
+                                </p>
+                                <ul class="c-content-list-1 c-separator-dot">
+                                    <li>
+                                        <a href="#">Editor-Name-1 </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Editor-Name-2 </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Reviewer-Name-1 </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Reviewer-Name-2 </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Additional-Reviewer-Name </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">Assign Editor/Reviewers </span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <p>
+                                    <span class="label label-success c-font-slim c-font-uppercase c-font-bold">Editor's Comments (2) </span>
+                                </p>
+                                <ul class="c-content-list-1 c-separator-dot">
+                                    <li>
+                                        <a href="#">1. Article Title (Date of Reviewer's Assignment) </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span class="label label-success c-font-slim c-font-uppercase c-font-bold">See Full Details </span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <p>
+                                    <span class="label label-info c-font-slim c-font-uppercase c-font-bold">Reviewer's Comments (2) </span>
+                                </p>
+                                <ul class="c-content-list-1 c-separator-dot">
+                                    <li>
+                                        <a href="#">1. Article Title (Published Date) </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> <span class="label label-info c-font-slim c-font-uppercase c-font-bold">See Full Details </span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="c-content-panel">
+                                <div class="c-label">
+                                    Current Status of the Paper
+                                </div>
+                                <div class="c-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group form-c-radios">
+                                            <label class="col-md-4 control-label">Status of Article</label>
+                                            <div class="col-md-6">
+                                                <div class="c-radio-list">
+                                                    <div class="c-radio has-success">
+                                                        <input type="radio" id="radio7-112" class="c-radio" name="radios3">
+                                                        <label for="radio7-112">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Under Review</label>
+                                                    </div>
+                                                    <div class="c-radio has-error">
+                                                        <input type="radio" id="radio8-112" class="c-radio" checked name="radios3">
+                                                        <label for="radio8-112">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Rejected</label>
+                                                    </div>
+                                                    <div class="c-radio has-warning">
+                                                        <input type="radio" id="radio9-112" class="c-radio" name="radios3">
+                                                        <label for="radio9-112">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Revised</label>
+                                                    </div>
+                                                    <div class="c-radio has-info">
+                                                        <input type="radio" id="radio10-112" class="c-radio" name="radios3">
+                                                        <label for="radio10-112">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Accepted & Published</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group c-margin-t-40">
+                                            <div class="col-sm-offset-4 col-md-8">
+                                                <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update the Status</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                <div class="c-content-panel">
+                    <div class="c-label">
+                        Statistics of Articles
+                    </div>
+                    <div class="c-body">
+                        <div class="c-content-ver-nav">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="c-content-ver-nav">
+                                        <ul class="c-menu">
+                                            <li>
+                                                <a href="#">Views <span class="badge c-bg-blue">3</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="c-content-ver-nav">
+                                        <ul class="c-menu c-arrow-dot">
+                                            <li class="c-bg-before-blue">
+                                                <a href="#">Downloads  <span class="badge c-bg-blue-1">3</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="c-content-ver-nav">
+                                        <ul class="c-menu c-theme c-font-uppercase">
+                                            <li>
+                                                <a href="#">Citations <span class="badge c-bg-blue-2">3</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="c-content-panel">
+                                <div class="c-label">
+                                    Indexing the Article
+                                </div>
+                                <div class="c-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group form-c-checkboxes">
+                                            <div class="col-md-6">
+                                                <div class="c-checkbox-list">
+                                                    <div class="c-checkbox has-success">
+                                                        <input type="checkbox" id="checkbox9-111" class="c-check">
+                                                        <label for="checkbox9-111">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Shared on Social Medias </label>
+                                                    </div>
+                                                    <div class="c-checkbox has-warning">
+                                                        <input type="checkbox" id="checkbox11-111" class="c-check">
+                                                        <label for="checkbox11-111">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Indexing in Scientific Databases </label>
+                                                    </div>
+                                                    <div class="c-checkbox has-info">
+                                                        <input type="checkbox" id="checkbox12-111" class="c-check">
+                                                        <label for="checkbox12-111">
+                                                    <span></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                    Published as News and SEO </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group c-margin-t-40">
+                                            <div class="col-sm-offset-4 col-md-8">
+                                                <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update Indexing</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+
+            </div>
+            <!-- END: CONTENT/MISC/SERVICES-1-1 -->
+        <!-- END: PAGE CONTENT -->
+    </div>
+    <!-- END: PAGE CONTAINER -->
+
+
+@!component('components.foot')
+
+@!component('components.scripts')
+</body>
+
+</html>

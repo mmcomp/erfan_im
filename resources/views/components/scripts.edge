@@ -72,6 +72,12 @@
                 }
                 event.preventDefault();
             });
+            
+            let msg = '{{msg}}';
+            let msg_type = '{{msg_type}}';
+            if(msg.trim()!='') {
+                $('body').append('<div class="alert alert-' + ((msg_type!='')?msg_type:'success') + ' new-alert hideMe" role="alert" >' + msg + '</div>');
+            }
         });
     </script>
     <!-- END: THEME SCRIPTS -->

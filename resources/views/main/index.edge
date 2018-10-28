@@ -575,17 +575,8 @@
 
         @!component('components.foot')
 
-        @!component('components.scripts')
+        @!component('components.scripts', {msg: msg, msg_type: msg_type})
 
-        <script>
-            $(document).ready(function() {
-                let msg = '{{msg}}';
-                let msg_type = '{{msg_type}}';
-                if(msg.trim()!='') {
-                    $('body').append('<div class="alert alert-' + ((msg_type!='')?msg_type:'success') + ' new-alert hideMe" role="alert" >' + msg + '</div>');
-                }
-            });
-        </script>
 </body>
 
 </html>

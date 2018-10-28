@@ -140,6 +140,35 @@ class JournalController {
         }
         return response.route('home', {isLogged: isLogged})
     }
+
+    async profile ({ view, response, session, request, params }) {
+        let isLogged = false, user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        console.log('Params', params)
+        if(!params || !params.article_id || isNaN(parseInt(params.article_id, 10))) {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.redirect('/')
+        }
+        let article = await Artical.find(parseInt(params.article_id, 10))
+        if(!article) {
+            session.put('msg', 'Article Not Found')
+            session.put('msg_type', 'danger')
+            return response.redirect('/admin')
+        }
+        article = article.toJSON()
+        let status_color = 'primary'
+        if(article.status == 'published') {
+            status_color = 'success'
+        }else if(article.status == 'rejected') {
+            status_color = 'danger'
+        }
+        return view.render('artical.profile', {isLogged: isLogged, user:user, article: article, status_color: status_color})
+    }
 }
 
 module.exports = JournalController
