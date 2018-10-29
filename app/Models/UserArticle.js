@@ -2,9 +2,9 @@
 
 const Model = use('Model')
 
-class Artical extends Model {
+class UserArticle extends Model {
   static get table () {
-    return 'article'
+    return 'users_article'
   }
 
   static get createdAtColumn () {
@@ -15,9 +15,9 @@ class Artical extends Model {
     return 'updated_at'
   }
   
-  author () {
-    return this.hasOne('App/Models/User', 'author_id', 'id')
+  user () {
+    return this.hasOne('App/Models/User', 'users_id', 'id')
   }
 }
 
-module.exports = Artical
+module.exports = UserArticle

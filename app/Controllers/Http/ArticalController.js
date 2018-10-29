@@ -2,6 +2,8 @@
 
 const Artical = use('App/Models/Artical')
 const Journal = use('App/Models/Journal')
+const User = use('App/Models/User')
+const UserArticle = use('App/Models/UserArticle')
 const Helpers = use('Helpers')
 
 class JournalController {
@@ -154,18 +156,123 @@ class JournalController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-        let article = await Artical.find(parseInt(params.article_id, 10))
-        if(!article) {
+        let mainArticle = await Artical.query().with('author').where('id', parseInt(params.article_id, 10)).first()
+        if(!mainArticle) {
             session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
-        article = article.toJSON()
+        let article = mainArticle.toJSON()
+
+        let userArticles = await UserArticle.query().with('user').where('article_id', article.id).fetch()
+        userArticles = userArticles.toJSON()
+        for(let userArt of userArticles) {
+            article[userArt.position] = userArt.user 
+        }
+
+        console.log('Article', article)
+
         let status_color = 'primary'
         if(article.status == 'published') {
             status_color = 'success'
         }else if(article.status == 'rejected') {
             status_color = 'danger'
+        }
+        if(request.method()=='POST') {
+            if(request.all()['position']) {
+                if(request.all()['position']=='corresponding') {
+                    let author = await User.find(article.author_id)
+                    if(!author) {
+                        author = new User
+                        author.group_id = 5
+                    }
+                    author.salutation = request.all()['salutation']
+                    author.fname = request.all()['fname']
+                    author.lname = request.all()['lname']
+                    author.department = request.all()['department']
+                    author.email = request.all()['email']
+                    author.password = request.all()['password']
+                    author.university_institute = request.all()['university_institute']
+                    author.tell = request.all()['tell']
+                    await author.save()
+                    let userArticle = await UserArticle.query().where('users_id', author.id).where('article_id', article.id).first()
+                    if(!userArticle) {
+                        userArticle = new UserArticle
+                        userArticle.users_id = author.id
+                        userArticle.article_id = article.id
+                        await userArticle.save()
+                    }
+                }else if(request.all()['position']=='first'){
+                    let theAuthor = await User.query().where('email', request.all()['email']).first()
+                    if(!theAuthor) {
+                        theAuthor = new User
+                        theAuthor.group_id = 5
+                    }
+                    theAuthor.salutation = request.all()['salutation']
+                    theAuthor.fname = request.all()['fname']
+                    theAuthor.lname = request.all()['lname']
+                    theAuthor.department = request.all()['department']
+                    theAuthor.email = request.all()['email']
+                    theAuthor.password = request.all()['password']
+                    theAuthor.university_institute = request.all()['university_institute']
+                    theAuthor.tell = request.all()['tell']
+                    await theAuthor.save()
+                    let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
+                    if(!userArticle) {
+                        userArticle = new UserArticle
+                        userArticle.users_id = theAuthor.id
+                        userArticle.article_id = article.id
+                    }
+                    userArticle.position = request.all()['position']
+                    await userArticle.save()
+                }else if(request.all()['position']=='co'){
+                    let theAuthor = await User.query().where('fname', request.all()['fname']).where('lname', request.all()['lname']).first()
+                    if(!theAuthor) {
+                        theAuthor = new User
+                        theAuthor.group_id = 5
+                    }
+                    theAuthor.fname = request.all()['fname']
+                    theAuthor.lname = request.all()['lname']
+                    theAuthor.university_institute = request.all()['university_institute']
+                    await theAuthor.save()
+                    let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
+                    if(!userArticle) {
+                        userArticle = new UserArticle
+                        userArticle.users_id = theAuthor.id
+                        userArticle.article_id = article.id
+                    }
+                    userArticle.position = request.all()['position']
+                    await userArticle.save()
+                }
+            }else if(request.all()['abstract']) {
+                mainArticle.abstract = request.all()['abstract']
+                await mainArticle.save()
+                article.abstract = request.all()['abstract']
+            }else if(request.all()['introduction']) {
+                mainArticle.introduction = request.all()['introduction']
+                await mainArticle.save()
+                article.introduction = request.all()['introduction']
+            }else if(request.all()['material']) {
+                mainArticle.material = request.all()['material']
+                await mainArticle.save()
+                article.material = request.all()['material']
+            }else if(request.all()['results']) {
+                mainArticle.results = request.all()['results']
+                await mainArticle.save()
+                article.results = request.all()['results']
+            }else if(request.all()['disc']) {
+                mainArticle.disc = request.all()['disc']
+                await mainArticle.save()
+                article.disc = request.all()['disc']
+            }else if(request.all()['ack']) {
+                mainArticle.ack = request.all()['ack']
+                await mainArticle.save()
+                article.ack = request.all()['ack']
+            }else if(request.all()['ref']) {
+                mainArticle.ref = request.all()['ref']
+                await mainArticle.save()
+                article.ref = request.all()['ref']
+            }
         }
         return view.render('artical.profile', {isLogged: isLogged, user:user, article: article, status_color: status_color})
     }
