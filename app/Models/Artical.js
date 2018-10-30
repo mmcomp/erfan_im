@@ -18,6 +18,10 @@ class Artical extends Model {
   author () {
     return this.hasOne('App/Models/User', 'author_id', 'id')
   }
+
+  editors () {
+    return this.belongsToMany('App/Models/User', 'article_id', 'users_id').pivotTable('users_edits')
+  }
 }
 
 module.exports = Artical

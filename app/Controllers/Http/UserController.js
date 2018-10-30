@@ -77,7 +77,7 @@ class UserController {
             country = country.toJSON()
         }
     
-        console.log('session', session.all())
+        // console.log('session', session.all())
         // console.log('country', country)
         let msg = session.get('msg')
         let msg_type = (session.get('msg_type')?session.get('msg_type'):'')

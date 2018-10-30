@@ -4,6 +4,7 @@ const Artical = use('App/Models/Artical')
 const Journal = use('App/Models/Journal')
 const User = use('App/Models/User')
 const UserArticle = use('App/Models/UserArticle')
+const UserArticleEditor = use('App/Models/UserArticleEditor')
 const Helpers = use('Helpers')
 
 class JournalController {
@@ -150,20 +151,40 @@ class JournalController {
             user = session.get('user')
         }
 
-        console.log('Params', params)
+        // console.log('Params', params)
         if(!params || !params.article_id || isNaN(parseInt(params.article_id, 10))) {
             session.put('msg', 'Wrong Usage')
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-        let mainArticle = await Artical.query().with('author').where('id', parseInt(params.article_id, 10)).first()
+        
+        let mainArticle = await Artical.query().with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
         if(!mainArticle) {
             session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
         let article = mainArticle.toJSON()
-
+        article['reviewers'] = []
+        let userEdits = await UserArticleEditor.query().with('comments').where('article_id', article.id).fetch()
+        // article['comments'] = userEdits.toJSON()
+        userEdits = userEdits.toJSON()
+        console.log('Editors and Reviewers', userEdits)
+        let finalEditors = []
+        for(let uEdit of userEdits) {
+            for(let i = 0;i < article.editors.length;i++) {
+                let editor = article.editors[i]
+                if(editor.id == uEdit.users_id) {
+                    article.editors[i]['comments'] = uEdit.comments
+                    if(uEdit.type=='reviewer') {
+                        article.reviewers.push(article.editors[i])    
+                    }else if(uEdit.type=='editor') {
+                        finalEditors.push(article.editors[i])
+                    }
+                }
+            }
+        }
+        article.editors = finalEditors
         let userArticles = await UserArticle.query().with('user').where('article_id', article.id).fetch()
         userArticles = userArticles.toJSON()
         for(let userArt of userArticles) {
@@ -178,6 +199,7 @@ class JournalController {
         }else if(article.status == 'rejected') {
             status_color = 'danger'
         }
+
         if(request.method()=='POST') {
             if(request.all()['position']) {
                 if(request.all()['position']=='corresponding') {
@@ -272,9 +294,32 @@ class JournalController {
                 mainArticle.ref = request.all()['ref']
                 await mainArticle.save()
                 article.ref = request.all()['ref']
+            }else if(request.all()['editor_email']) {
+                let assignEditor = await User.query().where('email', request.all()['editor_email']).first()
+                if(!assignEditor) {
+                    session.put('msg', 'Email not Registered!')
+                    session.put('msg_type', 'danger')
+                    return response.redirect('/article_id/' + article.id)
+                }
+                let userArticleEditor = await UserArticleEditor.query().where('users_id', assignEditor.id).where('article_id', article.id).first()
+                if(!userArticleEditor) {
+                    userArticleEditor = new UserArticleEditor
+                    userArticleEditor.sender_id = user.id
+                    userArticleEditor.users_id = assignEditor.id
+                    userArticleEditor.article_id = article.id
+                    await userArticleEditor.save()
+                    article.editors.push(assignEditor.toJSON())
+                    article.status = 'editor_assigned'
+                    mainArticle.status = 'editor_assigned'
+                    await mainArticle.save()
+                }
             }
         }
-        return view.render('artical.profile', {isLogged: isLogged, user:user, article: article, status_color: status_color})
+        let msg = session.get('msg')
+        let msg_type = session.get('msg_type')
+        session.forget('msg')
+        session.forget('msg_type')
+        return view.render('artical.profile', {isLogged: isLogged, user:user, article: article, status_color: status_color, msg: msg, msg_type: msg_type})
     }
 }
 
