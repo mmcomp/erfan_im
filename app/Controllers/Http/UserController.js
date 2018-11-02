@@ -221,13 +221,13 @@ class UserController {
             for(let art of articles) {
                 if(art.status == 'submitted') {
                     newlySubmitedArticles.push(art)
-                }else if(art.status == 'under_review') {
-                    underReviewArticles.push(art)
                 }else if(art.status == 'published') {
                     publishedArticles.push(art)
                     articleViews += art.views
                     articleDownloads += art.downloads
                     articleCitiations += art.citiations
+                }else {// if(art.status == 'under_review') {
+                    underReviewArticles.push(art)
                 }
             }
             console.log('ArticleViews', articleViews)

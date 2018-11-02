@@ -313,6 +313,24 @@ class JournalController {
                     mainArticle.status = 'editor_assigned'
                     await mainArticle.save()
                 }
+            }else if(request.all()['radios3']) {
+                mainArticle.status = request.all()['radios3']
+                await mainArticle.save()
+                article.status = mainArticle.status
+            }else {
+                if(request.all()['shared_on_social']) {
+                    mainArticle.shared_on_social = 1
+                    article.shared_on_social = 1
+                }
+                if(request.all()['scientific_database']) {
+                    mainArticle.scientific_database = 1
+                    article.scientific_database = 1
+                }
+                if(request.all()['news_seo']) {
+                    mainArticle.news_seo = 1
+                    article.news_seo = 1
+                }
+                await mainArticle.save()
             }
         }
         let msg = session.get('msg')
