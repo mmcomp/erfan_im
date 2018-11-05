@@ -337,7 +337,14 @@ class JournalController {
         let msg_type = session.get('msg_type')
         session.forget('msg')
         session.forget('msg_type')
-        return view.render('artical.profile', {isLogged: isLogged, user:user, article: article, status_color: status_color, msg: msg, msg_type: msg_type})
+        return view.render('artical.profile', {
+            isLogged: isLogged, 
+            user:user, 
+            article: article, 
+            status_color: status_color, 
+            msg: msg, 
+            msg_type: msg_type
+        })
     }
 }
 

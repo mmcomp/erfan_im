@@ -85,7 +85,7 @@
               <div class="tab-content c-bordered c-padding-lg">
                 <div class="tab-pane active" id="tab_1_1_content">
                   <p>
-                    Author's Names and Affiliations will appear here.
+                    <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">{{ article.author.fname }} {{ article.author.lname }}</a>
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -293,7 +293,7 @@
 
                 <div class="tab-pane" id="tab_1_2_content">
                   <p>
-                    Abstract of 250 words will appear here.
+                    {{ article.abstract }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -328,7 +328,7 @@
                   </p>
                 </div>
                 <div class="tab-pane" id="tab_1_3_content">
-                  <p>Introduction text will appear here.</p>
+                  <p>{{ article.introduction }}</p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#introductionModel" data-whatever="bootstrap">Add/Edit
@@ -364,7 +364,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_4_content">
                   <p>
-                    Materials and Methodologies in formatted references and table will appear here.
+                    {{ article.material }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -401,7 +401,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_5_content">
                   <p>
-                    Results will appear here.
+                    {{ article.results }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -437,7 +437,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_6_content">
                   <p>
-                    Discussion and Conclusion will appear here.
+                    {{ article.disc }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -474,7 +474,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_7_content">
                   <p>
-                    Acknowledgement will appear here.
+                    {{ article.ack }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -511,7 +511,7 @@
                 <div class="tab-pane" id="tab_1_8_content">
 
                   <p>
-                    References will appear here.
+                    {{ article.ref }}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
