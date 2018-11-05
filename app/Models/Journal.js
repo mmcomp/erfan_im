@@ -14,7 +14,11 @@ class Journal extends Model {
 
   static get updatedAtColumn () {
     return 'updated_at'
-	}
+  }
+  
+  extra() {
+    return this.hasMany('App/Models/JournalExtra')
+  }
 }
 
 module.exports = Journal

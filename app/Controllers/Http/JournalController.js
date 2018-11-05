@@ -2,8 +2,10 @@
 
 const Country = use('App/Models/Country')
 const Journal = use('App/Models/Journal')
+const JournalExtra = use('App/Models/JournalExtra')
 const Database = use('Database')
 const Helpers = use('Helpers')
+const Env = use('Env')
 
 class JournalController {
     async index ({ view, response, session }) {
@@ -42,8 +44,8 @@ class JournalController {
             jours += '<a href="' + ((journals[i].web_site)?journals[i].web_site:'#') + '" class="cbp-singlePage cbp-l-caption-buttonLeft btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase">Journal Homepage</a>'
             jours += '<a href="' + ((journals[i].cover_image_path)?journals[i].cover_image_path:'static/img/GnC-cover.jpg') + '" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="Dashboard<br>by Paul Flavius Nechita">Journal Cover</a>'
             jours += '</div></div></div></div>'
-            jours += '<a href="/journal_page/' + journals[i].id + '" class="cbp-singlePage cbp-l-grid-masonry-projects-title">' + journals[i].name + '</a>'
             jours += '<div class="cbp-l-grid-masonry-projects-desc">'
+            jours += '<b><a href="/jouranl_request/' + journals[i].id + '">' + journals[i].name + '</a></b><br/>'
             jours += journals[i].issn
             jours += '</div></div>'
         }
@@ -166,7 +168,7 @@ class JournalController {
             isLogged = true
             user = session.get('user')
         }
-        let theJournal = await Journal.find(params.journal_id)
+        let theJournal = await Journal.query().with('extra').where('id', params.journal_id).first()
         if(!theJournal) {
             session.put('msg', 'Journal Not Found')
             session.put('msg_type', 'danger')
@@ -180,9 +182,24 @@ class JournalController {
                 await theJournal.save()
             }
         }else {
-            theJournal.director_note = request.all()['director_note']
-            theJournal.status = request.all()['status']
-            await theJournal.save()
+            // console.log('POST Request', request.all())
+            if(request.all()['director_note']) {
+                theJournal.director_note = request.all()['director_note']
+                theJournal.status = request.all()['status']
+                await theJournal.save()    
+            }else if(request.all()['tabdata']) {
+                let tbdata = []
+                try{
+                    tbdata = JSON.parse(request.all()['tabdata'])
+                }catch(e){
+                    console.log('json parse error', e)
+                }
+                if(tbdata.length>0) {
+                    await JournalExtra.query().where('journal_id', theJournal.id).delete()
+                    await JournalExtra.createMany(tbdata)
+                    console.log('saveing tb data', tbdata)
+                }
+            }
         }
 
         return view.render('journal.profile', { isLogged: isLogged, user: user, title: theJournal.name, journal: theJournal.toJSON()})
