@@ -4,6 +4,7 @@ const Country = use('App/Models/Country')
 const User = use('App/Models/User')
 const Journal = use('App/Models/Journal')
 const Artical = use('App/Models/Artical')
+const UserArticle = use('App/Models/UserArticle')
 
 class UserController {
     async logout ({ auth, response, session }) {
@@ -304,7 +305,55 @@ class UserController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-        return selected_user.fname + ' ' + selected_user.lname 
+        let pageNumber = 1
+        if(request.all()['page_number']) {
+            pageNumber = parseInt(request.all()['page_number'],10)
+            if(isNaN(pageNumber)) {
+                pageNumber = 1
+            }
+        }
+        if(request.all()['page_move']) {
+            let page_move = parseInt(request.all()['page_move'],10)
+            if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                pageNumber += page_move
+            }
+        }
+        let articleIds = []
+        let articles = await Artical.query().where('author_id', selected_user.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let recentPublished = articles.toJSON()
+        for(let tmp of recentPublished.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        recentPublished['pages'] = []
+        for(let i = 1;i <= recentPublished.lastPage;i++) {
+            recentPublished.pages.push(i)
+        }
+        articles = await Artical.query().where('author_id', selected_user.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        let highlyCited = articles.toJSON()
+        for(let tmp of highlyCited.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        highlyCited['pages'] = []
+        for(let i = 1;i <= highlyCited.lastPage;i++) {
+            highlyCited.pages.push(i)
+        }
+        let userArticles = await UserArticle.query().with('user').whereIn('article_id', articleIds).fetch()
+        userArticles = userArticles.toJSON()
+        console.log('Recently : ', recentPublished)
+        return view.render('admin.user', {
+            isLogged: true, 
+            user: user, 
+            selected_user: selected_user,
+            articles : {
+                recentPublished: recentPublished,
+                highlyCited: highlyCited
+            },
+            user_articles: userArticles
+        })
     }
 }
 
