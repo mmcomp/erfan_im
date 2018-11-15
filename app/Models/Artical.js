@@ -19,15 +19,18 @@ class Artical extends Model {
 
   async getScholar () {
     try{
-      const response = await axios.get('https://scholar.google.com/scholar?as_epq=' + this.full_title)
+      const response = await axios.get('https://scholar.google.com/scholar?q="' + this.full_title + '"')
       let citIndex = response.data.indexOf('Cited by ')
+      // console.log(citIndex)
+      let tmp = 0
       if(citIndex>=0) {
-        let tmp = parseInt(response.data.split('Cited by ')[1], 10)
-        if(!isNaN(tmp)) {
-          this.citiations = tmp
-          await this.save()
+        tmp = parseInt(response.data.split('Cited by ')[1], 10)
+        if(isNaN(tmp)) {
+          tmp = 0
         }
       }
+      this.citiations = tmp
+      await this.save()
       // let resultObj = await scholar.search(this.full_title)
       // console.log('Scholar', resultObj)
     }catch(e) {
