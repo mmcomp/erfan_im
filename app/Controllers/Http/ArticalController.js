@@ -317,12 +317,16 @@ class JournalController {
                     article.status = 'editor_assigned'
                     mainArticle.status = 'editor_assigned'
                     await mainArticle.save()
-
-                    await Mail.send('emails.welcome', {}, (message) => {
-                        message.from('info@imaqpress.com')
-                        message.to(request.all()['editor_email'])
-                        message.subject('Subjected Mail')
-                    })
+                    try{
+                        await Mail.send('emails.welcome', {}, (message) => {
+                            message.from('info@imaqpress.com')
+                            message.to(request.all()['editor_email'])
+                            message.subject('Subjected Mail')
+                        })
+                    }catch(e) {
+                        console.log('Send Mail Error')
+                        console.log(e)
+                    }
                 }
             }else if(request.all()['radios3']) {
                 mainArticle.status = request.all()['radios3']
