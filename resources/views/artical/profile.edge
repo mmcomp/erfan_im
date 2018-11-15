@@ -85,7 +85,28 @@
               <div class="tab-content c-bordered c-padding-lg">
                 <div class="tab-pane active" id="tab_1_1_content">
                   <p>
-                    <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">{{ article.author.fname }} {{ article.author.lname }}</a>
+                    <ul>
+                      @if(article.first.length>0)
+                      <li>
+                        First Author : <a href="/author/{{ article.first[0].fname }}-{{ article.first[0].lname }}">{{ article.first[0].fname }} {{ article.first[0].lname }}</a>
+                      </li>
+                      @endif
+                      @if(article.co.length>0)
+                      <li>
+                        Co-Author : <a href="/author/{{ article.co[0].fname }}-{{ article.co[0].lname }}">{{ article.co[0].fname }} {{ article.co[0].lname }}</a>
+                      </li>
+                      @endif
+                      @if(article.corresponding.length==1)
+                      <li>
+                        Corresponding Author * : <a href="/author/{{ article.corresponding[0].fname }}-{{ article.corresponding[0].lname }}">{{ article.corresponding[0].fname }} {{ article.corresponding[0].lname }} *</a>
+                      </li>
+                      @endif
+                      @if(article.corresponding.length==2)
+                      <li>
+                          Corresponding Author ** : <a href="/author/{{ article.corresponding[1].fname }}-{{ article.corresponding[1].lname }}">{{ article.corresponding[1].fname }} {{ article.corresponding[1].lname }} **</a>
+                      </li>
+                      @endif
+                    </ul>
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -328,7 +349,7 @@
                   </p>
                 </div>
                 <div class="tab-pane" id="tab_1_3_content">
-                  <p>{{ article.introduction }}</p>
+                  <p>{{{ article.introduction }}}</p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#introductionModel" data-whatever="bootstrap">Add/Edit
@@ -348,7 +369,7 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Introduction:</label>
-                                <textarea name="introduction" class="form-control c-square" id="message-text">{{ article.introduction }}</textarea>
+                                <textarea name="introduction" class="form-control c-square editor" id="message-text">{{ article.introduction }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -364,7 +385,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_4_content">
                   <p>
-                    {{ article.material }}
+                    {{{ article.material }}}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -385,7 +406,7 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Materials & Methodologies:</label>
-                                <textarea name="material" class="form-control c-square" id="message-text">{{ article.material }}</textarea>
+                                <textarea name="material" class="form-control c-square editor" id="message-text">{{ article.material }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -401,7 +422,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_5_content">
                   <p>
-                    {{ article.results }}
+                    {{{ article.results }}}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -421,7 +442,7 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Results:</label>
-                                <textarea name="results" class="form-control c-square" id="message-text">{{ article.results }}</textarea>
+                                <textarea name="results" class="form-control c-square editor" id="message-text">{{ article.results }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -437,7 +458,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_6_content">
                   <p>
-                    {{ article.disc }}
+                    {{{ article.disc }}}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -458,7 +479,7 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Discussion & Conclusion:</label>
-                                <textarea name="disc" class="form-control c-square" id="message-text">{{ article.disc }}</textarea>
+                                <textarea name="disc" class="form-control c-square editor" id="message-text">{{ article.disc }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -474,7 +495,7 @@
                 </div>
                 <div class="tab-pane" id="tab_1_7_content">
                   <p>
-                    {{ article.ack }}
+                    {{{ article.ack }}}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -494,7 +515,7 @@
                               {{ csrfField() }}      
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Acknowledgement:</label>
-                                <textarea name="ack" class="form-control c-square" id="message-text">{{ article.ack }}</textarea>
+                                <textarea name="ack" class="form-control c-square editor" id="message-text">{{ article.ack }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -511,7 +532,7 @@
                 <div class="tab-pane" id="tab_1_8_content">
 
                   <p>
-                    {{ article.ref }}
+                    {{{ article.ref }}}
                   </p>
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -523,15 +544,22 @@
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel">Please check the formated references and
-                              click on save button</h4>
+                            <h4 class="modal-title" id="exampleModalLabel">
+                              Please check the formated references and
+                              click on save button
+                              <br/>
+                              insert every Reference in a line and like the above example :
+                            </h4>
+                            <h5 class="modal-title" id="exampleModalLabel" style="background: #eaeaea;padding: 10px;font-size: 12px;">
+                              Irfan Maqsood, Muhammad, Maryam M. Matin, Ahmad Reza Bahrami, and Mohammad M. Ghasroldasht. "Immortality of cell lines: challenges and advantages of establishment." Cell biology international 37, no. 10 (2013): 1038-1045.
+                            </h5>
                           </div>
                           <div class="modal-body">
                             <form method="post" id="ref-form">
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">References:</label>
-                                <textarea name="ref" class="form-control c-square" id="message-text">{{ article.ref }}</textarea>
+                                <textarea name="ref" class="form-control c-square editor" id="message-text">{{ article.ref }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -798,6 +826,20 @@
     @!component('components.foot')
 
     @!component('components.scripts', {msg: msg, msg_type: msg_type})
-    </body>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js"></script>
+    <script>
+        function editorify() {
+            $(".editor").each(function(id, field){
+              ClassicEditor
+                .create( field )
+                .catch( error => {
+                        console.error( error );
+                    } 
+                );
+            });
+        }
+        editorify();
+    </script>
+</body>
 
-    </html>
+</html>

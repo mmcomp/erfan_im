@@ -6,6 +6,7 @@ const JournalExtra = use('App/Models/JournalExtra')
 const Database = use('Database')
 const Helpers = use('Helpers')
 const Env = use('Env')
+const Mail = use('Mail')
 
 class JournalController {
     async index ({ view, response, session }) {
@@ -162,6 +163,13 @@ class JournalController {
 
     async profile ({ view, response, session, request, params }) {
         console.log('Params', params)
+        
+
+        await Mail.send('emails.welcome', {}, (message) => {
+            message.from('foo@bar.com')
+            message.to('m.mirsamie@gmail.com')
+        })
+
         let isLogged = false
         let user = {}
         if(session.get('user')) {
@@ -183,9 +191,10 @@ class JournalController {
             }
         }else {
             // console.log('POST Request', request.all())
-            if(request.all()['director_note']) {
+            if(request.all()['status']) {
                 theJournal.director_note = request.all()['director_note']
                 theJournal.status = request.all()['status']
+                theJournal.doi_code = request.all()['doi_code']
                 await theJournal.save()    
             }else if(request.all()['tabdata']) {
                 let tbdata = []

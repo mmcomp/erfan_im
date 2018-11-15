@@ -26,9 +26,15 @@ Route.get('journals', 'JournalController.index').as('journals')
 
 Route.any('journal_submission', 'JournalController.create').as('journal_create')
 
+Route.any('jouranl_request/:journal_id', 'JournalController.profile')
+
+
+
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
 Route.any('article_id/:article_id', 'ArticalController.profile')
+
+
 
 Route.post('login', 'UserController.login')
 
@@ -38,9 +44,9 @@ Route.get('logout', 'UserController.logout')
 
 Route.get('admin', 'UserController.admin')
 
-Route.any('jouranl_request/:journal_id', 'JournalController.profile')
-
 Route.get('author/:author_name', 'UserController.profile')
+
+
 
 Route.any('privacy', async ({view, session}) => {
     let loggedIn = true, user = {}

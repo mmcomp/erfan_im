@@ -169,7 +169,7 @@ class JournalController {
         let userEdits = await UserArticleEditor.query().with('comments').where('article_id', article.id).fetch()
         // article['comments'] = userEdits.toJSON()
         userEdits = userEdits.toJSON()
-        console.log('Editors and Reviewers', userEdits)
+        // console.log('Editors and Reviewers', userEdits)
         let finalEditors = []
         for(let uEdit of userEdits) {
             for(let i = 0;i < article.editors.length;i++) {
@@ -188,7 +188,10 @@ class JournalController {
         let userArticles = await UserArticle.query().with('user').where('article_id', article.id).fetch()
         userArticles = userArticles.toJSON()
         for(let userArt of userArticles) {
-            article[userArt.position] = userArt.user 
+            if(!article[userArt.position]) {
+                article[userArt.position] = []
+            }
+            article[userArt.position].push(userArt.user)
         }
 
         console.log('Article', article)

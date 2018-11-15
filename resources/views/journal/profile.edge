@@ -32,7 +32,6 @@
                     Director Note :
                 </h3>
                 <textarea name="director_note" rows="10" cols="110">{{ (journal.director_note)?journal.director_note:'' }}</textarea>
-                <br/>
                 <select name="status" class="form-control c-square c-theme">
                     <option value="pending"> Still Pending </option>
                     @if(journal.status=='aproved')
@@ -41,7 +40,7 @@
                     <option value="aproved"> Approved </option>
                     @endif
                 </select>
-                <br/>
+                <input class="form-control c-square c-theme" type="text" name="doi_code" value="{{ journal.doi_code }}" placeholder="DOI Prefix" />
                 <button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">
                     Save
                 </button>
@@ -59,8 +58,8 @@
                         <div class="col-md-6">
                             <!-- Begin: Title 1 component -->
                             <div class="c-content-title-1" data-height="height">
-                                <h3 class="c-font-uppercase c-font-bold">{{journal.name}}</h3>
-                                <p class="c-font-uppercase c-font-sbold">
+                                <h3 class="c-font-uppercase c-font-bold editor">{{journal.name}}</h3>
+                                <p class="c-font-uppercase c-font-sbold editor">
                                     {{journal.description}}
                                 </p>
                                 <a href="/artical_submission?thejournal_id={{ journal.id }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</a>
@@ -70,7 +69,7 @@
                         <div class="col-md-6">
                             <div class="c-content-v-center c-bg-red" data-height="height">
                                 <div class="c-wrapper">
-                                    <div class="c-body">
+                                    <div class="c-body editor">
                                         <h3 class="c-font-white c-font-bold">Indexed in Google Scholar, DOAJ, DOI, CrossRef, HINARI etc.</h3>
                                     </div>
                                 </div>
