@@ -6,7 +6,6 @@ const JournalExtra = use('App/Models/JournalExtra')
 const Database = use('Database')
 const Helpers = use('Helpers')
 const Env = use('Env')
-const Mail = use('Mail')
 
 class JournalController {
     async index ({ view, response, session }) {
@@ -163,12 +162,6 @@ class JournalController {
 
     async profile ({ view, response, session, request, params }) {
         console.log('Params', params)
-        
-
-        await Mail.send('emails.welcome', {}, (message) => {
-            message.from('info@imaqpress.com')
-            message.to('m.mirsamie@gmail.com')
-        })
 
         let isLogged = false
         let user = {}

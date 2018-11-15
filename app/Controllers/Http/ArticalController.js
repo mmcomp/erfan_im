@@ -6,6 +6,7 @@ const User = use('App/Models/User')
 const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
 const Helpers = use('Helpers')
+const Mail = use('Mail')
 
 class JournalController {
     async index ({ view, response, session }) {
@@ -310,11 +311,18 @@ class JournalController {
                     userArticleEditor.sender_id = user.id
                     userArticleEditor.users_id = assignEditor.id
                     userArticleEditor.article_id = article.id
+                    userArticleEditor.status = 'pending'
                     await userArticleEditor.save()
                     article.editors.push(assignEditor.toJSON())
                     article.status = 'editor_assigned'
                     mainArticle.status = 'editor_assigned'
                     await mainArticle.save()
+
+                    await Mail.send('emails.welcome', {}, (message) => {
+                        message.from('info@imaqpress.com')
+                        message.to(request.all()['editor_email'])
+                        message.subject('Subjected Mail')
+                    })
                 }
             }else if(request.all()['radios3']) {
                 mainArticle.status = request.all()['radios3']
