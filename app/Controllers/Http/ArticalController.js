@@ -165,6 +165,9 @@ class JournalController {
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
+        
+        await mainArticle.getScholar()
+
         let article = mainArticle.toJSON()
         article['reviewers'] = []
         let userEdits = await UserArticleEditor.query().with('comments').where('article_id', article.id).fetch()

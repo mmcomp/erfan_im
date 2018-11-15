@@ -1,6 +1,8 @@
 'use strict'
 
 const Model = use('Model')
+const axios = require('axios')
+// let scholar = require('google-scholar')
 
 class Artical extends Model {
   static get table () {
@@ -13,6 +15,24 @@ class Artical extends Model {
 
   static get updatedAtColumn () {
     return 'updated_at'
+  }
+
+  async getScholar () {
+    try{
+      const response = await axios.get('https://scholar.google.com/scholar?q=' + this.full_title)
+      let citIndex = response.data.indexOf('Cited by ')
+      if(citIndex>=0) {
+        let tmp = parseInt(response.data.split('Cited by ')[1], 10)
+        if(!isNaN(tmp)) {
+          this.citiations = tmp
+          await this.save()
+        }
+      }
+      // let resultObj = await scholar.search(this.full_title)
+      // console.log('Scholar', resultObj)
+    }catch(e) {
+      console.log('Scholar Error', e)
+    }
   }
   
   author () {
