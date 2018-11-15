@@ -19,7 +19,7 @@ class Artical extends Model {
 
   async getScholar () {
     try{
-      const response = await axios.get('https://scholar.google.com/scholar?q=' + this.full_title)
+      const response = await axios.get('https://scholar.google.com/scholar?as_epq=' + this.full_title)
       let citIndex = response.data.indexOf('Cited by ')
       if(citIndex>=0) {
         let tmp = parseInt(response.data.split('Cited by ')[1], 10)
