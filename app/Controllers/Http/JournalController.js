@@ -166,7 +166,7 @@ class JournalController {
         
 
         await Mail.send('emails.welcome', {}, (message) => {
-            message.from('foo@bar.com')
+            message.from('info@imaqpress.com')
             message.to('m.mirsamie@gmail.com')
         })
 
