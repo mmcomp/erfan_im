@@ -8,56 +8,7 @@ const UserArticleEditor = use('App/Models/UserArticleEditor')
 const Helpers = use('Helpers')
 const Mail = use('Mail')
 
-class JournalController {
-    async index ({ view, response, session }) {
-        let isLogged = false
-        if(session.get('user')) {
-            isLogged = true
-        }
-        let theFrequencies = ''
-        let jours = ''
-        let freqs = []
-        let journals = await Journal.all()
-        journals = journals.toJSON()
-        console.log('Journals')
-        console.log(journals)
-
-        for(let i = 0;i < journals.length;i++) {
-            console.log('Check', journals[i].frequency, freqs.indexOf(journals[i].frequency))
-            if(freqs.indexOf(journals[i].frequency)<0) {
-                freqs.push(journals[i].frequency)
-            }
-
-            jours += '<div class="cbp-item ' + journals[i].frequency + '">'
-            jours += '<div class="cbp-caption">'
-            jours += '<div class="cbp-caption-defaultWrap">'
-            jours += '<img src="' + ((journals[i].cover_image_path)?journals[i].cover_image_path:'static/img/GnC-cover.jpg') + '" alt="">'
-            jours += '</div>'
-            jours += '<div class="cbp-caption-activeWrap">'
-            jours += '<div class="c-masonry-border"></div>'
-            jours += '<div class="cbp-l-caption-alignCenter"><div class="cbp-l-caption-body">'
-            jours += '<a href="' + ((journals[i].web_site)?journals[i].web_site:'#') + '" class="cbp-singlePage cbp-l-caption-buttonLeft btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase">Journal Homepage</a>'
-            jours += '<a href="' + ((journals[i].cover_image_path)?journals[i].cover_image_path:'static/img/GnC-cover.jpg') + '" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="Dashboard<br>by Paul Flavius Nechita">Journal Cover</a>'
-            jours += '</div></div></div></div>'
-            jours += '<a href="/journal_page/' + journals[i].id + '" class="cbp-singlePage cbp-l-grid-masonry-projects-title">' + journals[i].name + '</a>'
-            jours += '<div class="cbp-l-grid-masonry-projects-desc">'
-            jours += journals[i].issn
-            jours += '</div></div>'
-        }
-
-        for(let i = 0;i < freqs.length;i++) {
-            theFrequencies += '<div data-filter=".' + freqs[i] + '" class="cbp-filter-item">'
-            theFrequencies += freqs[i]
-            theFrequencies += '<div class="cbp-filter-counter">'
-            theFrequencies += '</div>'
-            theFrequencies += '</div>'
-        }
-
-        console.log('theFreq', theFrequencies)
-
-        return view.render('journal.index', { isLogged: isLogged, frequencies: theFrequencies, jours: jours })
-    }
-
+class ArticalController {
     async create ({ view, response, session, request }) {
         let isLogged = false, user = {}, msg = '', msg_type = ''
         if(session.get('user')) {
@@ -73,6 +24,9 @@ class JournalController {
             return response.route('home', {isLogged: isLogged})
         }
 
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
         if(request.method()=='GET') {
             let journals = await Journal.all()
             let theJournalId  = (request.all()['thejournal_id'])?parseInt(request.all()['thejournal_id'],10):-1
@@ -83,7 +37,8 @@ class JournalController {
                 msg: msg,
                 msg_type: msg_type,
                 journals: journals.toJSON(),
-                thejournal_id: theJournalId
+                thejournal_id: theJournalId,
+                partners: partners
             })
         }else {
             console.log('Request', request.all())
@@ -158,7 +113,10 @@ class JournalController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-        
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
         let mainArticle = await Artical.query().with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
         if(!mainArticle) {
             session.put('msg', 'Article Not Found')
@@ -198,7 +156,7 @@ class JournalController {
             article[userArt.position].push(userArt.user)
         }
 
-        console.log('Article', article)
+        // console.log('Article', article)
 
         let status_color = 'primary'
         if(article.status == 'published') {
@@ -361,9 +319,10 @@ class JournalController {
             article: article, 
             status_color: status_color, 
             msg: msg, 
-            msg_type: msg_type
+            msg_type: msg_type,
+            partners: partners
         })
     }
 }
 
-module.exports = JournalController
+module.exports = ArticalController

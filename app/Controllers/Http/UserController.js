@@ -77,7 +77,12 @@ class UserController {
             country = await Country.all()
             country = country.toJSON()
         }
-    
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
+        // console.log('Partners', partners)
+
         // console.log('session', session.all())
         // console.log('country', country)
         let msg = session.get('msg')
@@ -87,7 +92,14 @@ class UserController {
         if(loggedIn) {
             user = session.get('user')
         }
-        return view.render('main.index', { isLogged: loggedIn, msg: msg, msg_type:msg_type, country: country, user: user})
+        return view.render('main.index', { 
+            isLogged: loggedIn, 
+            msg: msg, 
+            msg_type:msg_type, 
+            country: country, 
+            user: user,
+            partners: partners
+        })
     }
 
     async signup ({ request, response, session }) {
@@ -130,6 +142,9 @@ class UserController {
         }
 
         let user = session.get('user')
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
 
         if(user.group_id==1) {
             // Admin
@@ -204,7 +219,14 @@ class UserController {
                 countries: countries,
                 dois: dois
             }
-            return view.render('admin.admin', { isLogged: true, user: user, journals: journals, request_count: requestCount, statics: statics})
+            return view.render('admin.admin', { 
+                isLogged: true, 
+                user: user, 
+                journals: journals, 
+                request_count: requestCount, 
+                statics: statics,
+                partners: partners
+            })
         }else if(user.group_id==2){
             let cities = [], countries = []
             let journals = await Journal.all()
@@ -281,7 +303,8 @@ class UserController {
                 cities: cities,
                 countries: countries,
                 msg: msg,
-                msg_type: msg_type
+                msg_type: msg_type,
+                partners: partners
             })
         }else {
             session.put('msg', 'You Are Not Authorized to use Dashboard')
@@ -299,6 +322,10 @@ class UserController {
         let fname = (author_name.length==2)?author_name[0]:''
         let lname = (author_name.length==2)?author_name[1]:author_name[0]
         console.log('Fname', fname, 'Lname', lname)
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
         let selected_user = await User.query().where('fname', fname).where('lname', lname).first()
         if(!selected_user) {
             session.put('msg', 'Author Not Found')
@@ -352,7 +379,8 @@ class UserController {
                 recentPublished: recentPublished,
                 highlyCited: highlyCited
             },
-            user_articles: userArticles
+            user_articles: userArticles,
+            partners: partners
         })
     }
 }

@@ -2,13 +2,14 @@
 
 const Country = use('App/Models/Country')
 const Journal = use('App/Models/Journal')
+const Article = use('App/Models/Artical')
 const JournalExtra = use('App/Models/JournalExtra')
 const Database = use('Database')
 const Helpers = use('Helpers')
-const Env = use('Env')
+const User = use('App/Models/User')
 
 class JournalController {
-    async index ({ view, response, session }) {
+    async index ({ view, session }) {
         let isLogged = false
         let country = [], user = {}
         if(session.get('user')) {
@@ -19,6 +20,8 @@ class JournalController {
             country = await Country.all()
             country = country.toJSON()
         }
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
         let theFrequencies = ''
         let jours = ''
         let freqs = []
@@ -60,7 +63,14 @@ class JournalController {
 
         console.log('theFreq', theFrequencies)
 
-        return view.render('journal.index', { isLogged: isLogged, frequencies: theFrequencies, jours: jours, country: country, user: user })
+        return view.render('journal.index', { 
+            isLogged: isLogged, 
+            frequencies: theFrequencies, 
+            jours: jours, 
+            country: country, 
+            user: user,
+            partners: partners
+        })
     }
 
     async create ({ view, response, session, request }) {
@@ -69,6 +79,9 @@ class JournalController {
             isLogged = true
             user = session.get('user')
         }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
 
         if(request.method()=='GET') {
             console.log('GET')
@@ -115,7 +128,8 @@ class JournalController {
                 city: JSON.stringify(city),
                 countries: countries,
                 plainCountries: JSON.stringify(plainCountries),
-                user: user
+                user: user,
+                partners: partners
             })
         }
 
@@ -161,8 +175,6 @@ class JournalController {
     }
 
     async profile ({ view, response, session, request, params }) {
-        console.log('Params', params)
-
         let isLogged = false
         let user = {}
         if(session.get('user')) {
@@ -176,6 +188,9 @@ class JournalController {
     
             return response.route('home')
         }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
 
         if(request.method()=='GET') {
             if(theJournal.status == 'requested') {
@@ -204,7 +219,41 @@ class JournalController {
             }
         }
 
-        return view.render('journal.profile', { isLogged: isLogged, user: user, title: theJournal.name, journal: theJournal.toJSON()})
+        return view.render('journal.profile', { 
+            isLogged: isLogged, 
+            user: user, 
+            title: theJournal.name, 
+            journal: theJournal.toJSON(),
+            partners: partners
+        })
+    }
+
+    async partner ({ request, auth, view, response, session, params }) {
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
+        params.partner = decodeURIComponent(params.partner)
+        // let users = await User.query().where('university_institute', params.partner).pluck('id')
+        let theQuery = "select users.id uid, fname, lname, count(article.id) aid from article left join users on (users.id=author_id) where university_institute = '" + params.partner + "' order by count(article.id) desc limit 10"
+        let result = await Database.raw(theQuery)
+        result = result[0]
+        // console.log(theQuery)
+        // console.log(result[0])
+
+        return view.render('journal.partner', {
+            top_users: result,
+            partner: params.partner,
+            isLogged: isLogged,
+            user: user,
+            partners: partners
+        })
     }
 }
 
