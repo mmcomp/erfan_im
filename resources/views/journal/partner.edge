@@ -96,9 +96,11 @@
             </div>
             <ul class="c-menu c-arrow-dot1 c-theme">
                 @each(us in top_users)
+                @if(us.lname && us.aid > 0)
                 <li>
                 <a href="/author/{{ us.fname }}-{{ us.lname }}">{{ us.fname }} {{ us.lname }} ({{ us.aid }})</a>
                 </li>
+                @endif
                 @endeach
                 <!--
               <li>
@@ -296,19 +298,19 @@
         <div class="row">
           <div class="col-md-4">
             <div class="c-counter c-theme-border c-font-bold c-theme-font" data-counter="counterup">
-              130
+              {{ number_of_articles }}
             </div>
             <h4 class="c-title c-first c-font-uppercase c-font-bold">No. of Articles</h4>
           </div>
           <div class="col-md-4">
             <div class="c-counter c-theme-border c-font-bold c-theme-font" data-counter="counterup">
-              35,500
+              {{ number_of_authers }}
             </div>
             <h4 class="c-title c-font-uppercase c-font-bold">No. of Authors</h4>
           </div>
           <div class="col-md-4">
             <div class="c-counter c-theme-border c-font-bold c-theme-font" data-counter="counterup">
-              110,865
+              {{ number_of_citiations }}
             </div>
             <h4 class="c-title c-font-uppercase c-font-bold">No. of Citations</h4>
           </div>

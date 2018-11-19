@@ -244,15 +244,30 @@ class JournalController {
         let theQuery = "select users.id uid, fname, lname, count(article.id) aid from article left join users on (users.id=author_id) where university_institute = '" + params.partner + "' order by count(article.id) desc limit 10"
         let result = await Database.raw(theQuery)
         result = result[0]
-        // console.log(theQuery)
-        // console.log(result[0])
-
+        let numberOfArticles = 0
+        for(let res of result) {
+            numberOfArticles += res.aid
+        }
+        theQuery = "select sum('citiation') sc from article left join users on (author_id=users.id) where university_institute = '" + params.partner + "'"
+        let citResult = await Database.raw(theQuery)
+        citResult = citResult[0][0]['sc']
+        // console.log('Cit Result', theQuery, citResult)
+        if(citResult === null){
+            citResult = '0'
+        }
+        numberOfArticles = String(numberOfArticles)
+        let numberOfAuthers = await User.query().where('university_institute', params.partner).count()
+        numberOfAuthers = numberOfAuthers[0]['count(*)']
+        // console.log(numberOfAuthers)
         return view.render('journal.partner', {
             top_users: result,
             partner: params.partner,
             isLogged: isLogged,
             user: user,
-            partners: partners
+            partners: partners,
+            number_of_articles: numberOfArticles,
+            number_of_authers: numberOfAuthers,
+            number_of_citiations: citResult
         })
     }
 }
