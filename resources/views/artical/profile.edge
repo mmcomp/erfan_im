@@ -577,7 +577,20 @@
             </div>
           </div>
         </div>
-
+        <div class="c-content-panel">
+          <h3 onclick="sendImage();" style="cursor: pointer;">
+            <img src="{{ uploadedImage }}" style="width: 30px;" />
+          </h3>
+          <form method="post"  enctype="multipart/form-data">
+              {{ csrfField() }}
+              <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
+              <input type="file" name="image_upload" />
+              <button class="btn btn-success pull-left">
+                  Upload Image
+              </button>
+          </form>
+        </div>
+        <br/><br/>
         <div class="c-content-panel">
           <div class="c-label">
             Article's Review Panel
@@ -828,10 +841,35 @@
     @!component('components.scripts', {msg: msg, msg_type: msg_type})
     <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js"></script>
     <script>
+        var editors = [];
+        var uploadedImage = '{{ uploadedImage }}';
+        function sendImage() {
+            if(uploadedImage=='') {
+                alert('No Image was Uploaded yet!');
+                return false;
+            }
+            var selected_editor = parseInt($("#selected_editor").val(), 10);
+            if(isNaN(selected_editor) || selected_editor<=-1) {
+                alert('No Target Selected for Image');
+                return false;
+            }
+            var data = editors[selected_editor].getData();
+            editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
+        }
         function editorify() {
             $(".editor").each(function(id, field){
               ClassicEditor
                 .create( field )
+                .then(theEditor => {
+                  editors.push(theEditor);
+                  var theButton = $(field).parent().parent().parent().parent().parent().parent().prev().find('button');
+                  theButton.prop('editorindex', editors.length-1);
+                  theButton.click(function(){
+                    if(!isNaN(parseInt(this.editorindex, 10))){
+                        $("#selected_editor").val(parseInt(this.editorindex, 10));
+                    }
+                  });
+                })
                 .catch( error => {
                         console.error( error );
                     } 

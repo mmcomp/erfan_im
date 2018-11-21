@@ -117,6 +117,8 @@ class ArticalController {
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
 
+        let uploadedImage = '', selected_editor = -1
+
         let mainArticle = await Artical.query().with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
         if(!mainArticle) {
             session.put('msg', 'Article Not Found')
@@ -293,6 +295,22 @@ class ArticalController {
                 mainArticle.status = request.all()['radios3']
                 await mainArticle.save()
                 article.status = mainArticle.status
+            }else if(request.file('image_upload')) {
+                const imageUpload = request.file('image_upload', {
+                    types: ['image'],
+                    size: '2mb'
+                })
+                selected_editor = request.all()['selected_editor']
+                let filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                await imageUpload.move(Helpers.publicPath('static/img/uploads'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!imageUpload.moved()) {
+                    console.log(imageUpload.error())
+                }else {
+                    uploadedImage = '/static/img/uploads/' + filename
+                }
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -320,7 +338,9 @@ class ArticalController {
             status_color: status_color, 
             msg: msg, 
             msg_type: msg_type,
-            partners: partners
+            partners: partners,
+            uploadedImage: uploadedImage,
+            selected_editor: selected_editor
         })
     }
 }
