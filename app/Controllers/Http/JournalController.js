@@ -191,6 +191,8 @@ class JournalController {
 
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
+        
+        let uploadedImage = '', selected_editor = -1
 
         if(request.method()=='GET') {
             if(theJournal.status == 'requested') {
@@ -216,6 +218,22 @@ class JournalController {
                     await JournalExtra.createMany(tbdata)
                     console.log('saveing tb data', tbdata)
                 }
+            }else if(request.file('image_upload')) {
+                const imageUpload = request.file('image_upload', {
+                    types: ['image'],
+                    size: '2mb'
+                })
+                selected_editor = request.all()['selected_editor']
+                let filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                await imageUpload.move(Helpers.publicPath('static/img/uploads'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!imageUpload.moved()) {
+                    console.log(imageUpload.error())
+                }else {
+                    uploadedImage = '/static/img/uploads/' + filename
+                }
             }
         }
 
@@ -224,7 +242,9 @@ class JournalController {
             user: user, 
             title: theJournal.name, 
             journal: theJournal.toJSON(),
-            partners: partners
+            partners: partners,
+            uploadedImage: uploadedImage,
+            selected_editor: selected_editor
         })
     }
 

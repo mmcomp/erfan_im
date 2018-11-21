@@ -96,7 +96,7 @@
                                     class="active"
                                     @endif
                                     >
-                                        <a class="editor tbs" id="tb{{ ($loop.index + 1) }}" href="#tab_{{ ($loop.index + 1) }}" data-toggle="tab">{{{ extr.tbname }}}</a>
+                                        <a class="tbs" id="tb{{ ($loop.index + 1) }}" href="#tab_{{ ($loop.index + 1) }}" data-toggle="tab">{{{ extr.tbname }}}</a>
                                     </li>
                                     @endeach
                                     <!--
@@ -166,6 +166,17 @@
             <form method="post" id="tabdata-form">
                 {{ csrfField() }}
                 <input type="hidden" name="tabdata" id="tabdata" />
+            </form>
+            <h3 onclick="sendImage();" style="cursor: pointer;">
+                <img src="{{ uploadedImage }}" style="width: 30px;" />
+            </h3>
+            <form method="post"  enctype="multipart/form-data">
+                {{ csrfField() }}
+                <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
+                <input type="file" name="image_upload" />
+                <button class="btn btn-success pull-left">
+                    Upload Image
+                </button>
             </form>
         </div>
 
@@ -386,16 +397,54 @@
 
     @!component('components.scripts')
     <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/inline/ckeditor.js"></script>
+    <!--<script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>-->
     <script>
         var lastid = 3;
+        var editors = [];
+        var uploadedImage = '{{ uploadedImage }}';
+        function sendImage() {
+            if(uploadedImage=='') {
+                alert('No Image was Uploaded yet!');
+                return false;
+            }
+            var selected_editor = parseInt($("#selected_editor").val(), 10);
+            if(isNaN(selected_editor) || selected_editor<=-1) {
+                alert('No Target Selected for Image');
+                return false;
+            }
+            var data = editors[selected_editor].getData();
+            editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
+        }
         function editorify() {
+            // CKEDITOR.disableAutoInline = true;
+            // CKEDITOR.inline( 'editor1' );
+            // var start = true;
             $(".editor").each(function(id, field){
+                console.log(id, field);
                 InlineEditor
                 .create( field )
+                .then(theEditor => {
+                    editors.push(theEditor);
+                    $(field).prop('editorindex', editors.length-1);
+                    $(field).click(function(){
+                        // console.log('Click', this.editorindex);
+                        if(!isNaN(parseInt(this.editorindex, 10))){
+                            $("#selected_editor").val(parseInt(this.editorindex, 10));
+                        }
+                        // console.log(editors[this.editorindex].getData());
+                    });
+                })
                 .catch( error => {
                         console.error( error );
                     } 
                 );
+                // if(start) {
+                // CKEDITOR.disableAutoInline = true;
+                // CKEDITOR.inline( field , {
+				// 	extraAllowedContent: 'a(documentation);abbr[title];code'
+				// });
+                // start =false;
+                // }
             });
         }
         function addTab() {
@@ -406,7 +455,7 @@
             var id = lastid;
             $("#li-more").before('<li><a class="editor tbs" id="tb' + id + '" href="#tab_' + id + '" data-toggle="tab" aria-expanded="true">' + tbname + '</a></li>');
             $("#tab_more").before('<div class="tab-pane fade" id="tab_' + id + '"><div id="tb' + id + '_content" class="editor tbcon">' + tbcontent + '</div></div>');
-            editorify();
+            // editorify();
             $("#tb").val('');
             $("#tb-content").html('Content');
         }
@@ -417,7 +466,7 @@
                 tmp['tbname'] = $(field).html().trim();
                 tmp['tbcontent'] = 'Content';
                 if($("#tb" + theid + "_content").length==1) {
-                    tmp['tbcontent'] = $("#tab_" + theid).html().trim();
+                    tmp['tbcontent'] = $("#tb" + theid + "_content").html().trim();
                 }
                 tmp['journal_id'] = {{ journal.id }};
                 tabs.push(tmp);
