@@ -1,0 +1,250 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user})
+
+<!-- BEGIN: PAGE CONTAINER -->
+<div class="c-layout-page" style="margin-top: 140px !important;">
+  <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+  <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold">
+    <div class="container">
+      <div class="c-page-title c-pull-left">
+        <h3 class="c-font-uppercase c-font-bold">{{ article.journal.name }}</h3>
+      </div>
+      <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+        <li>
+          <a href="/journal/{{ article.journal.name }}">Journals</a>
+        </li>
+        <li>
+          /
+        </li>
+        <li class="c-state_active">
+          {{ article.journal.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+  <!-- BEGIN: PAGE CONTENT -->
+
+  <!-- BEGIN: CONTENT/BARS/BAR-5 -->
+  <div class="c-content-box c-size-md c-bg-parallax" style="background-image: url(assets/base/img/content/backgrounds/bg-29.jpg); padding:70px !important;">
+
+  </div>
+  <!-- END: CONTENT/BARS/BAR-5 -->
+
+
+  <!-- BEGIN: CONTENT/BARS/BAR-2 -->
+  <div class="c-content-box c-size-md c-bg-grey-1">
+    <div class="container">
+      <div class="c-content-bar-2 c-opt-1">
+        <div class="row" data-auto-height="true">
+          <div class="col-md-12">
+            <!-- Begin: Title 1 component -->
+            <div class="c-content-title-1" data-height="height">
+              <span class="c-content-label c-font-uppercase c-font-bold c-bg-green-2 c-font-slim c-font-uppercase c-font-bold">Review
+                Article</span>
+              <p class="c-font-sentence c-font-sbold"> Published in <a href="/journal/{{ article.journal.name }}">{{ article.journal.name }}</a> on <a href="http://imaqpress.com/archive/2015/august">{{ article.publish_date }}</a> <br> Vol:
+                {{ article.publish_vol }}, No: {{ article.publish_no }}, Page: {{ article.publish_startpage }}-{{ article.publish_endpage }} <br>
+                DOI: <a href="http://doi.org/00000.00/gnc.012018"> 00000.00/{{ article.journal.doi_code }}.{{ article.doi }}</a> </p>
+              <h3 class="c-font-sentence c-font-bold">{{ article.running_title }}</h3>
+              <span class="item"><span aria-hidden="true" class="icon-users">&nbsp;Authors:</span> <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">
+                  {{ article.author.fname }} {{ article.author.lname }}</a>
+                @each(aut in otherAuthors)
+                @if(aut.users_id!=article.author.id)
+                , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
+                  {{ aut.user.fname }} {{ aut.user.lname }}
+                </a>
+                @endif
+                @endeach
+                @each(aut in corAuthors)
+                @if(aut.users_id!=article.author.id)
+                , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
+                  {{ aut.user.fname }} {{ aut.user.lname }} {{ aut.stars }}
+                </a>
+                @endif
+                @endeach
+                <!--
+                  , <a href="http://imaqpress.com/authors/">Mahdi Mirahmadi </a>
+                  , <a href="http://imaqpress.com/authors/"> Hojjat Naderi-meshkin* </a>
+                  -->
+              </span>
+              @if(corAuthors.length>0)
+              <div class="c-content-panel">
+                <div class="c-label">
+                  Correspondance*:
+                </div>
+                <div class="c-body">
+                  @each(aut in corAuthors)
+                  <blockquote>
+                    <p>
+                      <strong>{{ aut.user.salutation }}. {{ aut.user.fname }} {{ aut.user.lname }} </strong>, {{ aut.user.department }} <br> {{ aut.user.university_institute }} <br> {{ aut.user.country.COUNTRY_NAME}} <br> {{ aut.user.email }}
+                      <br> {{ aut.user.tell }}
+                    </p>
+                  </blockquote>
+                  @endeach
+                </div>
+              </div>
+              @endif
+              <p class="c-font-sentence c-font-sbold"> <strong>Abstract: </strong><br> Stem cell therapeutic research
+                is passing through a transition phase between laboratory research and health industry. According to the
+                US data registry of clinical trials, more than 4776 studies have been registered, 2882 have been
+                completed whereas 1894 studies are in process. Surprisingly, in spite of having huge research, there
+                are two commercialized stem cell therapeutic products in global market and these two products are also
+                not approved by FDA. As it has been discussed in literature, stem cells have been considered as
+                promising candidates to treat non-curable diseases like cancer etc. More than 80% successful clinical
+                trials have been done showing no or little side effects with much better efficiency than
+                pharmacokinetics but still stem cell research is far from being commercialized. The major reason of
+                stem cells non-commercialization is the gap among clinicians, researchers, industry experts and policy
+                makers. A multibillion dollar grants and a very strong communication system between doctors,
+                researchers, industrial experts, policy makers, regulating authorities, are the pre-requisite to
+                commercialize stem cell therapy.</p>
+              <span class="item"><span aria-hidden="true" class="icon-tag">&nbsp;Keywords:</span> <a href="http://imaqpress.com/keywords/">
+                  Current good manufacturing practice </a> <a href="http://imaqpress.com/keywords/"> commercialization
+                  of stem cells </a> <a href="http://imaqpress.com/keywords/"> cellular therapy </a> <a href="http://imaqpress.com/keywords/">
+                  clinical trials </a> <a href="http://imaqpress.com/keywords/non-curable-disease"> non-curable
+                  diseases </a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- END: CONTENT/BARS/BAR-2 -->
+
+
+  <!-- START: FULL TEXT ARTICLE -->
+  <div class="c-content-box c-size-md c-bg-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9">
+          <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+            <h3 class="c-font-bold c-font-uppercase">Full Text</h3>
+          </div>
+          </br>
+          <div class="c-content-panel">
+            <div class="c-body ">
+              <div class="row">
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                  <ul class="nav nav-tabs tabs-left c-font-uppercase ">
+                    <li class=""> <a href="#tab_16_1" data-toggle="tab">Introduction</a></li>
+                    <li> <a href="#tab_16_2" data-toggle="tab">Literature Review</a></li>
+                    <li class="active"> <a href="#tab_16_3" data-toggle="tab" aria-expanded="true"> Conclusion </a></li>
+                    <li><a href="#tab_16_4" data-toggle="tab"> Acknowledgement </a></li>
+                    <li><a href="#tab_16_4" data-toggle="tab"> Conflict of Interest </a></li>
+                    <li><a href="#tab_16_4" data-toggle="tab"> References </a></li>
+                  </ul>
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-9">
+                  <div class="tab-content c-padding-sm">
+                    <div class="tab-pane fade" id="tab_16_1">
+                      <p>
+                        Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown
+                        aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan
+                        helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater
+                        eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan
+                        aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+                      </p>
+                    </div>
+                    <div class="tab-pane fade" id="tab_16_2">
+                      <p>
+                        Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                        Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four
+                        loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo
+                        enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic,
+                        assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna
+                        velit sapiente labore
+                        stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut
+                        DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher
+                        vero sint qui sapiente
+                        accusamus tattooed echo park.
+                      </p>
+                    </div>
+                    <div class="tab-pane active" id="tab_16_3">
+                      <p>
+                        Etsy mixtape waefore they sold out mcsweeney's organic lomo retro fanny pack lo-fi
+                        farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone
+                        skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy
+                        irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free,
+                        carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably
+                        haven't heard of them,
+                        vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.
+                      </p>
+                    </div>
+                    <div class="tab-pane fade" id="tab_16_4">
+                      <p>
+                        Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art partter cleanse gluten-free
+                        squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf
+                        cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia
+                        PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf
+                        viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan,
+                        sartorial keffiyeh echo
+                        park vegan.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END: FULL TEXT ARTICLE -->
+
+          </div>
+        </div>
+        <div class="col-md-3">
+          <!-- BEGIN: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
+          <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+            <h3 class="c-font-bold c-font-uppercase">Article Info</h3>
+          </div>
+          <div class="c-content-ver-nav">
+            <ul class="c-content-list-1 c-theme c-separator-dot c-square">
+              <li>
+                Views: 00
+              </li>
+              <li>
+                Downloads: 00
+              </li>
+              <li>
+                Citations: 00
+              </li>
+              <li>
+                <a href="http://imaqpress.com/demographs/articles/immortalized-cell-lines">Article Demographs</a>
+              </li>
+            </ul>
+          </div>
+          <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+            <h3 class="c-font-bold c-font-uppercase">Formats to Cite</h3>
+          </div>
+          <div class="c-content-ver-nav">
+            <ul class="c-menu c-arrow-dot1 c-theme">
+              <li>
+                <a href="http://imaqpress.com/articles/immortalized-cell-lines.pdf">Full Text PDF</a>
+              </li>
+              <li>
+                <a href="http://imaqpress.com/articles/immortalized-cell-lines.epub">Full Text ePUB</a>
+              </li>
+              <li>
+                <a href="http://imaqpress.com/articles/immortalized-cell-lines.xml">Full Text XML</a>
+              </li>
+              <li>
+                <a href="http://imaqpress.com/articles/immortalized-cell-lines/cite">How to Cite?</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- END: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- END: PAGE CONTENT -->
+</div>
+<!-- END: PAGE CONTAINER -->
+
+
+@!component('components.foot')
+
+@!component('components.scripts', {msg: msg, msg_type: msg_type})
+
+</body>
+
+</html>

@@ -36,6 +36,10 @@ class User extends Model {
   permissions () {
     return this.hasMany('App/Models/GroupPermission', 'group_id', 'users_group_id')
   }
+
+  country () {
+    return this.hasOne('App/Models/Country', 'country_id', 'id')
+  }
 }
 
 module.exports = User

@@ -195,7 +195,8 @@
                                 @each(journal in journals)
                                 @if(journal.status=='requested')
                                 <li>
-                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                    {{--  <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>  --}}
+                                    <a href="jouranl/{{journal.name}}">{{journal.name}}</a>
                                 </li>
                                 @endif
                                 @endeach
@@ -209,7 +210,7 @@
                                 @each(journal in journals)
                                 @if(journal.status=='aproved')
                                 <li>
-                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                    <a href="jouranl/{{journal.name}}">{{journal.name}}</a>
                                 </li>
                                 @endif
                                 @endeach
@@ -223,7 +224,7 @@
                                 @each(journal in journals)
                                 @if(journal.status=='pending')
                                 <li>
-                                    <a href="jouranl_request/{{journal.id}}">{{journal.name}}</a>
+                                    <a href="jouranl/{{journal.name}}">{{journal.name}}</a>
                                 </li>
                                 @endif
                                 @endeach

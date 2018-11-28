@@ -343,6 +343,67 @@ class ArticalController {
             selected_editor: selected_editor
         })
     }
+
+    async publish ({ view, response, session, request, params }) {
+        let isLogged = false, user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        if(!params || !params.article_name || params.article_name=='') {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.redirect('/')
+        }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
+        let theArticle = await Artical.query().with('journal').with('author').where('running_title', params.article_name).first()
+        // console.log('theArticle', theArticle)
+        if(!theArticle) {
+            // console.log('Not Found!', theArticle)
+            session.put('msg', 'Article Not Found1')
+            session.put('msg_type', 'danger')
+            return response.redirect('/')
+        }
+        // console.log('!!!!!')
+        let article = theArticle.toJSON()
+        let otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id).whereNot('users_id', article.author.id).whereNot('position', 'corresponding').fetch()
+        otherAuthors = otherAuthors.toJSON()
+
+        let corAuthors = await UserArticle.query().with('user.country').where('article_id', theArticle.id).whereNot('users_id', article.author.id).where('position', 'corresponding').fetch()
+        corAuthors = corAuthors.toJSON()
+        console.log('CorAuthors', corAuthors)
+        
+        let star = '*', stars = ''
+        for(let i = 1;i <= corAuthors.length;i++) {
+            stars = ''
+            for(let j = 0;j < i;j++) {
+                stars += star
+            }
+            corAuthors[i-1].stars = stars
+        }
+
+        // console.log('Article')
+        // console.log(article)
+        
+        let msg = session.get('msg')
+        let msg_type = session.get('msg_type')
+        session.forget('msg')
+        session.forget('msg_type')
+        return view.render('artical.publish', {
+            isLogged: isLogged, 
+            user:user, 
+            article: article,
+            otherAuthors: otherAuthors,
+            corAuthors: corAuthors,
+            msg: msg, 
+            msg_type: msg_type,
+            partners: partners
+        })
+    }
 }
 
 module.exports = ArticalController

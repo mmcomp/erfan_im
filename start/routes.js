@@ -28,6 +28,8 @@ Route.any('journal_submission', 'JournalController.create').as('journal_create')
 
 Route.any('jouranl_request/:journal_id', 'JournalController.profile')
 
+Route.any('jouranl/:journal_name', 'JournalController.profileByName')
+
 Route.get('partners/:partner', 'JournalController.partner')
 
 
@@ -35,6 +37,8 @@ Route.get('partners/:partner', 'JournalController.partner')
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
 Route.any('article_id/:article_id', 'ArticalController.profile')
+
+Route.get('article/:article_name', 'ArticalController.publish')
 
 
 

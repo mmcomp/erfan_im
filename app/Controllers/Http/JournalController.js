@@ -174,6 +174,87 @@ class JournalController {
         return response.route('journals', {isLogged: isLogged})
     }
 
+    async profileByName ({ view, response, session, request, params }) {
+        if(!params || !params.journal_name || params.journal_name=='') {
+            session.put('msg', 'Journal Name Is Not Valid')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+        let theJournal = await Journal.query().with('extra').where('name', params.journal_name).first()
+        if(!theJournal) {
+            session.put('msg', 'Journal Not Found')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+        
+        let uploadedImage = '', selected_editor = -1
+
+        if(request.method()=='GET') {
+            if(theJournal.status == 'requested') {
+                theJournal.status = 'pending'
+                await theJournal.save()
+            }
+        }else {
+            // console.log('POST Request', request.all())
+            if(request.all()['status']) {
+                theJournal.director_note = request.all()['director_note']
+                theJournal.status = request.all()['status']
+                theJournal.doi_code = request.all()['doi_code']
+                await theJournal.save()    
+            }else if(request.all()['tabdata']) {
+                let tbdata = []
+                try{
+                    tbdata = JSON.parse(request.all()['tabdata'])
+                }catch(e){
+                    console.log('json parse error', e)
+                }
+                if(tbdata.length>0) {
+                    await JournalExtra.query().where('journal_id', theJournal.id).delete()
+                    await JournalExtra.createMany(tbdata)
+                    console.log('saveing tb data', tbdata)
+                }
+            }else if(request.file('image_upload')) {
+                const imageUpload = request.file('image_upload', {
+                    types: ['image'],
+                    size: '2mb'
+                })
+                selected_editor = request.all()['selected_editor']
+                let filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                await imageUpload.move(Helpers.publicPath('static/img/uploads'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!imageUpload.moved()) {
+                    console.log(imageUpload.error())
+                }else {
+                    uploadedImage = '/static/img/uploads/' + filename
+                }
+            }
+        }
+
+        return view.render('journal.profile', { 
+            isLogged: isLogged, 
+            user: user, 
+            title: theJournal.name, 
+            journal: theJournal.toJSON(),
+            partners: partners,
+            uploadedImage: uploadedImage,
+            selected_editor: selected_editor
+        })
+    }
+
     async profile ({ view, response, session, request, params }) {
         let isLogged = false
         let user = {}

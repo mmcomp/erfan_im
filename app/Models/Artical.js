@@ -42,10 +42,14 @@ class Artical extends Model {
     return this.hasOne('App/Models/User', 'author_id', 'id')
   }
 
+  authors () {
+    return this.belongsToMany('App/Models/User', 'article_id', 'users_id').pivotTable('users_article')
+  }
+  
   editors () {
     return this.belongsToMany('App/Models/User', 'article_id', 'users_id').pivotTable('users_edits')
   }
-  
+
   journal () {
     return this.hasOne('App/Models/Journal', 'journal_id', 'id')
   }
