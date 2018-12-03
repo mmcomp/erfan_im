@@ -100,6 +100,7 @@ class UserController {
 
         let articles = await Artical.query().with('journal').orderBy('citiations', 'desc').limit(3).fetch()
         articles = articles.toJSON()
+        console.log('articles', articles)
 
         let editorCount = await Database.raw('select count(id) as c from (select id from users_edits group by users_id) tb1')
         editorCount = editorCount[0][0].c
