@@ -30,6 +30,8 @@ Route.any('jouranl_request/:journal_id', 'JournalController.profile')
 
 Route.any('jouranl/:journal_name', 'JournalController.profileByName')
 
+Route.any('jouranls/:journal_name/:issn', 'JournalController.profileByName')
+
 Route.get('partners/:partner', 'JournalController.partner')
 
 

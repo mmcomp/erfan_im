@@ -48,7 +48,7 @@ class JournalController {
             jours += '<a href="' + ((journals[i].cover_image_path)?journals[i].cover_image_path:'static/img/GnC-cover.jpg') + '" class="cbp-lightbox cbp-l-caption-buttonRight btn c-btn-square c-btn-border-1x c-btn-white c-btn-bold c-btn-uppercase" data-title="Dashboard<br>by Paul Flavius Nechita">Journal Cover</a>'
             jours += '</div></div></div></div>'
             jours += '<div class="cbp-l-grid-masonry-projects-desc">'
-            jours += '<b><a href="/jouranl_request/' + journals[i].id + '">' + journals[i].name + '</a></b><br/>'
+            jours += '<b><a href="/jouranls/' + journals[i].name.replace(/ /g, '-') + '/' + journals[i].issn + '">' + journals[i].name + '</a></b><br/>'
             jours += journals[i].issn
             jours += '</div></div>'
         }
@@ -193,6 +193,13 @@ class JournalController {
         let theJournal = await Journal.query().with('extra').where('name', params.journal_name).first()
         if(!theJournal) {
             session.put('msg', 'Journal Not Found')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        if(params.issn && params.issn!=theJournal.issn) {
+            session.put('msg', 'Journal with this ISSN Not Found')
             session.put('msg_type', 'danger')
     
             return response.route('home')
