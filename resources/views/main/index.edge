@@ -195,7 +195,10 @@
                                             <a href="/article/{{ art.running_title.replace(/ /g,'-') }}">{{ art.full_title }}</a>
                                         </div>
                                         <div class="c-author">
-                                            By <a href="/journal/{{ art.journal.name.replace(/ /g,'-') }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.publish_date }}</span>
+                                            @if(art.journal)
+                                            By <a href="/journal/{{ art.journal.name.replace(/ /g,'-') }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a>
+                                            @endif
+                                             on <span class="c-font-uppercase">{{ art.publish_date }}</span>
                                         </div>
                                         <div class="c-panel">
                                             <p>
