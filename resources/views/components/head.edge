@@ -147,11 +147,9 @@ Follow: www.twitter.com/themehats
                                 <a href="#" class="c-link dropdown-toggle">Partners</a>
                                 <ul class="dropdown-menu c-menu-type-classic c-pull-left">
                                     @each(partner in partners)
-                                    @if(partner.university_institute)
                                     <li>
-                                        <a href="/partners/{{ partner.university_institute.replace(/ /g,'-') }}">{{ partner.university_institute }}</a>
+                                        <a href="/partners/{{ partner.university_institute }}">{{ partner.university_institute }}</a>
                                     </li>
-                                    @endif
                                     @endeach
                                 </ul>
                             </li>
