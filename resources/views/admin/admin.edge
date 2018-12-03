@@ -224,7 +224,7 @@
                                 @each(journal in journals)
                                 @if(journal.status=='pending')
                                 <li>
-                                    <a href="jouranl/{{journal.name}}">{{journal.name}}</a>
+                                    <a href="jouranl/{{ journal.name.replace(/ /g, '-') }}">{{journal.name}}</a>
                                 </li>
                                 @endif
                                 @endeach
