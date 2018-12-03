@@ -60,7 +60,7 @@
                     <div class="col-md-12">
                         <div class="c-content-title-1">
                             <h3 class="c-font-34 c-font-center c-font-bold c-font-uppercase c-margin-b-30">
-                                iMaQ Journals </h3>
+                                iMaQ Journals</h3>
                             <div class="c-line-center c-theme-bg" style="margin: 0 auto 20px auto !important; ">
                             </div>
                         </div>
@@ -70,14 +70,20 @@
                     <div class="col-md-12">
                         <div class="c-content-tab-2 c-theme c-opt-1">
                             <ul class="nav c-tab-icon-stack c-font-sbold c-font-uppercase">
-                                <li class="active">
-                                    <a href="#c-tab2-opt1-1" data-toggle="tab">
-
-                                        <span class="c-title" style="margin-bottom: 20px !important; margin-top: 0px !important;">GnC</span>
+                                @each(journal in journals)
+                                <li
+                                @if($loop.index==0)
+                                 class="active"
+                                @endif
+                                >
+                                    <a href="#c-tab2-opt1-{{ journal.id }}" data-toggle="tab">
+                                        <span class="c-title" style="margin-bottom: 20px !important; margin-top: 0px !important;">{{ journal.doi_code }}</span>
                                     </a>
                                     <div class="c-arrow">
                                     </div>
                                 </li>
+                                @endeach
+                                <!--
                                 <li>
                                     <a href="#c-tab2-opt1-2" data-toggle="tab">
 
@@ -94,24 +100,32 @@
                                     <div class="c-arrow">
                                     </div>
                                 </li>
+                                -->
                             </ul>
                             <div class="c-tab-content">
                                 <div class="c-bg-img-center1" style="background-image: url(assets/base/img/content/backgrounds/bg-62.jpg)">
                                     <div class="container">
                                         <div class="tab-content">
-                                            <div class="tab-pane fade in active" id="c-tab2-opt1-1">
+                                            @each(journal in journals)
+                                            <div class="tab-pane fade
+                                            @if($loop.index==0)
+                                             in active
+                                            @endif
+                                            " id="c-tab2-opt1-{{ journal.id }}">
                                                 <div class="c-tab-pane">
-                                                    <img class="img-responsive" src="static/img/GnC-cover.jpg" alt="" />
-                                                    <h4 class="c-font-30 c-font-thin c-font-uppercase c-font-bold"> Journal of Genes and Cells
+                                                    <img class="img-responsive" src="{{ journal.cover_image_path }}" alt="" />
+                                                    <h4 class="c-font-30 c-font-thin c-font-uppercase c-font-bold"> {{ journal.name }}
                                                     </h4>
                                                     <p class="c-font-17 c-margin-b-20 c-margin-t-20 c-font-thin ">
 
-                                                        Journal of Genes and Cells (ISSN: 2410-6887) is the official journal of Pakistan Society for Gene and Cell Therapy (PSGCT) to discuss issues in gene and cell therapeutic research and is being managed and published by iMaQ Publishing Group (iMaQPress).
+                                                            {{ journal.name }} (ISSN: {{ journal.issn }}) {{ journal.description }}
                                                     </p>
-                                                    <a href="http://genesandcells.com/index.php/gnc"> <button class="btn btn-sm c-theme-btn c-btn-square c-btn-bold">
+                                                    <a href="{{ journal.web_site }}"> <button class="btn btn-sm c-theme-btn c-btn-square c-btn-bold">
 												View Homepage </button> </a>
                                                 </div>
                                             </div>
+                                            @endeach
+                                            <!--
                                             <div class="tab-pane fade" id="c-tab2-opt1-2">
                                                 <div class="c-tab-pane">
                                                     <img class="img-responsive" src="static/img/tcp-cover.jpg" alt="" />
@@ -137,6 +151,7 @@
 												View Homepage </button></a>
                                                 </div>
                                             </div>
+                                            -->
                                         </div>
                                     </div>
                                 </div>
@@ -151,50 +166,55 @@
                     <div class="c-content-blog-post-card-1-slider" data-slider="owl" data-items="3" data-auto-play="8000">
                         <!-- Begin: Title 1 component -->
                         <div class="c-content-title-1">
-                            <h3 class="c-center c-font-uppercase c-font-bold">Highly Cited Articles</h3>
+                            <h3 class="c-center c-font-uppercase c-font-bold">Highly Cited Articles {{ articles.length }}</h3>
                             <div class="c-line-center c-theme-bg">
                             </div>
                         </div>
                         <!-- End-->
                         <!-- Begin: Owlcarousel -->
                         <div class="owl-carousel owl-theme c-theme">
+                            @each(art in articles)
                             <div class="item">
                                 <div class="c-content-blog-post-card-1 c-option-2">
                                     <div class="c-media c-content-overlay">
                                         <div class="c-overlay-wrapper">
                                             <div class="c-overlay-content">
-                                                <a href="http://genesandcells.com/journal/index.php/gnc/article/view/15"><i class="icon-link"></i></a>
-                                                <a href="static/img/MSC.jpg" data-lightbox="fancybox" data-fancybox-group="gallery">
+                                                <a href="/article/{{ art.running_title.replace(/ /g,'-') }}"><i class="icon-link"></i></a>
+                                                <a href="{{ art.abstract_image_path }}" data-lightbox="fancybox" data-fancybox-group="gallery">
                                                     <i class="icon-magnifier"></i>
                                                 </a>
                                             </div>
                                         </div>
-                                        <img class="c-overlay-object img-responsive" src="static/img/MSC.jpg" alt="MSC based therapies">
+                                        <img class="c-overlay-object img-responsive" src="{{ art.abstract_image_path }}" alt="{{ art.running_title }}">
                                     </div>
                                     <div class="c-body">
                                             <div class="c-panel">
-                                                    DOI <a href="https://doi.org/10.15562/gnc.15"><span class="c-font-uppercase">10.15562/gnc.15</span>
+                                                    DOI <a href="https://doi.org/10.15562/{{ art.journal.doi_code }}.{{ art.doi }}"><span class="c-font-uppercase">10.15562/{{ art.journal.doi_code }}.{{ art.doi }}</span>
                                             </div>
                                         <div class="c-title c-font-uppercase c-font-bold">
-                                            <a href="http://genesandcells.com/journal/index.php/gnc/article/view/15">Mesenchymal Stem Cells; Defining the Future of Regenerative Medicine</a>
+                                            <a href="/article/{{ art.running_title.replace(/ /g,'-') }}">{{ art.full_title }}</a>
                                         </div>
                                         <div class="c-author">
-                                            By <a href="http://genesandcells.com/journal"><span class="c-font-uppercase">Journal of Genes and Cells</span></a> on <span class="c-font-uppercase">1 April 2015</span>
+                                            By <a href="/journal/{{ art.journal.name.replace(/ /g,'-') }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.publish_date }}</span>
                                         </div>
                                         <div class="c-panel">
-                                            <p>Cell therapy has been considered as the third pillar of medicine. There are several kinds of cells...</p>
-                                            </br>
+                                            <p>
+                                                {{ art.abstract }}
+                                            </p>
+                                            <br/>
                                             <div class="c-comments">
-                                                <a href="#"><span class="icon-eye" aria-hidden="true"></span> 826 </a> &nbsp&nbsp
-                                                <a href="#"><span class="icon-note" aria-hidden="true"></span> 6 </a>&nbsp&nbsp
-                                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> 178</a>
+                                                <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.citiations }} </a> &nbsp&nbsp
+                                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments }} </a>&nbsp&nbsp
+                                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{ art.downloads }}</a>
                                             </div>
-                                            <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="https://docs.google.com/viewer?url=http://genesandcells.com/journal/index.php/gnc/article/viewFile/15/62" style="float: right !important;">Read More</a>
+                                            <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="/article/{{ art.running_title.replace(/ /g,'-') }}" style="float: right !important;">Read More</a>
                                         </div>
 
                                     </div>
                                 </div>
                             </div>
+                            @endeach
+                            <!--
                             <div class="item">
                                 <div class="c-content-blog-post-card-1 c-option-2">
                                     <div class="c-media c-content-overlay">
@@ -273,7 +293,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            -->
                         </div>
                         <!-- End-->
                     </div>
@@ -287,14 +307,14 @@
                         <div class="row c-margin-t-60">
                             <div class="col-md-3">
                                 <div class="c-counter c-bg-red c-bg-red-font" data-counter="counterup">
-                                    50
+                                    {{ editorCount }}
                                 </div>
                                 <h4 class="c-title c-first c-font-white c-font-uppercase c-font-bold">Editors</h4>
 
                             </div>
                             <div class="col-md-3">
                                 <div class="c-counter c-bg-blue c-bg-blue-font" data-counter="counterup">
-                                    100
+                                    {{ articleCount }}
                                 </div>
                                 <h4 class="c-title c-font-white c-font-uppercase c-font-bold">Articles</h4>
 
@@ -302,14 +322,14 @@
 
                             <div class="col-md-3">
                                 <div class="c-counter c-bg-blue c-bg-blue-font" data-counter="counterup">
-                                    40
+                                    {{ citationCount }}
                                 </div>
                                 <h4 class="c-title c-font-white c-font-uppercase c-font-bold">Citations</h4>
 
                             </div>
                             <div class="col-md-3">
                                 <div class="c-counter c-bg-green c-bg-green-font" data-counter="counterup">
-                                    200
+                                    {{ authorCount }}
                                 </div>
                                 <h4 class="c-title c-font-white c-font-uppercase c-font-bold">Authors</h4>
 
@@ -318,7 +338,7 @@
                         </div>
                         <div class="row ">
                             <div class="col-md-12">
-                                <a class="btn btn-lg c-btn-white c-font-uppercase c-btn-square c-btn-border-1x c-center  c-margin-t-60" href="/file:///D:/Underdeveloped%20Webprojects/SciencePub/SciencePub%20V2/submit.html">Submit Manuscirpt</a>
+                                <a class="btn btn-lg c-btn-white c-font-uppercase c-btn-square c-btn-border-1x c-center  c-margin-t-60" href="/artical_submission">Submit Manuscirpt</a>
                             </div>
                         </div>
                     </div>
@@ -399,7 +419,7 @@
 							<div class="c-text">
                                 iMaQPress is the system of highly advanced technologies empowered by ScienceUp(TM) and being managed by the young experts to give your scientific journals, a new recognition.
 							</div>
-							<button type="submit" class="btn c-btn-uppercase btn-md c-btn-bold c-btn-square c-theme-btn">Publish Your Journal with Us</button>
+							<a href="/journal_submission" class="btn c-btn-uppercase btn-md c-btn-bold c-btn-square c-theme-btn">Publish Your Journal with Us</a>
 							<img class="c-photo img-responsive" width="420" alt="" src="static/img/sample1.jpg"/>
 						</div>
 					</div>

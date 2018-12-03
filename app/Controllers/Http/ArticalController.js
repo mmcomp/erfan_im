@@ -19,7 +19,7 @@ class ArticalController {
             session.forget('msg')
             session.forget('msg_type')
         }else {
-            session.put('msg', 'You need to Login first')
+            session.put('msg', 'You need to Login or Signup first')
             session.put('msg_type', 'danger')
             return response.route('home', {isLogged: isLogged})
         }
@@ -359,6 +359,8 @@ class ArticalController {
 
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
+
+        params.article_name = params.article_name.replace(/-/g, ' ')
 
         let theArticle = await Artical.query().with('journal').with('author').where('running_title', params.article_name).first()
         // console.log('theArticle', theArticle)

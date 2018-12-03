@@ -5,6 +5,7 @@ const User = use('App/Models/User')
 const Journal = use('App/Models/Journal')
 const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
+const Database = use('Database')
 
 class UserController {
     async logout ({ auth, response, session }) {
@@ -21,50 +22,58 @@ class UserController {
     }
 
     async login ({ request, auth, response, session }) {
-        const { email, password } = request.all()
-        let msg_type ='', msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
         try{
-            await auth.check()
-        }catch(e) {
-            // console.log('Check Error')
-            // console.log(e)
-            logedIn = false
-        }
-        if(!logedIn) {
-            session.clear()
-
+            const { email, password } = request.all()
+            let msg_type ='', msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
             try{
-                console.log('Remember Me : ', rememberme)
-                await auth.remember(rememberme).attempt(email, password)
-                msg = 'Logged in successfully'
-                logedIn = true;
-
-                let user = await User.query().where('id', auth.user.id).with('permissions').first()
-                console.log('User', user.toJSON())
-                user = user.toJSON()
-                let permissions = {}
-                for(let i = 0;i < user.permissions.length;i++) {
-                    permissions[user.permissions[i].permission_key] = true
-                }
-                user.permissions = permissions
-                console.log(user)
-                session.put('user', user)
-                
+                await auth.check()
             }catch(e) {
-                console.log('Login Error')
-                console.log(e)
-                msg = 'Login information is wrong'
-                msg_type = 'danger'
+                // console.log('Check Error')
+                // console.log(e)
+                logedIn = false
             }
-        }else {
-            msg_type = 'primary'
-            msg = 'Already Loged In'
+            if(!logedIn) {
+                session.clear()
+
+                try{
+                    console.log('Remember Me : ', rememberme)
+                    await auth.remember(rememberme).attempt(email, password)
+                    msg = 'Logged in successfully'
+                    logedIn = true;
+
+                    let user = await User.query().where('id', auth.user.id).with('permissions').first()
+                    console.log('User', user.toJSON())
+                    user = user.toJSON()
+                    let permissions = {}
+                    for(let i = 0;i < user.permissions.length;i++) {
+                        permissions[user.permissions[i].permission_key] = true
+                    }
+                    user.permissions = permissions
+                    console.log(user)
+                    session.put('user', user)
+                    
+                }catch(e) {
+                    console.log('Login Error')
+                    console.log(e)
+                    msg = 'Login information is wrong'
+                    msg_type = 'danger'
+                }
+            }else {
+                msg_type = 'primary'
+                msg = 'Already Loged In'
+            }
+
+            session.put('msg', msg)
+            session.put('msg_type', msg_type)
+
+            return response.route('home', {message: msg, isLogged: logedIn})
+        }catch(e){
+            console.log(e)
+            session.put('msg', 'try again please')
+            session.put('msg_type', 'danger')
+
+            return response.route('home', {message: msg, isLogged: logedIn})
         }
-
-        session.put('msg', msg)
-        session.put('msg_type', msg_type)
-
-        return response.route('home', {message: msg, isLogged: logedIn})
     }
 
     async home ({ view, auth, session }) {
@@ -85,6 +94,25 @@ class UserController {
 
         // console.log('session', session.all())
         // console.log('country', country)
+
+        let journals = await Journal.query().where('status', 'aproved').fetch()
+        journals = journals.toJSON()
+
+        let articles = await Artical.query().with('journal').orderBy('citiations', 'desc').limit(3).fetch()
+        articles = articles.toJSON()
+
+        let editorCount = await Database.raw('select count(id) as c from (select id from users_edits group by users_id) tb1')
+        editorCount = editorCount[0][0].c
+
+        let articleCount = await Database.raw('select count(*) c from article')
+        articleCount = articleCount[0][0].c
+
+        let citationCount = await Database.raw('select sum(citiations) c from article')
+        citationCount = citationCount[0][0].c
+
+        let authorCount = await Database.raw('select count(*) c from users')
+        authorCount = authorCount[0][0].c
+
         let msg = session.get('msg')
         let msg_type = (session.get('msg_type')?session.get('msg_type'):'')
         session.forget('msg')
@@ -98,7 +126,13 @@ class UserController {
             msg_type:msg_type, 
             country: country, 
             user: user,
-            partners: partners
+            partners: partners,
+            journals: journals,
+            articles: articles,
+            editorCount: editorCount,
+            articleCount: articleCount,
+            citationCount: citationCount,
+            authorCount: authorCount
         })
     }
 

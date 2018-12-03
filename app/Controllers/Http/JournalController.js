@@ -188,6 +188,8 @@ class JournalController {
             isLogged = true
             user = session.get('user')
         }
+
+        params.journal_name = params.journal_name.replace(/-/g, ' ')
         let theJournal = await Journal.query().with('extra').where('name', params.journal_name).first()
         if(!theJournal) {
             session.put('msg', 'Journal Not Found')
@@ -340,7 +342,7 @@ class JournalController {
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
 
-        params.partner = decodeURIComponent(params.partner)
+        params.partner = params.partner.replace(/-/g, ' ')
         // let users = await User.query().where('university_institute', params.partner).pluck('id')
         let theQuery = "select users.id uid, fname, lname, count(article.id) aid from article left join users on (users.id=author_id) where university_institute = '" + params.partner + "' order by count(article.id) desc limit 10"
         let result = await Database.raw(theQuery)
