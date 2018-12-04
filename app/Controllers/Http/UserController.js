@@ -351,12 +351,12 @@ class UserController {
 
     async profile ({ request, auth, view, response, session, params }) {
         let user = session.get('user')
-        console.log('params', params)
+        // console.log('params', params)
         let author_name = params.author_name.split('-')
-        console.log('Author Name', author_name, author_name.length)
+        // console.log('Author Name', author_name, author_name.length)
         let fname = (author_name.length==2)?author_name[0]:''
         let lname = (author_name.length==2)?author_name[1]:author_name[0]
-        console.log('Fname', fname, 'Lname', lname)
+        // console.log('Fname', fname, 'Lname', lname)
 
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
@@ -367,6 +367,14 @@ class UserController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
+
+        if(request.all()['email']) {
+            selected_user.email = request.all()['email']
+            selected_user.academic_page = request.all()['academic_page']
+            selected_user.group_id = request.all()['group_id']
+            await selected_user.save()
+        }
+
         let pageNumber = 1
         if(request.all()['page_number']) {
             pageNumber = parseInt(request.all()['page_number'],10)

@@ -52,7 +52,7 @@ Route.get('logout', 'UserController.logout')
 
 Route.get('admin', 'UserController.admin')
 
-Route.get('author/:author_name', 'UserController.profile')
+Route.any('author/:author_name', 'UserController.profile')
 
 
 

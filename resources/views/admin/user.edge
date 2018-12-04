@@ -1,139 +1,195 @@
 @!component('components.head', { isLogged: isLogged , csrf: csrfToken, user: user, partners: partners})
 
-    <!-- BEGIN: PAGE CONTAINER -->
-    <div class="c-layout-page" style="margin-top: 150px;">
-        <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
-        <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold">
-            <div class="container">
-                <div class="c-page-title c-pull-left">
-                    <h3 class="c-font-uppercase c-font-bold">Author's Dashboard</h3>
-                </div>
-                <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
-                    <li>
-                        Author
-                    </li>
-                    <li>
-                        /
-                    </li>
-                    <li class="c-state_active">
-                        {{ selected_user.fname }}-{{ selected_user.lname }} (Edit / Save)
-                    </li>
-                </ul>
-            </div>
-        </div>
-        </div>
-        <!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+<!-- BEGIN: PAGE CONTAINER -->
+<div class="c-layout-page" style="margin-top: 150px;">
+  <!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+  <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold">
+    <div class="container">
+      <div class="c-page-title c-pull-left">
+        <h3 class="c-font-uppercase c-font-bold">Author's Dashboard</h3>
+      </div>
+      <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+        <li>
+          Author
+        </li>
+        <li>
+          /
+        </li>
+        <li class="c-state_active">
+          {{ selected_user.fname }}-{{ selected_user.lname }} <a href="javascript:$('#frm1').submit();">(Edit / Save)</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
 
-             <!-- BEGIN: CONTENT/BARS/BAR-2 -->
-             <div class="c-content-box c-size-md c-bg-grey-1">
-                    <div class="container">
-                        <div class="c-content-bar-2 c-opt-1">
-                            <div class="row" data-auto-height="true">
-                                <div class="col-md-6">
-                                    <!-- Begin: Title 1 component -->
-                                    <div class="c-content-title-1" data-height="height">
-                                        <h3 class="c-font-uppercase c-font-bold">{{ selected_user.fname }} {{ selected_user.lname }}, {{ selected_user.salutation }}.</h3>
-                                        <p class="c-font-uppercase c-font-sbold">
-                                                {{ (selected_user.biography)?selected_user.biography:'' }}                                                 
-                                        </p>
-                                        <a href="{{ (selected_user.academic_page)?selected_user.academic_page:'#' }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Academic Profile Page</a>
-                                    </div>
-                                    <!-- End-->
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="c-content-v-center c-bg-red" data-height="height">
-                                        <div class="c-wrapper">
-                                            <div class="c-body">
-                                                <h3 class="c-font-white c-font-bold">Citations, Views and Download Graphs will be displayed here from the following articles over years </h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+<!-- BEGIN: CONTENT/BARS/BAR-2 -->
+<div class="c-content-box c-size-md c-bg-grey-1">
+  <div class="container">
+    <div class="c-content-bar-2 c-opt-1">
+      <div class="row" data-auto-height="true">
+        <div class="col-md-6">
+          <!-- Begin: Title 1 component -->
+          <div class="c-content-title-1" data-height="height">
+            <h3 class="c-font-uppercase c-font-bold">{{ selected_user.fname }} {{ selected_user.lname }}, 
+            {{ selected_user.salutation }}.</h3>
+            <p class="c-font-uppercase c-font-sbold">
+              {{ (selected_user.biography)?selected_user.biography:'' }}
+            </p>
+            <a href="{{ (selected_user.academic_page)?selected_user.academic_page:'#' }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Academic
+              Profile Page</a>
+          </div>
+          <!-- End-->
+        </div>
+        <div class="col-md-6">
+          <div class="c-content-v-center c-bg-red" data-height="height">
+            <div class="c-wrapper">
+              <div class="c-content-panel">
+                <div class="c-label">
+                  User's admin panel
+                </div>
+                <div class="c-body">
+                  <div class="c-content-title-1 c-title-md c-margin-b-20 clearfix">
+                    <h3 class="c-center c-font-uppercase c-font-bold">Author's Information Form</h3>
+                    <div class="c-line-center c-theme-bg">
                     </div>
+                  </div>
+                  <form class="form-horizontal" method="post" id="frm1">
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">Email</label>
+                      <div class="col-md-6">
+                        <input type="email" class="form-control c-square c-theme" name="email" id="inputEmail3"
+                          placeholder="Email" value="{{ selected_user.email }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-md-4 control-label">Academic Profile Link</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="academic_page" id="inputPassword3"
+                          placeholder="Academic Page" value="{{ selected_user.academic_page?selected_user.academic_page:'' }}">
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-md-4 control-label">User Access Level</label>
+                      <div class="col-md-6">
+                        <select class="form-control c-square c-theme" name="group_id">
+                          <option value="0">Select Access Level</option>
+                          <option value="1" {{ (selected_user.group_id == 1)?' selected':'' }}>Deputy Director</option>
+                          <option value="2" {{ (selected_user.group_id == 2)?' selected':'' }}>Chief Editor</option>
+                          <option value="6" {{ (selected_user.group_id == 6)?' selected':'' }}>Associate Editor</option>
+                          <option value="5" {{ (selected_user.group_id == 5)?' selected':'' }}>Author</option>
+                          <!-- <option value="5">Partners Admin</option> -->
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group c-margin-t-40">
+                      <div class="col-sm-offset-4 col-md-8">
+                        <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">
+                          Update Information
+                        </button>
+                      </div>
+                    </div>
+                    {{ csrfField() }}
+                  </form>
                 </div>
+              </div>
             </div>
-            <!-- END: PAGE CONTAINER -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- END: PAGE CONTAINER -->
 
-        	<!-- BEGIN: CONTENT/MISC/LATEST-ITEMS-3 -->
-	<div class="c-content-box c-size-md c-bg-white">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4">
-					<div class="c-content-media-1 c-bordered" style="min-height: 380px;">
-                        <div class="item">
-                            <div class="c-content-person-1 c-option-2">
-                                <div class="c-caption c-content-overlay">
-                                    <img src="{{ (selected_user.image_path)?selected_user.image_path:'/assets/base/img/content/team/team10.jpg' }}" class="img-responsive c-overlay-object" alt="">
-                                </div>
-                                <div class="c-body">
-                                    <div class="c-head">
-                                        <div class="c-name c-font-uppercase c-font-bold">
-                                            {{ selected_user.department }} <br> {{ selected_user.university_institute }}
-                                        </div>
-                                        <ul class="c-socials c-theme-ul">
-                                            <li>
-                                                <a href="http://twitter.com"><i class="icon-social-twitter"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="http://facebook.com"><i class="icon-social-facebook"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="http://mysite.com"><i class="icon-social-dribbble"></i></a>
-                                            </li>
-                                        </ul>
-                                    </div>                    
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-					</div>
+<!-- BEGIN: CONTENT/MISC/LATEST-ITEMS-3 -->
+<div class="c-content-box c-size-md c-bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="c-content-media-1 c-bordered" style="min-height: 380px;">
+          <div class="item">
+            <div class="c-content-person-1 c-option-2">
+              <div class="c-caption c-content-overlay">
+                <img src="{{ (selected_user.image_path)?selected_user.image_path:'/assets/base/img/content/team/team10.jpg' }}"
+                  class="img-responsive c-overlay-object" alt="">
+              </div>
+              <div class="c-body">
+                <div class="c-head">
+                  <div class="c-name c-font-uppercase c-font-bold">
+                    {{ selected_user.department }} <br> {{ selected_user.university_institute }}
+                  </div>
+                  <ul class="c-socials c-theme-ul">
+                    <li>
+                      <a href="http://twitter.com"><i class="icon-social-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="http://facebook.com"><i class="icon-social-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="http://mysite.com"><i class="icon-social-dribbble"></i></a>
+                    </li>
+                  </ul>
                 </div>
+                <p></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-                <div class="col-md-8">
-                        <div class="c-content-media-1 c-bordered" style="min-height: 380px;">
-                            <div class="item">
-                                <div class="c-content-person-1 c-option-2">
-                                        <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
-                                            <h3 class="c-font-bold c-font-uppercase">List of All Articles</h3>
-                                        </div>
-                                        <div class="c-content-tab-1 c-theme c-margin-t-30">
-                                            <div class="nav-justified">
-                                                <ul class="nav nav-tabs nav-justified">
-                                                    <li class="active">
-                                                        <a href="#blog_recent_posts_2" data-toggle="tab">Recent Published</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#blog_popular_posts_2" data-toggle="tab">Highly Cited</a>
-                                                    </li>
-                                                </ul>
-                                                <div class="tab-content">
-                                                    <div id="blog_recent_posts_2" class="tab-pane fade in active">
-                                                        @each(art in articles.recentPublished.data)
-                                                        <div class="item">
-                                                            <div class="c-content-blog-post-card-1 c-option-2">
-                                                                <div class="c-body">
-                                                                    <div class="c-panel">
-                                                                        DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{ art.doi?artdoi:'' }}</span>
-                                                                    </div>
-                                                                    <div class="c-title c-font-uppercase c-font-bold">
-                                                                        <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
-                                                                    </div>
-                                                                    <div class="c-author">
-                                                                            By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
-                                                                        <div class="c-comments">
-                                                                                <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a> &nbsp&nbsp
-                                                                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length }} </a>&nbsp&nbsp
-                                                                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{ art.downloads }}</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endeach
-                                                        <!--
+      <div class="col-md-8">
+        <div class="c-content-media-1 c-bordered" style="min-height: 380px;">
+          <div class="item">
+            <div class="c-content-person-1 c-option-2">
+              <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
+                <h3 class="c-font-bold c-font-uppercase">List of All Articles</h3>
+              </div>
+              <div class="c-content-tab-1 c-theme c-margin-t-30">
+                <div class="nav-justified">
+                  <ul class="nav nav-tabs nav-justified">
+                    <li class="active">
+                      <a href="#blog_recent_posts_2" data-toggle="tab">Recent Published</a>
+                    </li>
+                    <li>
+                      <a href="#blog_popular_posts_2" data-toggle="tab">Highly Cited</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div id="blog_recent_posts_2" class="tab-pane fade in active">
+                      @each(art in articles.recentPublished.data)
+                      <div class="item">
+                        <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-body">
+                            <div class="c-panel">
+                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{
+                                  art.doi?artdoi:'' }}</span>
+                            </div>
+                            <div class="c-title c-font-uppercase c-font-bold">
+                              <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                            </div>
+                            <div class="c-author">
+                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
+                                  art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                              <div class="c-comments">
+                                <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
+                                &nbsp&nbsp
+                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length
+                                  }} </a>&nbsp&nbsp
+                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{
+                                  art.downloads }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      @endeach
+                      <!--
                                                         <div class="item">
                                                                 <div class="c-content-blog-post-card-1 c-option-2">
                                                                     <div class="c-body">
@@ -157,73 +213,70 @@
                                                             </div>
                                                         </div>
                                                         -->
-                                                        <div class="c-body">
-                                                            <ul class="c-content-pagination c-theme">
-                                                                <li class="c-prev">
-                                                                    <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
-                                                                </li>
-                                                                @each(pg in articles.recentPublished.pages)
-                                                                <li
-                                                                @if(pg==articles.recentPublished.page)
-                                                                class="c-active"
-                                                                @endif
-                                                                >
-                                                                    <a href="?page_number={{ pg }}">{{ pg }}</a>
-                                                                </li>
-                                                                @endeach
-                                                                <li class="c-next">
-                                                                    <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div id="blog_popular_posts_2" class="tab-pane fade">
-                                                            @each(art in articles.highlyCited.data)
-                                                            <div class="item">
-                                                                <div class="c-content-blog-post-card-1 c-option-2">
-                                                                    <div class="c-body">
-                                                                        <div class="c-panel">
-                                                                            DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{ art.doi?artdoi:'' }}</span>
-                                                                        </div>
-                                                                        <div class="c-title c-font-uppercase c-font-bold">
-                                                                            <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
-                                                                        </div>
-                                                                        <div class="c-author">
-                                                                                By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
-                                                                            <div class="c-comments">
-                                                                                    <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a> &nbsp&nbsp
-                                                                                    <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length }} </a>&nbsp&nbsp
-                                                                                    <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{ art.downloads }}</a>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            @endeach
-                                                            <div class="c-body">
-                                                                <ul class="c-content-pagination c-theme">
-                                                                    <li class="c-prev">
-                                                                        <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
-                                                                    </li>
-                                                                    @each(pg in articles.highlyCited.pages)
-                                                                    <li
-                                                                    @if(pg==articles.highlyCited.page)
-                                                                    class="c-active"
-                                                                    @endif
-                                                                    >
-                                                                        <a href="?page_number={{ pg }}">{{ pg }}</a>
-                                                                    </li>
-                                                                    @endeach
-                                                                    <li class="c-next">
-                                                                        <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--
+                      <div class="c-body">
+                        <ul class="c-content-pagination c-theme">
+                          <li class="c-prev">
+                            <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                          </li>
+                          @each(pg in articles.recentPublished.pages)
+                          <li @if(pg==articles.recentPublished.page) class="c-active" @endif>
+                            <a href="?page_number={{ pg }}">{{ pg }}</a>
+                          </li>
+                          @endeach
+                          <li class="c-next">
+                            <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div id="blog_popular_posts_2" class="tab-pane fade">
+                      @each(art in articles.highlyCited.data)
+                      <div class="item">
+                        <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-body">
+                            <div class="c-panel">
+                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{
+                                  art.doi?artdoi:'' }}</span>
+                            </div>
+                            <div class="c-title c-font-uppercase c-font-bold">
+                              <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                            </div>
+                            <div class="c-author">
+                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
+                                  art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                              <div class="c-comments">
+                                <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
+                                &nbsp&nbsp
+                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length
+                                  }} </a>&nbsp&nbsp
+                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{
+                                  art.downloads }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      @endeach
+                      <div class="c-body">
+                        <ul class="c-content-pagination c-theme">
+                          <li class="c-prev">
+                            <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                          </li>
+                          @each(pg in articles.highlyCited.pages)
+                          <li @if(pg==articles.highlyCited.page) class="c-active" @endif>
+                            <a href="?page_number={{ pg }}">{{ pg }}</a>
+                          </li>
+                          @endeach
+                          <li class="c-next">
+                            <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--
                                         </br>
                                         <div class="c-body">
                                             <ul class="c-content-pagination c-theme">
@@ -266,71 +319,73 @@
                                             </ul>
                                         </div>
                                         -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-			</div>
-		</div>
-	</div>
-	<!-- END: CONTENT/MISC/LATEST-ITEMS-3 -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END: CONTENT/MISC/LATEST-ITEMS-3 -->
 
-	<!-- BEGIN: CONTENT/SLIDERS/TEAM-2 -->
-	<div class="c-content-box c-size-md c-bg-grey-1">
-		<div class="container">
-			<!-- Begin: Testimonals 1 component -->
-			<div class="c-content-person-1-slider" data-slider="owl" data-items="4">
-				<!-- Begin: Title 1 component -->
-				<div class="c-content-title-1">
-					<h3 class="c-center c-font-uppercase c-font-bold">Co-Authors and Team Members</h3>
-					<div class="c-line-center c-theme-bg">
-					</div>
-				</div>
-				<!-- End-->
-				<!-- Begin: Owlcarousel -->
-				<div class="owl-carousel owl-theme c-theme">
-                    @each(uart in user_articles)
-					<div class="item">
-						<div class="c-content-person-1 c-option-2">
-							<div class="c-caption c-content-overlay">
-								<div class="c-overlay-wrapper">
-									<div class="c-overlay-content">
-										<a href="/author/{{ uart.user.fname }}-{{ uart.user.lname }}"><i class="icon-link"></i></a>
-										<a href="{{ (uart.user.image_path)?uart.user.image_path:'/assets/base/img/content/team/team10.jpg' }}" data-lightbox="fancybox" data-fancybox-group="gallery-2">
-										<i class="icon-magnifier"></i>
-										</a>
-									</div>
-								</div>
-								<img src="{{ (uart.user.image_path)?uart.user.image_path:'/assets/base/img/content/team/team10.jpg' }}" class="img-responsive c-overlay-object" alt="">
-							</div>
-							<div class="c-body">
-								<div class="c-head">
-									<div class="c-name c-font-uppercase c-font-bold">
-                                            {{ uart.user.fname }} {{ uart.user.lname }}
-									</div>
-									<ul class="c-socials c-theme-ul">
-										<li>
-											<a href="#"><i class="icon-social-twitter"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon-social-facebook"></i></a>
-										</li>
-										<li>
-											<a href="#"><i class="icon-social-dribbble"></i></a>
-										</li>
-									</ul>
-								</div>
-								<div class="c-position">
-                                        {{ uart.user.fname }} {{ uart.user.lname }} <br>
-                                        {{ uart.user.department }} ({{ uart.user.university_institute }})
-								</div>
-								<p>
-								</p>
-							</div>
-						</div>
-                    </div>
-                    @endeach
-                    <!--
+<!-- BEGIN: CONTENT/SLIDERS/TEAM-2 -->
+<div class="c-content-box c-size-md c-bg-grey-1">
+  <div class="container">
+    <!-- Begin: Testimonals 1 component -->
+    <div class="c-content-person-1-slider" data-slider="owl" data-items="4">
+      <!-- Begin: Title 1 component -->
+      <div class="c-content-title-1">
+        <h3 class="c-center c-font-uppercase c-font-bold">Co-Authors and Team Members</h3>
+        <div class="c-line-center c-theme-bg">
+        </div>
+      </div>
+      <!-- End-->
+      <!-- Begin: Owlcarousel -->
+      <div class="owl-carousel owl-theme c-theme">
+        @each(uart in user_articles)
+        <div class="item">
+          <div class="c-content-person-1 c-option-2">
+            <div class="c-caption c-content-overlay">
+              <div class="c-overlay-wrapper">
+                <div class="c-overlay-content">
+                  <a href="/author/{{ uart.user.fname }}-{{ uart.user.lname }}"><i class="icon-link"></i></a>
+                  <a href="{{ (uart.user.image_path)?uart.user.image_path:'/assets/base/img/content/team/team10.jpg' }}"
+                    data-lightbox="fancybox" data-fancybox-group="gallery-2">
+                    <i class="icon-magnifier"></i>
+                  </a>
+                </div>
+              </div>
+              <img src="{{ (uart.user.image_path)?uart.user.image_path:'/assets/base/img/content/team/team10.jpg' }}"
+                class="img-responsive c-overlay-object" alt="">
+            </div>
+            <div class="c-body">
+              <div class="c-head">
+                <div class="c-name c-font-uppercase c-font-bold">
+                  {{ uart.user.fname }} {{ uart.user.lname }}
+                </div>
+                <ul class="c-socials c-theme-ul">
+                  <li>
+                    <a href="#"><i class="icon-social-twitter"></i></a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="icon-social-facebook"></i></a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="icon-social-dribbble"></i></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="c-position">
+                {{ uart.user.fname }} {{ uart.user.lname }} <br>
+                {{ uart.user.department }} ({{ uart.user.university_institute }})
+              </div>
+              <p>
+              </p>
+            </div>
+          </div>
+        </div>
+        @endeach
+        <!--
 					<div class="item">
 						<div class="c-content-person-1 c-option-2">
 							<div class="c-caption c-content-overlay">
@@ -484,15 +539,15 @@
 						</div>
                     </div>
                     -->
-				</div>
-				<!-- End-->
-			</div>
-			<!-- End-->
-		</div>
-	</div>
-	<!-- END: CONTENT/SLIDERS/TEAM-2 -->
-    <!-- BEGIN: CONTENT/MISC/ABOUT-1 -->
-    <!--
+      </div>
+      <!-- End-->
+    </div>
+    <!-- End-->
+  </div>
+</div>
+<!-- END: CONTENT/SLIDERS/TEAM-2 -->
+<!-- BEGIN: CONTENT/MISC/ABOUT-1 -->
+<!--
 	<div class="c-content-box c-size-md c-bg-white">
 		<div class="container">
 			<div class="row">
@@ -573,7 +628,7 @@
 		</div>
     </div>
     -->
-	<!-- END: CONTENT/MISC/ABOUT-1 -->
+<!-- END: CONTENT/MISC/ABOUT-1 -->
 
 @!component('components.foot')
 
