@@ -234,6 +234,12 @@ class JournalController {
                     await JournalExtra.createMany(tbdata)
                     console.log('saveing tb data', tbdata)
                 }
+                theJournal.google_indexes = request.all()['google_indexes']
+                theJournal.name = request.all()['name']
+                theJournal.description = request.all()['description']
+                await theJournal.save()
+                theJournal = await Journal.query().with('extra').where('id', theJournal.id).first()
+
             }else if(request.file('image_upload')) {
                 const imageUpload = request.file('image_upload', {
                     types: ['image'],

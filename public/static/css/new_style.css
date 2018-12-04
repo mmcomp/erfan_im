@@ -32,3 +32,6 @@
       position: absolute;     
     }
   }
+.edit-mode {
+  display: none;
+}

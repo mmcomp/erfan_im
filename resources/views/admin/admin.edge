@@ -107,7 +107,7 @@
 											<ul id="instit" style="display:none">
 												@each(directo in statics.institutesUniversities)
 												<li>
-													{{ directo }}
+													<a href="/partners/{{ directo.replace(/ /g, '-') }}">{{ directo }}</a>
 												</li>
 												@endeach
 											</ul>	
@@ -129,7 +129,14 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-arrow-dot">
 										<li class="c-bg-before-blue">
-											<a href="#">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
+											<a href="javascript:$('#arts').toggle()">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
+											<ul id="arts" style="display:none">
+												@each(art in statics.articles)
+												<li>
+													<a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.running_title }}</a>
+												</li>
+												@endeach
+											</ul>
 										</li>
 										<li class="c-bg-before-red">
 											<a href="#">Article Views <span class="badge c-bg-green-1">{{statics.articleViews}}</span></a>	
@@ -138,7 +145,7 @@
 											<a href="#">Downloads  <span class="badge c-bg-red-1">{{statics.articleDownloads}}</span></a>
 										</li>
 										<li class="c-bg-before-purple">
-											<a href="#">Citations  <span class="badge c-bg-purple-1">0</span></a>
+											<a href="#">Citations  <span class="badge c-bg-purple-1">{{statics.articleCitations}}</span></a>
 										</li>
 										<li class="c-bg-before-yellow">
 											<a href="#">Cities <span class="badge c-bg-yellow-1">{{statics.cities.length}}</span></a>

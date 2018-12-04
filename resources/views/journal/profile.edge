@@ -58,8 +58,8 @@
                         <div class="col-md-6">
                             <!-- Begin: Title 1 component -->
                             <div class="c-content-title-1" data-height="height">
-                                <h3 class="c-font-uppercase c-font-bold editor">{{journal.name}}</h3>
-                                <p class="c-font-uppercase c-font-sbold editor">
+                                <h3 id="name" class="c-font-uppercase c-font-bold">{{journal.name}}</h3>
+                                <p id="description" class="c-font-uppercase c-font-sbold">
                                     {{journal.description}}
                                 </p>
                                 <a href="/artical_submission?thejournal_id={{ journal.id }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</a>
@@ -69,8 +69,8 @@
                         <div class="col-md-6">
                             <div class="c-content-v-center c-bg-red" data-height="height">
                                 <div class="c-wrapper">
-                                    <div class="c-body editor">
-                                        <h3 class="c-font-white c-font-bold">Indexed in Google Scholar, DOAJ, DOI, CrossRef, HINARI etc.</h3>
+                                    <div class="c-body editor" id="google_indexes">
+                                        {{{ journal.google_indexes?journal.google_indexes:'<h3 class="c-font-white c-font-bold">Indexed in Google Scholar, DOAJ, DOI, CrossRef, HINARI etc.</h3>' }}}
                                     </div>
                                 </div>
                             </div>
@@ -166,6 +166,11 @@
             <form method="post" id="tabdata-form">
                 {{ csrfField() }}
                 <input type="hidden" name="tabdata" id="tabdata" />
+                <input type="hidden" name="google_indexes" id="google_indexes-input" />
+                <!--
+                <input type="hidden" name="name" id="name-input" />
+                <input type="hidden" name="description" id="description-input" />
+                -->
             </form>
             <h3 onclick="sendImage();" style="cursor: pointer;">
                 <img src="{{ uploadedImage }}" style="width: 30px;" />
@@ -474,6 +479,9 @@
             });
             console.log(tabs);
             $("#tabdata").val(JSON.stringify(tabs));
+            $("#google_indexes-input").val($("#google_indexes").html());
+            // $("#name-input").val($("#name").html());
+            // $("#description-input").val($("#description").html());
             $("#tabdata-form").submit();
         }
         editorify();

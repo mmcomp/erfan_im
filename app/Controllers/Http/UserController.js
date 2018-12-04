@@ -231,10 +231,12 @@ class UserController {
             articles = articles.toJSON()
             let articleViews = 0
             let articleDownloads = 0
+            let articleCitations = 0
             let dois = []
             for(let art of articles) {
                 articleViews += art.views
                 articleDownloads += art.downloads
+                articleCitations += art.citiations
                 if(art.doi && dois.indexOf(art.doi)<0) {
                     dois.push(art.doi)
                 }
@@ -250,6 +252,7 @@ class UserController {
                 articles: articles,
                 articleViews: articleViews,
                 articleDownloads: articleDownloads,
+                articleCitations: articleCitations,
                 cities: cities,
                 countries: countries,
                 dois: dois

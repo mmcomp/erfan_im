@@ -16,7 +16,7 @@
           /
         </li>
         <li class="c-state_active">
-          {{ selected_user.fname }}-{{ selected_user.lname }} <a href="javascript:$('#frm1').submit();">(Edit / Save)</a>
+          {{ selected_user.fname }}-{{ selected_user.lname }} <a id="edit-save" href="javascript:changeMode();">(Edit)</a>
         </li>
       </ul>
     </div>
@@ -43,7 +43,7 @@
           <!-- End-->
         </div>
         <div class="col-md-6">
-          <div class="c-content-v-center c-bg-red" data-height="height">
+          <div class="edit-mode c-content-v-center c-bg-red" data-height="height">
             <div class="c-wrapper">
               <div class="c-content-panel">
                 <div class="c-label">
@@ -97,6 +97,13 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="view-mode c-content-v-center c-bg-red" data-height="height">
+              <div class="c-wrapper">
+                  <div class="c-body">
+                      <h3 class="c-font-white c-font-bold">Citations, Views and Download Graphs will be displayed here from the following articles over years </h3>
+                  </div>
+              </div>
           </div>
         </div>
       </div>
@@ -633,6 +640,17 @@
 @!component('components.foot')
 
 @!component('components.scripts')
+<script>
+  function changeMode() {
+    if($("#edit-save").text()=='(Edit)') {
+      $("#edit-save").text('(Save)');
+      $(".view-mode").hide();
+      $(".edit-mode").show();
+    }else {
+      $("#frm1").submit();
+    }
+  }
+</script>
 </body>
 
 </html>
