@@ -135,7 +135,8 @@ class ArticalController {
                 msg_type: msg_type,
                 journals: journals.toJSON(),
                 thejournal_id: theJournalId,
-                partners: partners
+                partners: partners,
+                disableJournal: true
             })
         }else {
             console.log('Request', request.all())

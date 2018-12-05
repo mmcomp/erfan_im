@@ -111,10 +111,12 @@
 										Publisher Info </a>
                                     </li>
                                     -->
+                                    @if(user.group_id==1 || user.group_id==2)
                                     <li id="li-more">
                                         <a href="#tab_more" data-toggle="tab">
 										More </a>
                                     </li>
+                                    @endif
                                 </ul>
                             </div>
 
@@ -148,6 +150,7 @@
                                         </div>
                                     </div>
                                     -->
+                                    @if(user.group_id==1 || user.group_id==2)
                                     <div class="tab-pane fade" id="tab_more">
                                         <p>
                                             <h3>Please Insert New Tab Name and Content Here</h3>
@@ -156,15 +159,43 @@
                                             <a class="btn btn-success pull-right" href="javascript:addTab();">Add</a>
                                         </p>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <a class="btn btn-success pull-right" href="javascript:saveData();">Save</a>
+            @if(user.group_id==1 || user.group_id==2)
             <form method="post" id="tabdata-form">
                 {{ csrfField() }}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3>
+                                Every Category Keywords are Camma Seperated
+                            </h3>
+                        </div>
+                        <div class="col-md-4">
+                            <label>
+                                Catecgory 1 Keywords
+                            </label><br/>
+                            <textarea name="c1" >{{ (c1.length>0)?c1.join(','):'' }}</textarea><br/>
+                        </div>
+                        <div class="col-md-4">
+                            <label>
+                                Catecgory 2 Keywords
+                            </label><br/>
+                            <textarea name="c2" >{{ (c2.length>0)?c2.join(','):'' }}</textarea><br/>
+                        </div>
+                        <div class="col-md-4">
+                            <label>
+                                Catecgory 3 Keywords
+                            </label><br/>
+                            <textarea name="c3" >{{ (c3.length>0)?c3.join(','):'' }}</textarea>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="tabdata" id="tabdata" />
                 <input type="hidden" name="google_indexes" id="google_indexes-input" />
                 <!--
@@ -172,6 +203,7 @@
                 <input type="hidden" name="description" id="description-input" />
                 -->
             </form>
+            <a class="btn btn-success pull-right" href="javascript:saveData();">Save</a>
             <h3 onclick="sendImage();" style="cursor: pointer;">
                 <img src="{{ uploadedImage }}" style="width: 30px;" />
             </h3>
@@ -183,6 +215,7 @@
                     Upload Image
                 </button>
             </form>
+            @endif
         </div>
 
 
@@ -401,6 +434,7 @@
     @!component('components.foot')
 
     @!component('components.scripts')
+    @if(user.group_id==1 || user.group_id==2)
     <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/inline/ckeditor.js"></script>
     <!--<script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>-->
     <script>
@@ -486,6 +520,7 @@
         }
         editorify();
     </script>
+    @endif
 </body>
 
 </html>

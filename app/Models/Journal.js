@@ -19,6 +19,10 @@ class Journal extends Model {
   extra() {
     return this.hasMany('App/Models/JournalExtra')
   }
+  
+  keyword() {
+    return this.hasMany('App/Models/JournalKeyword')
+  }
 }
 
 module.exports = Journal

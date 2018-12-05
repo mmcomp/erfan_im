@@ -4,6 +4,7 @@ const Country = use('App/Models/Country')
 const Journal = use('App/Models/Journal')
 const Article = use('App/Models/Artical')
 const JournalExtra = use('App/Models/JournalExtra')
+const JournalKeyword = use('App/Models/JournalKeyword')
 const Database = use('Database')
 const Helpers = use('Helpers')
 const User = use('App/Models/User')
@@ -190,7 +191,7 @@ class JournalController {
         }
 
         params.journal_name = params.journal_name.replace(/-/g, ' ')
-        let theJournal = await Journal.query().with('extra').where('name', params.journal_name).first()
+        let theJournal = await Journal.query().with('extra').with('keyword').where('name', params.journal_name).first()
         if(!theJournal) {
             session.put('msg', 'Journal Not Found')
             session.put('msg_type', 'danger')
@@ -209,7 +210,19 @@ class JournalController {
         partners =  partners.toJSON()
         
         let uploadedImage = '', selected_editor = -1
-
+        var c1 = [], c2 = [], c3 = []
+        let theJournalData = theJournal.toJSON()
+        // console.log('TheJournalData', theJournalData)
+        for(let i = 0;i < theJournalData.keyword.length;i++) {
+            if(theJournalData.keyword[i].category=='c1') {
+                c1.push(theJournalData.keyword[i].theword)
+            }else if(theJournalData.keyword[i].category=='c2') {
+                c2.push(theJournalData.keyword[i].theword)
+            }else if(theJournalData.keyword[i].category=='c3') {
+                c3.push(theJournalData.keyword[i].theword)
+            }
+        }
+        // console.log('c1', c1)
         if(request.method()=='GET') {
             if(theJournal.status == 'requested') {
                 theJournal.status = 'pending'
@@ -238,6 +251,41 @@ class JournalController {
                 theJournal.name = request.all()['name']
                 theJournal.description = request.all()['description']
                 await theJournal.save()
+                let categorys = []
+                c1 = request.all()['c1'].split(',')
+                if(c1[0]!='') {
+                    for(let i =0;i < c1.length;i++) {
+                        categorys.push({
+                            category: 'c1',
+                            journal_id: theJournal.id,
+                            theword: c1[i]
+                        })
+                    }
+                }
+                c2 = request.all()['c2'].split(',')
+                if(c2[0]!='') {
+                    for(let i =0;i < c2.length;i++) {
+                        categorys.push({
+                            category: 'c2',
+                            journal_id: theJournal.id,
+                            theword: c2[i]
+                        })
+                    }
+                }
+                c3 = request.all()['c3'].split(',')
+                if(c3[0]!='') {
+                    for(let i =0;i < c3.length;i++) {
+                        categorys.push({
+                            category: 'c3',
+                            journal_id: theJournal.id,
+                            theword: c3[i]
+                        })
+                    }
+                }
+                await JournalKeyword.query().where('journal_id', theJournal.id).delete()
+                if(categorys.length>0) {
+                    await JournalKeyword.createMany(categorys)
+                }
                 theJournal = await Journal.query().with('extra').where('id', theJournal.id).first()
 
             }else if(request.file('image_upload')) {
@@ -266,7 +314,10 @@ class JournalController {
             journal: theJournal.toJSON(),
             partners: partners,
             uploadedImage: uploadedImage,
-            selected_editor: selected_editor
+            selected_editor: selected_editor,
+            c1: c1,
+            c2: c2,
+            c3: c3
         })
     }
 
@@ -314,6 +365,11 @@ class JournalController {
                     await JournalExtra.createMany(tbdata)
                     console.log('saveing tb data', tbdata)
                 }
+                theJournal.google_indexes = request.all()['google_indexes']
+                theJournal.name = request.all()['name']
+                theJournal.description = request.all()['description']
+                await theJournal.save()
+                theJournal = await Journal.query().with('extra').where('id', theJournal.id).first()
             }else if(request.file('image_upload')) {
                 const imageUpload = request.file('image_upload', {
                     types: ['image'],
