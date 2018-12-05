@@ -130,23 +130,23 @@
                                 <label for="corresponding-salut" class="control-label">Write Salutation here e.g.
                                   Dr./Prof./Prof.Dr./Mr</label>
                                 <input name="salutation" type="text" class="form-control c-square" id="corresponding-salut"
-                                  value="{{ article.author.salutation }}">
+                                  value="{{ (article.author.salutation)?article.author.salutation:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> First Name e.g. Muhammad</label>
                                 <input name="fname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ article.author.fname }}">
+                                  value="{{ (article.author.fname)?article.author.fname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> Last Name e.g. Irfan</label>
                                 <input name="lname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ article.author.lname }}">
+                                  value="{{ (article.author.lname)?article.author.lname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-department" class="control-label">Department e.g. Department
                                   of Biology</label>
                                 <input name="department" type="text" class="form-control c-square" id="corresponding-department"
-                                  value="{{ article.author.department }}">
+                                  value="{{ (article.author.department)?article.author.department:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-university" class="control-label">Institute/University e.g.
@@ -157,13 +157,13 @@
                               <div class="form-group">
                                 <label for="corresponding-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
                                 <input name="email" type="text" class="form-control c-square" id="corresponding-email"
-                                  value="{{ article.author.email }}">
+                                  value="{{ (article.author.email)?article.author.email:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-number" class="control-label">Corresponding number e.g.
                                   +10123456789</label>
                                 <input name="tell" type="text" class="form-control c-square" id="corresponding-number"
-                                  value="{{ article.author.tell }}">
+                                  value="{{ (article.author.tell)?article.author.tell:'' }}">
                               </div>
                             </form>
                           </div>
@@ -224,23 +224,23 @@
                                 <label for="corresponding-salut" class="control-label">Write Salutation here e.g.
                                   Dr./Prof./Prof.Dr./Mr</label>
                                 <input name="salutation" type="text" class="form-control c-square" id="corresponding-salut"
-                                  value="{{ article.first.salutation }}">
+                                  value="{{ (article.first.salutation)?article.first.salutation:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> First Name e.g. Muhammad</label>
                                 <input name="fname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ article.first.fname }}">
+                                  value="{{ (article.first.fname)?article.first.fname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> Last Name e.g. Irfan</label>
                                 <input name="lname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ article.first.lname }}">
+                                  value="{{ (article.first.lname)?article.first.lname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-department" class="control-label">Department e.g. Department
                                   of Biology</label>
                                 <input name="department" type="text" class="form-control c-square" id="corresponding-department"
-                                  value="{{ article.first.department }}">
+                                  value="{{ (article.first.department)?article.first.department:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-university" class="control-label">Institute/University e.g.
@@ -251,13 +251,13 @@
                               <div class="form-group">
                                 <label for="corresponding-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
                                 <input name="email" type="text" class="form-control c-square" id="corresponding-email"
-                                  value="{{ article.first.email }}">
+                                  value="{{ (article.first.email)?article.first.email:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-number" class="control-label">Corresponding number e.g.
                                   +10123456789</label>
                                 <input name="tell" type="text" class="form-control c-square" id="corresponding-number"
-                                  value="{{ article.first.tell }}">
+                                  value="{{ (article.first.tell)?article.first.tell:'' }}">
                               </div>
                             </form>
                           </div>
@@ -288,16 +288,16 @@
                               <input type="hidden" name="position" value="co" />
                               <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> First Name e.g. Muhammad</label>
-                                <input name="fname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ article.co.fname }}">
+                                <input name="fname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ (article.co.fname)?article.co.fname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> Last Name e.g. Irfan</label>
-                                <input name="lname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ article.co.lname }}">
+                                <input name="lname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ (article.co.lname)?article.co.lname:'' }}">
                                 </div>
                               <div class="form-group">
                                 <label for="coauthor-1-university" class="control-label">Institute/University e.g.
                                   University of Oxford</label>
-                                <input name="university_institute" type="text" class="form-control c-square" id="coauthor-1-university" value="{{ article.co.university_institute }}">
+                                <input name="university_institute" type="text" class="form-control c-square" id="coauthor-1-university" value="{{ (article.co.university_institute)?article.co.university_institute:'' }}">
                               </div>
                             </form>
                           </div>

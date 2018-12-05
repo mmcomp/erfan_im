@@ -91,7 +91,7 @@ class ArticalController {
             artical.full_title = request.all()['full_title']
             artical.running_title = request.all()['running_title']
             artical.summery = request.all()['summery']
-            // artical.author_id = user.id
+            artical.author_id = user.id
             await artical.save()
 
             session.put('msg', 'Article Save Successfully.')
