@@ -469,12 +469,15 @@ class ArticalController {
             return response.redirect('/')
         }
         // console.log('!!!!!')
-        let article = theArticle.toJSON()
-        let otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id).whereNot('users_id', article.author.id).whereNot('position', 'corresponding').fetch()
-        otherAuthors = otherAuthors.toJSON()
-
-        let corAuthors = await UserArticle.query().with('user.country').where('article_id', theArticle.id).whereNot('users_id', article.author.id).where('position', 'corresponding').fetch()
-        corAuthors = corAuthors.toJSON()
+        let article = theArticle.toJSON() , otherAuthors = [], corAuthors = []
+        if(article.author) {
+            otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id).whereNot('users_id', article.author.id).whereNot('position', 'corresponding').fetch()
+            otherAuthors = otherAuthors.toJSON()
+    
+            corAuthors = await UserArticle.query().with('user.country').where('article_id', theArticle.id).whereNot('users_id', article.author.id).where('position', 'corresponding').fetch()
+            corAuthors = corAuthors.toJSON()
+    
+        }
         console.log('CorAuthors', corAuthors)
         
         let star = '*', stars = ''
