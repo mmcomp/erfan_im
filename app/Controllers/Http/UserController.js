@@ -344,6 +344,8 @@ class UserController {
                 msg_type: msg_type,
                 partners: partners
             })
+        }else if(user.group_id==5){
+            return response.redirect('/profile/' + user.id)
         }else {
             session.put('msg', 'You Are Not Authorized to use Dashboard')
             session.put('msg_type', 'danger')
@@ -355,16 +357,30 @@ class UserController {
     async profile ({ request, auth, view, response, session, params }) {
         let user = session.get('user')
         // console.log('params', params)
-        let author_name = params.author_name.split('-')
-        // console.log('Author Name', author_name, author_name.length)
-        let fname = (author_name.length==2)?author_name[0]:''
-        let lname = (author_name.length==2)?author_name[1]:author_name[0]
-        // console.log('Fname', fname, 'Lname', lname)
+        if(!params) {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
+        let selected_user
+        if(params.author_name) {
+            let author_name = params.author_name.split('-')
+            // console.log('Author Name', author_name, author_name.length)
+            let fname = (author_name.length==2)?author_name[0]:''
+            let lname = (author_name.length==2)?author_name[1]:author_name[0]
+            // console.log('Fname', fname, 'Lname', lname)
+            selected_user = await User.query().where('fname', fname).where('lname', lname).first()
+        }else if(params.author_id) {
+            selected_user = await User.find(params.author_id)
+        }else {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
 
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
 
-        let selected_user = await User.query().where('fname', fname).where('lname', lname).first()
         if(!selected_user) {
             session.put('msg', 'Author Not Found')
             session.put('msg_type', 'danger')

@@ -54,6 +54,7 @@ Route.get('admin', 'UserController.admin')
 
 Route.any('author/:author_name', 'UserController.profile')
 
+Route.any('profile/:author_id', 'UserController.profile')
 
 
 Route.any('privacy', async ({view, session}) => {
