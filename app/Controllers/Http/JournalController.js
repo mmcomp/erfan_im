@@ -204,7 +204,7 @@ class JournalController {
     
             return response.route('home')
         }
-
+        session.put('selected_journal', theJournal.id)
         let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
         

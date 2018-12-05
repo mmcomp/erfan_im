@@ -100,6 +100,103 @@ class ArticalController {
         return response.route('home', {isLogged: isLogged})
     }
 
+    async createForJournal ({ view, response, session, request }) {
+        let isLogged = false, user = {}, msg = '', msg_type = ''
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+            msg = session.get('msg')
+            msg_type = session.get('msg_type')
+            session.forget('msg')
+            session.forget('msg_type')
+        }else {
+            session.put('msg', 'You need to Login or Signup first')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
+        }
+
+        if(!session.get('selected_journal')) {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
+        }
+
+        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+
+        if(request.method()=='GET') {
+            let journals = await Journal.all()
+            let theJournalId  = parseInt(session.get('selected_journal'), 10)
+
+            return view.render('artical.create', { 
+                isLogged: isLogged,
+                user: user,
+                msg: msg,
+                msg_type: msg_type,
+                journals: journals.toJSON(),
+                thejournal_id: theJournalId,
+                partners: partners
+            })
+        }else {
+            console.log('Request', request.all())
+            let artical = new Artical
+            artical.abstract_image_path = ''
+            const abstractImagePath = request.file('abstract_image_path', {
+                types: ['image'],
+                size: '2mb'
+            })
+            let filename = `${new Date().getTime()}.${abstractImagePath.subtype}`
+            await abstractImagePath.move(Helpers.publicPath('static/img/abstract'), {
+                name: filename,
+                overwrite: true
+            })
+    
+            if(!abstractImagePath.moved()) {
+                console.log(abstractImagePath.error())
+                let error = abstractImagePath.error()
+                session.put('msg', 'Abstract Image Error : ' + error.message)
+                session.put('msg_type', 'danger')
+
+                return response.route('artical_create')
+            }else {
+                artical.abstract_image_path = 'static/img/abstract/' + filename
+            }
+    
+            artical.file_path = ''
+            const filePath = request.file('file_path', {
+                size: '10mb'
+            })
+
+            filename = `${new Date().getTime()}.${filePath.clientName.split('.')[filePath.clientName.split('.').length-1]}`
+            await filePath.move(Helpers.publicPath('static/articals'), {
+                name: filename,
+                overwrite: true
+            })
+    
+            if(!filePath.moved()) {
+                console.log(filePath.error())
+                let error = filePath.error()
+                session.put('msg', 'Article File Error : ' + error.message)
+                session.put('msg_type', 'danger')
+
+                return response.route('artical_create')
+            }else {
+                artical.file_path = 'static/articals/' + filename
+            }
+
+            artical.type = (request.all()['type_research'])?'research':'non-research'
+            artical.full_title = request.all()['full_title']
+            artical.running_title = request.all()['running_title']
+            artical.summery = request.all()['summery']
+            // artical.author_id = user.id
+            await artical.save()
+
+            session.put('msg', 'Article Save Successfully.')
+            session.put('msg_type', '')
+        }
+        return response.route('home', {isLogged: isLogged})
+    }
+
     async profile ({ view, response, session, request, params }) {
         let isLogged = false, user = {}
         if(session.get('user')) {
