@@ -133,7 +133,7 @@
 											<ul id="arts" style="display:none">
 												@each(art in statics.articles)
 												<li>
-													<a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.running_title }}</a>
+													<a href="/article_id/{{ art.id }}">{{ art.running_title }}</a>
 												</li>
 												@endeach
 											</ul>

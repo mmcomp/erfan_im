@@ -442,6 +442,22 @@ class JournalController {
             number_of_citiations: citResult
         })
     }
+
+    async keyword ({ request, auth, view, response, session, params }) {
+        if(!params || !params.keyword) {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        let journalKeyword = await JournalKeyword.query().where('theword', params.keyword).first()
+
+        session.put('msg', 'UI not developed yet')
+        session.put('msg_type', 'danger')
+
+        return response.route('home')
+    }
 }
 
 module.exports = JournalController

@@ -460,11 +460,11 @@ class ArticalController {
 
         params.article_name = params.article_name.replace(/-/g, ' ')
 
-        let theArticle = await Artical.query().with('journal').with('author').where('running_title', params.article_name).first()
-        // console.log('theArticle', theArticle)
+        let theArticle = await Artical.query().with('journal').with('author').with('keyword.keyword').where('running_title', params.article_name).where('status', 'published').first()
+        // console.log('theArticle', theArticle.toJSON())
         if(!theArticle) {
             // console.log('Not Found!', theArticle)
-            session.put('msg', 'Article Not Found1')
+            session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
@@ -478,7 +478,7 @@ class ArticalController {
             corAuthors = corAuthors.toJSON()
     
         }
-        console.log('CorAuthors', corAuthors)
+        // console.log('CorAuthors', corAuthors)
         
         let star = '*', stars = ''
         for(let i = 1;i <= corAuthors.length;i++) {

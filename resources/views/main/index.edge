@@ -120,7 +120,7 @@
 
                                                             {{ journal.name }} (ISSN: {{ journal.issn }}) {{ journal.description }}
                                                     </p>
-                                                    <a href="{{ journal.web_site }}"> <button class="btn btn-sm c-theme-btn c-btn-square c-btn-bold">
+                                                    <a href="/jouranls/{{ journal.name.replace(/ /g,'-') }}/{{ journal.issn }}"> <button class="btn btn-sm c-theme-btn c-btn-square c-btn-bold">
 												View Homepage </button> </a>
                                                 </div>
                                             </div>

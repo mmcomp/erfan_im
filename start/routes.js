@@ -34,6 +34,7 @@ Route.any('jouranls/:journal_name/:issn', 'JournalController.profileByName')
 
 Route.get('partners/:partner', 'JournalController.partner')
 
+Route.get('keyword/:keyword', 'JournalController.keyword')
 
 
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')

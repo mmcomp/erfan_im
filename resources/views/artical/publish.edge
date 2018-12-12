@@ -1,4 +1,4 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user})
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user, title: article.running_title})
 
 <!-- BEGIN: PAGE CONTAINER -->
 <div class="c-layout-page" style="margin-top: 140px !important;">
@@ -83,24 +83,20 @@
                 </div>
               </div>
               @endif
-              <p class="c-font-sentence c-font-sbold"> <strong>Abstract: </strong><br> Stem cell therapeutic research
-                is passing through a transition phase between laboratory research and health industry. According to the
-                US data registry of clinical trials, more than 4776 studies have been registered, 2882 have been
-                completed whereas 1894 studies are in process. Surprisingly, in spite of having huge research, there
-                are two commercialized stem cell therapeutic products in global market and these two products are also
-                not approved by FDA. As it has been discussed in literature, stem cells have been considered as
-                promising candidates to treat non-curable diseases like cancer etc. More than 80% successful clinical
-                trials have been done showing no or little side effects with much better efficiency than
-                pharmacokinetics but still stem cell research is far from being commercialized. The major reason of
-                stem cells non-commercialization is the gap among clinicians, researchers, industry experts and policy
-                makers. A multibillion dollar grants and a very strong communication system between doctors,
-                researchers, industrial experts, policy makers, regulating authorities, are the pre-requisite to
-                commercialize stem cell therapy.</p>
-              <span class="item"><span aria-hidden="true" class="icon-tag">&nbsp;Keywords:</span> <a href="http://imaqpress.com/keywords/">
-                  Current good manufacturing practice </a> <a href="http://imaqpress.com/keywords/"> commercialization
+              <p class="c-font-sentence c-font-sbold"> <strong>Abstract: </strong><br> {{ article.abstract }}</p>
+              <span class="item"><span aria-hidden="true" class="icon-tag">&nbsp;Keywords:</span> 
+                @each(keyword in article.keyword)
+                <a href="/keyword/{{ keyword.keyword.theword.replace(/ /g,'-') }}">
+                  {{ keyword.keyword.theword }}
+                </a> 
+                @endeach
+                <!--
+                <a href="http://imaqpress.com/keywords/"> commercialization
                   of stem cells </a> <a href="http://imaqpress.com/keywords/"> cellular therapy </a> <a href="http://imaqpress.com/keywords/">
                   clinical trials </a> <a href="http://imaqpress.com/keywords/non-curable-disease"> non-curable
-                  diseases </a></span>
+                  diseases </a>
+                -->
+              </span>
             </div>
           </div>
         </div>

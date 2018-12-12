@@ -61,6 +61,10 @@ class Artical extends Model {
   comments () {
     return this.manyThrough('App/Models/UserArticleEditor', 'comments', 'id', 'article_id')
   }
+
+  keyword () {
+    return this.hasMany('App/Models/ArticleKeyword', 'id', 'article_id')
+  }
 }
 
 module.exports = Artical
