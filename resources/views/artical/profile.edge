@@ -583,12 +583,57 @@
           </h3>
           <form method="post"  enctype="multipart/form-data">
               {{ csrfField() }}
-              <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
-              <input type="file" name="image_upload" />
-              <button class="btn btn-success pull-left">
-                  Upload Image
-              </button>
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-2 col-sm-12">
+                    <label>
+                        Publish Volume :
+                    </label>
+                    <input class="form-control c-square" type="text" name="publish_vol" placeholder="Publish Volume" value="{{ article.publish_vol }}" />
+                  </div>
+                  <div class="col-md-2 col-sm-12">
+                      <label>
+                          Publish Number :
+                      </label>
+                      <input class="form-control c-square" type="text" name="publish_no" placeholder="Publish Number" value="{{ article.publish_no }}" />
+                  </div>
+                  <div class="col-md-2 col-sm-12">
+                      <label>
+                          Publish Page Start :
+                      </label>
+                    <input class="form-control c-square" type="text" name="publish_startpage" placeholder="Publish Page Start" value="{{ article.publish_startpage }}" />
+                  </div>
+                  <div class="col-md-2 col-sm-12">
+                      <label>
+                          Publish Page End :
+                      </label>
+                    <input class="form-control c-square" type="text" name="publish_endpage" placeholder="Publish Page End" value="{{ article.publish_endpage }}" />
+                  </div>
+                  <div class="col-md-2 col-sm-12">
+                      <label>
+                          DOI Article Code :
+                      </label>
+                    <input class="form-control c-square" type="text" name="doi" placeholder="DOI Article Code" value="{{ (article.doi)?article.doi:article.id }}" />
+                  </div>
+                  <div class="col-md-2 col-sm-12">
+                    <br/>
+                    <button class="btn btn-success pull-left">
+                        Save Publish Data
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>
+          <br/>
+          <form method="post">
+            {{ csrfField() }}
+            <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
+            <input type="file" name="image_upload" />
+            <button class="btn btn-success pull-left">
+                Upload Image
+            </button>
+        </form>
         </div>
         <br/><br/>
         <div class="c-content-panel">

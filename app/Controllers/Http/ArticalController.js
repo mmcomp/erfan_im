@@ -1,7 +1,9 @@
 'use strict'
 
 const Artical = use('App/Models/Artical')
+const ArticleKeyword = use('App/Models/ArticleKeyword')
 const Journal = use('App/Models/Journal')
+const JournalKeyword = use('App/Models/JournalKeyword')
 const User = use('App/Models/User')
 const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
@@ -9,6 +11,29 @@ const Helpers = use('Helpers')
 const Mail = use('Mail')
 
 class ArticalController {
+    async calcKeywords(article) {
+        let articleKeyword, journalKeywords = await JournalKeyword.query().where('journal_id', article.journal_id).fetch()
+        journalKeywords = journalKeywords.toJSON()
+        for(let journalKeyword of journalKeywords) {
+            if(article.running_title.indexOf(journalKeyword.theword)>=0){
+                articleKeyword = new ArticleKeyword
+                articleKeyword.article_id = article.id
+                articleKeyword.journal_keywords_id = journalKeyword.id
+                await articleKeyword.save()
+            }else if(article.full_title.indexOf(journalKeyword.theword)>=0){
+                articleKeyword = new ArticleKeyword
+                articleKeyword.article_id = article.id
+                articleKeyword.journal_keywords_id = journalKeyword.id
+                await articleKeyword.save()
+            }else if(article.summery.indexOf(journalKeyword.theword)>=0){
+                articleKeyword = new ArticleKeyword
+                articleKeyword.article_id = article.id
+                articleKeyword.journal_keywords_id = journalKeyword.id
+                await articleKeyword.save()
+            }
+        }
+    }
+
     async create ({ view, response, session, request }) {
         let isLogged = false, user = {}, msg = '', msg_type = ''
         if(session.get('user')) {
@@ -92,7 +117,10 @@ class ArticalController {
             artical.running_title = request.all()['running_title']
             artical.summery = request.all()['summery']
             artical.author_id = user.id
+            artical.journal_id = request.all()['journal_id']
             await artical.save()
+
+            await this.calcKeywords(artical)
 
             session.put('msg', 'Article Save Successfully.')
             session.put('msg_type', '')
@@ -189,8 +217,11 @@ class ArticalController {
             artical.full_title = request.all()['full_title']
             artical.running_title = request.all()['running_title']
             artical.summery = request.all()['summery']
-            // artical.author_id = user.id
+            artical.author_id = user.id
+            artical.journal_id = request.all()['journal_id']
             await artical.save()
+
+            await this.calcKeywords(artical)
 
             session.put('msg', 'Article Save Successfully.')
             session.put('msg_type', '')
@@ -409,6 +440,18 @@ class ArticalController {
                 }else {
                     uploadedImage = '/static/img/uploads/' + filename
                 }
+            }else if(request.all()['doi']) {
+                mainArticle.doi = request.all()['doi']
+                mainArticle.publish_vol = request.all()['publish_vol']
+                mainArticle.publish_no = request.all()['publish_no']
+                mainArticle.publish_startpage = request.all()['publish_startpage']
+                mainArticle.publish_endpage = request.all()['publish_endpage']
+                await mainArticle.save()
+                article.doi = request.all()['doi']
+                article.publish_vol = request.all()['publish_vol']
+                article.publish_no = request.all()['publish_no']
+                article.publish_startpage = request.all()['publish_startpage']
+                article.publish_endpage = request.all()['publish_endpage']
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
