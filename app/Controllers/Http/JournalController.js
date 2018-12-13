@@ -234,6 +234,7 @@ class JournalController {
                 theJournal.director_note = request.all()['director_note']
                 theJournal.status = request.all()['status']
                 theJournal.doi_code = request.all()['doi_code']
+                theJournal.issn = request.all()['issn']
                 await theJournal.save()    
             }else if(request.all()['tabdata']) {
                 let tbdata = []

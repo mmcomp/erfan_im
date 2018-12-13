@@ -9,9 +9,9 @@ const Database = use('Database')
 
 class UserController {
     async logout ({ auth, response, session }) {
-        console.log('Log Out')
+        // console.log('Log Out')
         session.clear()
-        console.log('session', session.all())
+        // console.log('session', session.all())
         try{
             await auth.logout()
         }catch(e) {
@@ -36,25 +36,25 @@ class UserController {
                 session.clear()
 
                 try{
-                    console.log('Remember Me : ', rememberme)
+                    // console.log('Remember Me : ', rememberme)
                     await auth.remember(rememberme).attempt(email, password)
                     msg = 'Logged in successfully'
                     logedIn = true;
 
                     let user = await User.query().where('id', auth.user.id).with('permissions').first()
-                    console.log('User', user.toJSON())
+                    // console.log('User', user.toJSON())
                     user = user.toJSON()
                     let permissions = {}
                     for(let i = 0;i < user.permissions.length;i++) {
                         permissions[user.permissions[i].permission_key] = true
                     }
                     user.permissions = permissions
-                    console.log(user)
+                    // console.log(user)
                     session.put('user', user)
                     
                 }catch(e) {
-                    console.log('Login Error')
-                    console.log(e)
+                    // console.log('Login Error')
+                    // console.log(e)
                     msg = 'Login information is wrong'
                     msg_type = 'danger'
                 }
