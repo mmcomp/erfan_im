@@ -390,12 +390,27 @@ class ArticalController {
                 mainArticle.ref = request.all()['ref']
                 await mainArticle.save()
                 article.ref = request.all()['ref']
+            }else if(request.all()['check_editor_email']) {
+                let testUser = await User.query().where('email', request.all()['check_editor_email']).first()
+                if(!testUser) {
+                    return {
+                        status: false
+                    }
+                }
+                return {
+                    status: true,
+                    data: testUser.toJSON()
+                }
             }else if(request.all()['editor_email']) {
                 let assignEditor = await User.query().where('email', request.all()['editor_email']).first()
                 if(!assignEditor) {
-                    session.put('msg', 'Email not Registered!')
-                    session.put('msg_type', 'danger')
-                    return response.redirect('/article_id/' + article.id)
+                    assignEditor = new User
+                    assignEditor.fname = request.all()['editor_fname']
+                    assignEditor.lname = request.all()['editor_lname']
+                    await assignEditor.save()
+                    // session.put('msg', 'Email not Registered!')
+                    // session.put('msg_type', 'danger')
+                    // return response.redirect('/article_id/' + article.id)
                 }
                 let userArticleEditor = await UserArticleEditor.query().where('users_id', assignEditor.id).where('article_id', article.id).first()
                 if(!userArticleEditor) {

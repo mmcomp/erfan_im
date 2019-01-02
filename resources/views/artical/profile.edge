@@ -189,12 +189,15 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="corresponding-salut" class="control-label">Editor Email :</label>
-                                <input name="editor_email" type="email" class="form-control c-square" id="corresponding-salut">
+                                <input type="hidden" id="editor_id" name="editor_id" value="" />
+                                <input name="editor_email" type="email" class="form-control c-square" id="corresponding-salut" onkeyup="checkEmail(this);" placeholder="Email">
+                                <input name="editor_fname" class="form-control c-square" id="editor_fname" placeholder="First Name" />
+                                <input name="editor_lname" class="form-control c-square" id="editor_lname" placeholder="Last Name"/>
                               </div>
                             </form>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" onclick="$('#assign-form').submit();" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
+                            <button type="button" onclick="assignEditor();" class="btn c-theme-btn c-btn-square c-btn-bold c-btn-uppercase">Save</button>
                             <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                               data-dismiss="modal">Close</button>
                           </div>
@@ -888,6 +891,34 @@
     <script>
         var editors = [];
         var uploadedImage = '{{ uploadedImage }}';
+        function checkEmail(dobj) {
+          console.log($(dobj).val());
+          var strlen = $(dobj).val().length;
+          if(strlen>=3) {
+            $.post('', {
+              check_editor_email: $(dobj).val(),
+              '_csrf': '{{ csrfToken }}'
+            }, function(result) {
+              console.log('Result', result);
+              if(result.status) {
+                $("#editor_fname").val(result.data.fname);
+                $("#editor_lname").val(result.data.lname);
+                $("#editor_id").val(result.data.id);
+              }
+            });
+          }
+        }
+        function assignEditor() {
+          if($("#editor_id").val().trim()!='') {
+            $('#assign-form').submit();
+          }else {
+            if($("#editor_fname").val().trim()!='' && $("#editor_lname").val().trim()!='') {
+              $('#assign-form').submit();
+            }else {
+              alert('Please Enter First Name and Last Name for the Editor.');
+            }
+          }
+        }
         function sendImage() {
             if(uploadedImage=='') {
                 alert('No Image was Uploaded yet!');
