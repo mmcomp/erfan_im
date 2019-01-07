@@ -9,6 +9,9 @@ const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
 const Helpers = use('Helpers')
 const Mail = use('Mail')
+const phantom = require('phantom')
+const Env = use('Env')
+const fs = require('fs')
 
 class ArticalController {
     async calcKeywords(article) {
@@ -49,9 +52,6 @@ class ArticalController {
             return response.route('home', {isLogged: isLogged})
         }
 
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
-
         if(request.method()=='GET') {
             let journals = await Journal.all()
             let theJournalId  = (request.all()['thejournal_id'])?parseInt(request.all()['thejournal_id'],10):-1
@@ -63,7 +63,6 @@ class ArticalController {
                 msg_type: msg_type,
                 journals: journals.toJSON(),
                 thejournal_id: theJournalId,
-                partners: partners
             })
         }else {
             console.log('Request', request.all())
@@ -149,9 +148,6 @@ class ArticalController {
             return response.route('home', {isLogged: isLogged})
         }
 
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
-
         if(request.method()=='GET') {
             let journals = await Journal.all()
             let theJournalId  = parseInt(session.get('selected_journal'), 10)
@@ -163,7 +159,6 @@ class ArticalController {
                 msg_type: msg_type,
                 journals: journals.toJSON(),
                 thejournal_id: theJournalId,
-                partners: partners,
                 disableJournal: true
             })
         }else {
@@ -242,9 +237,6 @@ class ArticalController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
 
         let uploadedImage = '', selected_editor = -1
 
@@ -494,7 +486,6 @@ class ArticalController {
             status_color: status_color, 
             msg: msg, 
             msg_type: msg_type,
-            partners: partners,
             uploadedImage: uploadedImage,
             selected_editor: selected_editor
         })
@@ -513,9 +504,6 @@ class ArticalController {
             return response.redirect('/')
         }
 
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
-
         params.article_name = params.article_name.replace(/-/g, ' ')
 
         let theArticle = await Artical.query().with('journal').with('author').with('keyword.keyword').where('running_title', params.article_name).where('status', 'published').first()
@@ -525,6 +513,21 @@ class ArticalController {
             session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/')
+        }
+        if(request.all()['pdf']) {
+            const ph = await phantom.create()
+            const page = await ph.createPage()
+            await page.property('viewportSize', { width: 2000, height: 768 });
+            const status = await page.open(Env.get('APP_URL') + "/article/" + params.article_name.replace(/ /g, '-'))
+            // const content = await page.property('content')
+            await page.render(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
+            const content = fs.readFileSync(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
+            // console.log(content)
+            fs.unlinkSync(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
+            ph.exit()
+            response.header('Content-type', 'application/pdf')
+            return response.send(content)
+
         }
         // console.log('!!!!!')
         let article = theArticle.toJSON() , otherAuthors = [], corAuthors = []
@@ -562,7 +565,6 @@ class ArticalController {
             corAuthors: corAuthors,
             msg: msg, 
             msg_type: msg_type,
-            partners: partners
         })
     }
 }

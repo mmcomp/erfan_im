@@ -87,20 +87,11 @@ class UserController {
             country = country.toJSON()
         }
 
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
-
-        // console.log('Partners', partners)
-
-        // console.log('session', session.all())
-        // console.log('country', country)
-
         let journals = await Journal.query().where('status', 'aproved').fetch()
         journals = journals.toJSON()
 
         let articles = await Artical.query().with('journal').where('status', 'published').orderBy('citiations', 'desc').limit(3).fetch()
         articles = articles.toJSON()
-        // console.log('articles', articles)
 
         let editorCount = await Database.raw('select count(id) as c from (select id from users_edits group by users_id) tb1')
         editorCount = editorCount[0][0].c
@@ -121,13 +112,13 @@ class UserController {
         if(loggedIn) {
             user = session.get('user')
         }
+
         return view.render('main.index', { 
             isLogged: loggedIn, 
             msg: msg, 
             msg_type:msg_type, 
             country: country, 
             user: user,
-            partners: partners,
             journals: journals,
             articles: articles,
             editorCount: editorCount,
@@ -177,9 +168,6 @@ class UserController {
         }
 
         let user = session.get('user')
-
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
 
         if(user.group_id==1) {
             // Admin
@@ -263,7 +251,6 @@ class UserController {
                 journals: journals, 
                 request_count: requestCount, 
                 statics: statics,
-                partners: partners
             })
         }else if(user.group_id==2){
             let cities = [], countries = []
@@ -342,7 +329,6 @@ class UserController {
                 countries: countries,
                 msg: msg,
                 msg_type: msg_type,
-                partners: partners
             })
         }else if(user.group_id==5){
             return response.redirect('/profile/' + user.id)
@@ -377,9 +363,6 @@ class UserController {
             session.put('msg_type', 'danger')
             return response.redirect('/') 
         }
-
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
 
         if(!selected_user) {
             session.put('msg', 'Author Not Found')
@@ -442,7 +425,6 @@ class UserController {
                 highlyCited: highlyCited
             },
             user_articles: userArticles,
-            partners: partners
         })
     }
 }

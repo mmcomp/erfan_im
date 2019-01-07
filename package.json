@@ -31,6 +31,7 @@
     "google-scholar": "^1.5.1",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
+    "phantom": "^6.0.3",
     "sqlite3": "^4.0.2"
   },
   "devDependencies": {},

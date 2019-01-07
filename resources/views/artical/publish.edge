@@ -197,7 +197,7 @@
           <div class="c-content-ver-nav">
             <ul class="c-menu c-arrow-dot1 c-theme">
               <li>
-                <a href="http://imaqpress.com/articles/immortalized-cell-lines.pdf">Full Text PDF</a>
+                <a href="javascript:requestPDF()">Full Text PDF</a>
               </li>
               <li>
                 <a href="http://imaqpress.com/articles/immortalized-cell-lines.epub">Full Text ePUB</a>
@@ -206,7 +206,36 @@
                 <a href="http://imaqpress.com/articles/immortalized-cell-lines.xml">Full Text XML</a>
               </li>
               <li>
-                <a href="http://imaqpress.com/articles/immortalized-cell-lines/cite">How to Cite?</a>
+                <a href="http://imaqpress.com/articles/immortalized-cell-lines/cite" data-toggle="modal" data-target="#howtocite" data-whatever="bootstrap">How to Cite?</a>
+                <div class="modal fade" id="howtocite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content c-square">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">How to Cite?</h4>
+                      </div>
+                      <div class="modal-body">
+                        <b>Harvard Style</b>
+                        <br/>
+                        <p style="padding: 10px;border: 1px solid #eaeaea;margin-top: 10px;">
+                          Irfan Maqsood, M., Matin, M.M., Bahrami, A.R. and Ghasroldasht, M.M., 2013. Immortality of cell lines: challenges and advantages of establishment. Cell biology international, 37(10), pp.1038-1045.
+                        </p>
+                        <br/>
+                        <b>Vancouver Style</b>
+                        <br/>
+                        <p style="padding: 10px;border: 1px solid #eaeaea;margin-top: 10px;">
+                          Irfan Maqsood M, Matin MM, Bahrami AR, Ghasroldasht MM. Immortality of cell lines: challenges and advantages of establishment. Cell biology international. 2013 Oct;37(10):1038-45.
+                        </p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
+                          data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </li>
             </ul>
           </div>
@@ -225,7 +254,15 @@
 @!component('components.foot')
 
 @!component('components.scripts', {msg: msg, msg_type: msg_type})
-
+<form method="post" id="pdf-form">
+  {{ csrfField() }}
+  <input type="hidden" name="pdf" value="pdf" />
+</form>
+<script>
+  function requestPDF() {
+    $("#pdf-form").submit();
+  }
+</script>
 </body>
 
 </html>

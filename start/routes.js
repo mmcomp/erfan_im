@@ -32,7 +32,7 @@ Route.any('jouranl/:journal_name', 'JournalController.profileByName')
 
 Route.any('jouranls/:journal_name/:issn', 'JournalController.profileByName')
 
-Route.get('partners/:partner', 'JournalController.partner')
+Route.get('partners', 'JournalController.partners')
 
 Route.get('keyword/:keyword', 'JournalController.keyword')
 
@@ -43,7 +43,7 @@ Route.any('journal_artical_submission', 'ArticalController.createForJournal')
 
 Route.any('article_id/:article_id', 'ArticalController.profile')
 
-Route.get('article/:article_name', 'ArticalController.publish')
+Route.any('article/:article_name', 'ArticalController.publish')
 
 
 

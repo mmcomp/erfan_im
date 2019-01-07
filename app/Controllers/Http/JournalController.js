@@ -21,8 +21,7 @@ class JournalController {
             country = await Country.all()
             country = country.toJSON()
         }
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
+
         let theFrequencies = ''
         let jours = ''
         let freqs = []
@@ -70,7 +69,6 @@ class JournalController {
             jours: jours, 
             country: country, 
             user: user,
-            partners: partners
         })
     }
 
@@ -80,9 +78,6 @@ class JournalController {
             isLogged = true
             user = session.get('user')
         }
-
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
 
         if(request.method()=='GET') {
             console.log('GET')
@@ -130,7 +125,6 @@ class JournalController {
                 countries: countries,
                 plainCountries: JSON.stringify(plainCountries),
                 user: user,
-                partners: partners
             })
         }
 
@@ -206,8 +200,6 @@ class JournalController {
             return response.route('home')
         }
         session.put('selected_journal', theJournal.id)
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
         
         let uploadedImage = '', selected_editor = -1
         var c1 = [], c2 = [], c3 = []
@@ -313,7 +305,6 @@ class JournalController {
             user: user, 
             title: theJournal.name, 
             journal: theJournal.toJSON(),
-            partners: partners,
             uploadedImage: uploadedImage,
             selected_editor: selected_editor,
             c1: c1,
@@ -336,9 +327,6 @@ class JournalController {
     
             return response.route('home')
         }
-
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
         
         let uploadedImage = '', selected_editor = -1
 
@@ -395,7 +383,6 @@ class JournalController {
             user: user, 
             title: theJournal.name, 
             journal: theJournal.toJSON(),
-            partners: partners,
             uploadedImage: uploadedImage,
             selected_editor: selected_editor
         })
