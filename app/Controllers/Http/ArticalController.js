@@ -7,6 +7,7 @@ const JournalKeyword = use('App/Models/JournalKeyword')
 const User = use('App/Models/User')
 const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
+const UserKeyword = use('App/Models/UserKeyword')
 const Helpers = use('Helpers')
 const Mail = use('Mail')
 const phantom = require('phantom')
@@ -246,7 +247,55 @@ class ArticalController {
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
+
+        let whereClause = "'" + mainArticle.running_title + "' like concat('%', keyword, '%')"
+        let preEditors = await UserKeyword.query().whereRaw(whereClause).with('user').fetch()
+        // console.log('Pre Editors', whereClause, preEditors.toJSON())
+        preEditors = preEditors.toJSON()
+        let PreEditors = {}, allCount = 0, sortable = []
+        for(let tmpE of preEditors) {
+            if(!PreEditors[tmpE.users_id]) {
+                allCount = await UserKeyword.query().where('users_id', tmpE.users_id).count('* as total')
+                allCount = allCount[0].total
+                PreEditors[tmpE.users_id] = {
+                    id: tmpE.users_id,
+                    fname: tmpE.user.fname,
+                    lname: tmpE.user.lname,
+                    count: 0,
+                    allCount: allCount,
+                    percent: 0,
+                }
+            }
+            PreEditors[tmpE.users_id].count++
+            if(PreEditors[tmpE.users_id].allCount>0) {
+                PreEditors[tmpE.users_id].percent = parseInt(100*PreEditors[tmpE.users_id].count/PreEditors[tmpE.users_id].allCount, 10)
+            }
+        }
         
+        for(let id in PreEditors) {
+            sortable.push([id, PreEditors[id].percent]);
+        }
+
+        sortable.sort(function(a, b) {
+            return a[1] - b[1];
+        });
+
+        console.log('PreEditors', PreEditors)
+        console.log('Sorted', sortable)
+
+        let tmpEd = PreEditors
+        PreEditors = []
+        if(sortable.length>0) {
+            for(let i = sortable.length-1;i >= Math.max(0, sortable.length-5);i--) {
+                PreEditors.push(tmpEd[sortable[i][0]])
+            }    
+        }
+
+        let userEmails = await User.query().whereNotNull('email').pluck('email')
+
+
+        // console.log('Sorted PreEditors', PreEditors)
+
         await mainArticle.getScholar()
 
         let article = mainArticle.toJSON()
@@ -487,7 +536,9 @@ class ArticalController {
             msg: msg, 
             msg_type: msg_type,
             uploadedImage: uploadedImage,
-            selected_editor: selected_editor
+            selected_editor: selected_editor,
+            preeditors: PreEditors,
+            userEmails: JSON.stringify(userEmails),
         })
     }
 

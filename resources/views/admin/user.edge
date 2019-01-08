@@ -70,7 +70,7 @@
                           placeholder="Academic Page" value="{{ selected_user.academic_page?selected_user.academic_page:'' }}">
                       </div>
                     </div>
-
+                    @if(user.group_id == 1 || user.group_id == 2)
                     <div class="form-group">
                       <label for="inputPassword3" class="col-md-4 control-label">User Access Level</label>
                       <div class="col-md-6">
@@ -84,7 +84,7 @@
                         </select>
                       </div>
                     </div>
-
+                    @endif
                     <div class="form-group c-margin-t-40">
                       <div class="col-sm-offset-4 col-md-8">
                         <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">

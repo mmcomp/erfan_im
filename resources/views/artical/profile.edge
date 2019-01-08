@@ -1,4 +1,5 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user, title: article.running_title})
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user, title:
+article.running_title})
 
 <!-- BEGIN: PAGE CONTAINER -->
 <div class="c-layout-page" style="margin-top: 100px !important;">
@@ -88,22 +89,26 @@
                     <ul>
                       @if(article.first.length>0)
                       <li>
-                        First Author : <a href="/author/{{ article.first[0].fname }}-{{ article.first[0].lname }}">{{ article.first[0].fname }} {{ article.first[0].lname }}</a>
+                        First Author : <a href="/author/{{ article.first[0].fname }}-{{ article.first[0].lname }}">{{
+                          article.first[0].fname }} {{ article.first[0].lname }}</a>
                       </li>
                       @endif
                       @if(article.co.length>0)
                       <li>
-                        Co-Author : <a href="/author/{{ article.co[0].fname }}-{{ article.co[0].lname }}">{{ article.co[0].fname }} {{ article.co[0].lname }}</a>
+                        Co-Author : <a href="/author/{{ article.co[0].fname }}-{{ article.co[0].lname }}">{{
+                          article.co[0].fname }} {{ article.co[0].lname }}</a>
                       </li>
                       @endif
                       @if(article.corresponding.length==1)
                       <li>
-                        Corresponding Author * : <a href="/author/{{ article.corresponding[0].fname }}-{{ article.corresponding[0].lname }}">{{ article.corresponding[0].fname }} {{ article.corresponding[0].lname }} *</a>
+                        Corresponding Author * : <a href="/author/{{ article.corresponding[0].fname }}-{{ article.corresponding[0].lname }}">{{
+                          article.corresponding[0].fname }} {{ article.corresponding[0].lname }} *</a>
                       </li>
                       @endif
                       @if(article.corresponding.length==2)
                       <li>
-                          Corresponding Author ** : <a href="/author/{{ article.corresponding[1].fname }}-{{ article.corresponding[1].lname }}">{{ article.corresponding[1].fname }} {{ article.corresponding[1].lname }} **</a>
+                        Corresponding Author ** : <a href="/author/{{ article.corresponding[1].fname }}-{{ article.corresponding[1].lname }}">{{
+                          article.corresponding[1].fname }} {{ article.corresponding[1].lname }} **</a>
                       </li>
                       @endif
                     </ul>
@@ -175,6 +180,7 @@
                         </div>
                       </div>
                     </div>
+                    <!--
                     <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                       aria-hidden="true">
                       <div class="modal-dialog">
@@ -182,7 +188,7 @@
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">×</span></button>
-                            <h4 class="modal-title" id="exampleModalLabel">Please Enter Editor Email :</h4>
+                            <h4 class="modal-title" id="exampleModalLabel">Assign or Invite Editor / Reviewer for Article ID {{ article.id }}</h4>
                           </div>
                           <div class="modal-body">
                             <form method="post" id="assign-form">
@@ -204,6 +210,100 @@
                         </div>
                       </div>
                     </div>
+                    -->
+                    <!-- BEGIN: ArticleProcessingPage/Reviewer-Selection-Form -->
+                    <div class="modal fade c-content-login-form" id="assignModal" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content c-square">
+                          <div class="modal-header c-no-border">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                          </div>
+                          <div class="modal-body">
+                            <h3 class="c-font-24 c-font-sbold">Assign or Invite Editor / Reviewer for Article ID {{ article.id }} </h3>
+                            <p>
+                              Percentage (%) shows the matching ratio of Editor / Reviewer based on their keywords
+                            </p>
+                            <form autocomplete="off">
+                              <input type="hidden" autocomplete="false" />
+                              {{ csrfField() }}
+                              <div class="form-group">
+                                <label class="col-md-4 control-label">Choose Role</label>
+                                <div class="col-md-6">
+                                  <select class="paper-role c-square c-theme">
+                                    <option value="1">Editor</option>
+                                    <option value="2">Reviewer</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <br>
+                              <div class="form-group">
+                                <label for="available-reviewer" class="col-md-4 control-label">Available Reviewers</label>
+                                <div class="col-md-8">
+                                  <select class="form-control c-square c-theme" multiple>
+                                    @each(editor in preeditors)
+                                    <option value="{{ editor.id }}">{{ editor.fname }} {{ editor.lname }} ({{ editor.percent }})</option>
+                                    <!--
+                                    <option value="1">Option 1 (95%)</option>
+                                    <option value="2">Option 2 (90%)</option>
+                                    <option value="3">Option 3 (85%)</option>
+                                    <option value="4">Option 4 (80%)</option>
+                                    <option value="5">Option 5 (75%)</option>
+                                    -->
+                                    @endeach
+                                  </select>
+                                </div>
+                              </div>
+                              <br><br><br>
+                              <div class="form-group">
+                                <label for="reviewer-email" class="show">Search by Email</label>
+                                <input type="Email" class="form-control input-lg c-square" id="reviewer-email"
+                                  placeholder="Email">
+                              </div>
+
+                              <div class="form-group">
+
+                                <div class="c-checkbox">
+                                  <input type="checkbox" id="invite-new-reviewer" class="c-check">
+                                  <label for="invite-new-reviewer" class="c-font-thin c-font-17">
+                                    <span></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span>
+                                    Not in list, invite reviewer </label>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="col-md-4 control-label">Salutation</label>
+                                <div class="col-md-8">
+                                  <select class="form-control c-square c-theme">
+                                    <option value="1">Dr. </option>
+                                    <option value="2">Prof. </option>
+                                    <option value="2">None</option>
+                                  </select>
+                                </div>
+                              </div><br>
+                              <div class="form-group">
+                                <label for="login-password" class="hide">First and Last Name</label>
+                                <input type="password" class="form-control input-lg c-square" id="name-of-invited-reviewer"
+                                  placeholder="First and Last Name">
+                              </div>
+                              <div class="form-group">
+                                <label for="login-password" class="hide">Email</label>
+                                <input type="password" class="form-control input-lg c-square" id="email-invited-reviewer"
+                                  placeholder="Email">
+                              </div>
+
+                              <div class="form-group">
+                                <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Send
+                                  Invitation</button>
+                              </div>
+
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END: ArticleProcessingPage/Reviewer-Selection-Form -->
                   </p>
 
                   <p>
@@ -291,16 +391,19 @@
                               <input type="hidden" name="position" value="co" />
                               <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> First Name e.g. Muhammad</label>
-                                <input name="fname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ (article.co.fname)?article.co.fname:'' }}">
+                                <input name="fname" type="text" class="form-control c-square" id="coauthor-1-name"
+                                  value="{{ (article.co.fname)?article.co.fname:'' }}">
                               </div>
                               <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> Last Name e.g. Irfan</label>
-                                <input name="lname" type="text" class="form-control c-square" id="coauthor-1-name" value="{{ (article.co.lname)?article.co.lname:'' }}">
-                                </div>
+                                <input name="lname" type="text" class="form-control c-square" id="coauthor-1-name"
+                                  value="{{ (article.co.lname)?article.co.lname:'' }}">
+                              </div>
                               <div class="form-group">
                                 <label for="coauthor-1-university" class="control-label">Institute/University e.g.
                                   University of Oxford</label>
-                                <input name="university_institute" type="text" class="form-control c-square" id="coauthor-1-university" value="{{ (article.co.university_institute)?article.co.university_institute:'' }}">
+                                <input name="university_institute" type="text" class="form-control c-square" id="coauthor-1-university"
+                                  value="{{ (article.co.university_institute)?article.co.university_institute:'' }}">
                               </div>
                             </form>
                           </div>
@@ -515,7 +618,7 @@
                           </div>
                           <div class="modal-body">
                             <form method="post" id="ack-form">
-                              {{ csrfField() }}      
+                              {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Acknowledgement:</label>
                                 <textarea name="ack" class="form-control c-square editor" id="message-text">{{ article.ack }}</textarea>
@@ -550,11 +653,13 @@
                             <h4 class="modal-title" id="exampleModalLabel">
                               Please check the formated references and
                               click on save button
-                              <br/>
+                              <br />
                               insert every Reference in a line and like the above example :
                             </h4>
                             <h5 class="modal-title" id="exampleModalLabel" style="background: #eaeaea;padding: 10px;font-size: 12px;">
-                              Irfan Maqsood, Muhammad, Maryam M. Matin, Ahmad Reza Bahrami, and Mohammad M. Ghasroldasht. "Immortality of cell lines: challenges and advantages of establishment." Cell biology international 37, no. 10 (2013): 1038-1045.
+                              Irfan Maqsood, Muhammad, Maryam M. Matin, Ahmad Reza Bahrami, and Mohammad M.
+                              Ghasroldasht. "Immortality of cell lines: challenges and advantages of establishment."
+                              Cell biology international 37, no. 10 (2013): 1038-1045.
                             </h5>
                           </div>
                           <div class="modal-body">
@@ -584,136 +689,141 @@
           <h3 onclick="sendImage();" style="cursor: pointer;">
             <img src="{{ uploadedImage }}" style="width: 30px;" />
           </h3>
-          <form method="post"  enctype="multipart/form-data">
-              {{ csrfField() }}
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-2 col-sm-12">
-                    <label>
-                        Publish Volume :
-                    </label>
-                    <input class="form-control c-square" type="text" name="publish_vol" placeholder="Publish Volume" value="{{ article.publish_vol }}" />
-                  </div>
-                  <div class="col-md-2 col-sm-12">
-                      <label>
-                          Publish Number :
-                      </label>
-                      <input class="form-control c-square" type="text" name="publish_no" placeholder="Publish Number" value="{{ article.publish_no }}" />
-                  </div>
-                  <div class="col-md-2 col-sm-12">
-                      <label>
-                          Publish Page Start :
-                      </label>
-                    <input class="form-control c-square" type="text" name="publish_startpage" placeholder="Publish Page Start" value="{{ article.publish_startpage }}" />
-                  </div>
-                  <div class="col-md-2 col-sm-12">
-                      <label>
-                          Publish Page End :
-                      </label>
-                    <input class="form-control c-square" type="text" name="publish_endpage" placeholder="Publish Page End" value="{{ article.publish_endpage }}" />
-                  </div>
-                  <div class="col-md-2 col-sm-12">
-                      <label>
-                          DOI Article Code :
-                      </label>
-                    <input class="form-control c-square" type="text" name="doi" placeholder="DOI Article Code" value="{{ (article.doi)?article.doi:article.id }}" />
-                  </div>
-                  <div class="col-md-2 col-sm-12">
-                    <br/>
-                    <button class="btn btn-success pull-left">
-                        Save Publish Data
-                    </button>
-                  </div>
+          <form method="post" enctype="multipart/form-data">
+            {{ csrfField() }}
+            <div class="container">
+              <div class="row">
+                <div class="col-md-2 col-sm-12">
+                  <label>
+                    Publish Volume :
+                  </label>
+                  <input class="form-control c-square" type="text" name="publish_vol" placeholder="Publish Volume"
+                    value="{{ article.publish_vol }}" />
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <label>
+                    Publish Number :
+                  </label>
+                  <input class="form-control c-square" type="text" name="publish_no" placeholder="Publish Number" value="{{ article.publish_no }}" />
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <label>
+                    Publish Page Start :
+                  </label>
+                  <input class="form-control c-square" type="text" name="publish_startpage" placeholder="Publish Page Start"
+                    value="{{ article.publish_startpage }}" />
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <label>
+                    Publish Page End :
+                  </label>
+                  <input class="form-control c-square" type="text" name="publish_endpage" placeholder="Publish Page End"
+                    value="{{ article.publish_endpage }}" />
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <label>
+                    DOI Article Code :
+                  </label>
+                  <input class="form-control c-square" type="text" name="doi" placeholder="DOI Article Code" value="{{ (article.doi)?article.doi:article.id }}" />
+                </div>
+                <div class="col-md-2 col-sm-12">
+                  <br />
+                  <button class="btn btn-success pull-left">
+                    Save Publish Data
+                  </button>
                 </div>
               </div>
             </div>
-          </form>
-          <br/>
-          <form method="post">
-            {{ csrfField() }}
-            <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
-            <input type="file" name="image_upload" />
-            <button class="btn btn-success pull-left">
-                Upload Image
-            </button>
-        </form>
         </div>
-        <br/><br/>
-        <div class="c-content-panel">
-          <div class="c-label">
-            Article's Review Panel
-          </div>
-          <div class="c-body">
-            <div class="row">
-              <div class="col-md-4">
-                <p>
-                  <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">List of Assigned Reviewers
-                    and Editors</span>
-                </p>
-                <ul class="c-content-list-1 c-separator-dot">
-                  @each(editor in article.editors)
-                  <li>
-                    <a href="/author/{{ editor.fname}}-{{ editor.lname}}">{{ editor.fname}} {{ editor.lname}}</a>
-                  </li>
-                  @endeach
-                  <li>
-                    <a href="#" data-toggle="modal" data-target="#assignModal" data-whatever="bootstrap"> 
-                      <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">
-                        Assign Editor/Reviewers 
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <p>
-                  <span class="label label-success c-font-slim c-font-uppercase c-font-bold">Editor's Comments (2)
-                  </span>
-                </p>
-                <ul class="c-content-list-1 c-separator-dot">
-                  @each(editor in article.editors)
-                  @if(editor.comments.length>0)
-                  <li>
-                    <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }} ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
-                    <div id="comment_{{ editor.id }}" style="display:none;" >
+        </form>
+        <br />
+        <form method="post">
+          {{ csrfField() }}
+          <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
+          <input type="file" name="image_upload" />
+          <button class="btn btn-success pull-left">
+            Upload Image
+          </button>
+        </form>
+      </div>
+      <br /><br />
+      <div class="c-content-panel">
+        <div class="c-label">
+          Article's Review Panel
+        </div>
+        <div class="c-body">
+          <div class="row">
+            <div class="col-md-4">
+              <p>
+                <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">List of Assigned Reviewers
+                  and Editors</span>
+              </p>
+              <ul class="c-content-list-1 c-separator-dot">
+                @each(editor in article.editors)
+                <li>
+                  <a href="/author/{{ editor.fname}}-{{ editor.lname}}">{{ editor.fname}} {{ editor.lname}}</a>
+                </li>
+                @endeach
+                <li>
+                  <a href="#" data-toggle="modal" data-target="#assignModal" data-whatever="bootstrap">
+                    <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">
+                      Assign Editor/Reviewers
+                    </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <p>
+                <span class="label label-success c-font-slim c-font-uppercase c-font-bold">Editor's Comments (2)
+                </span>
+              </p>
+              <ul class="c-content-list-1 c-separator-dot">
+                @each(editor in article.editors)
+                @if(editor.comments.length>0)
+                <li>
+                  <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
+                    ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
+                  <div id="comment_{{ editor.id }}" style="display:none;">
                     @each(commnt in editor.comments)
                     <div style="border: 1px solid #b5d0bd;padding: 3px;">
-                        {{ commnt.comment }}
+                      {{ commnt.comment }}
                     </div>
                     @endeach
-                    </div>
-                  </li>
-                  @endif
-                  @endeach
-                  <!--
+                  </div>
+                </li>
+                @endif
+                @endeach
+                <!--
                   <li>
                     <a href="#"> <span class="label label-success c-font-slim c-font-uppercase c-font-bold">See Full
                         Details </span></a>
                   </li>
                   -->
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <p>
-                  <span class="label label-info c-font-slim c-font-uppercase c-font-bold">Reviewer's Comments (2)
-                  </span>
-                </p>
-                <ul class="c-content-list-1 c-separator-dot">
-                  @each(editor in article.reviewers)
-                    @if(editor.comments.length>0)
-                    <li>
-                      <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }} ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
-                      <div id="comment_{{ editor.id }}" style="display:none;" >
-                      @each(commnt in editor.comments)
-                      <div style="border: 1px solid #b5d0bd;padding: 3px;">
-                          {{ commnt.comment }}
-                      </div>
-                      @endeach
-                      </div>
-                    </li>
-                    @endif
-                  @endeach
-                  <!--
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <p>
+                <span class="label label-info c-font-slim c-font-uppercase c-font-bold">Reviewer's Comments (2)
+                </span>
+              </p>
+              <ul class="c-content-list-1 c-separator-dot">
+                @each(editor in article.reviewers)
+                @if(editor.comments.length>0)
+                <li>
+                  <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
+                    ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
+                  <div id="comment_{{ editor.id }}" style="display:none;">
+                    @each(commnt in editor.comments)
+                    <div style="border: 1px solid #b5d0bd;padding: 3px;">
+                      {{ commnt.comment }}
+                    </div>
+                    @endeach
+                  </div>
+                </li>
+                @endif
+                @endeach
+                <!--
                   <li>
                     <a href="#">1. Article Title (Published Date) </a>
                   </li>
@@ -722,238 +832,258 @@
                         Details </span></a>
                   </li>
                   -->
-                </ul>
-              </div>
+              </ul>
             </div>
           </div>
         </div>
-
-        <div class="c-content-panel">
-          <div class="c-label">
-            Current Status of the Paper
-          </div>
-          <div class="c-body">
-            <form class="form-horizontal" method="post">
-              {{ csrfField() }}
-              <div class="form-group form-c-radios">
-                <label class="col-md-4 control-label">Status of Article</label>
-                <div class="col-md-6">
-                  <div class="c-radio-list">
-                    <div class="c-radio has-success">
-                      <input type="radio" id="radio7-112" class="c-radio" name="radios3" value="under_review" {{ article.status=='under_review'?'checked':'' }}>
-                      <label for="radio7-112">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Under Review</label>
-                    </div>
-                    <div class="c-radio has-error">
-                      <input type="radio" id="radio8-112" class="c-radio" name="radios3" value="rejected" {{ article.status=='rejected'?'checked':'' }}>
-                      <label for="radio8-112">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Rejected</label>
-                    </div>
-                    <div class="c-radio has-warning">
-                      <input type="radio" id="radio9-112" class="c-radio" name="radios3" value="revised" {{ article.status=='revised'?'checked':'' }}>
-                      <label for="radio9-112">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Revised</label>
-                    </div>
-                    <div class="c-radio has-info">
-                      <input type="radio" id="radio10-112" class="c-radio" name="radios3" value="published" {{ article.status=='published'?'checked':'' }}>
-                      <label for="radio10-112">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Accepted & Published</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group c-margin-t-40">
-                <div class="col-sm-offset-4 col-md-8">
-                  <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update the
-                    Status</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="c-content-panel">
-          <div class="c-label">
-            Statistics of Articles
-          </div>
-          <div class="c-body">
-            <div class="c-content-ver-nav">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="c-content-ver-nav">
-                    <ul class="c-menu">
-                      <li>
-                        <a href="#">Views <span class="badge c-bg-blue">{{ article.views }}</span></a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="c-content-ver-nav">
-                    <ul class="c-menu c-arrow-dot">
-                      <li class="c-bg-before-blue">
-                        <a href="#">Downloads <span class="badge c-bg-blue-1">{{ article.downloads }}</span></a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="c-content-ver-nav">
-                    <ul class="c-menu c-theme c-font-uppercase">
-                      <li>
-                        <a href="#">Citations <span class="badge c-bg-blue-2">{{ article.citiations }}  </span></a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="c-content-panel">
-          <div class="c-label">
-            Indexing the Article
-          </div>
-          <div class="c-body">
-            <form class="form-horizontal" method="post">
-              {{ csrfField() }}
-              <div class="form-group form-c-checkboxes">
-                <div class="col-md-6">
-                  <div class="c-checkbox-list">
-                    <div class="c-checkbox has-success">
-                      <input type="checkbox" id="checkbox9-111" class="c-check" name="shared_on_social" {{ article.shared_on_social?'checked':'' }}>
-                      <label for="checkbox9-111">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Shared on Social Medias </label>
-                    </div>
-                    <div class="c-checkbox has-warning">
-                      <input type="checkbox" id="checkbox11-111" class="c-check" name="scientific_database" {{ article.scientific_database?'checked':'' }}>
-                      <label for="checkbox11-111">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Indexing in Scientific Databases </label>
-                    </div>
-                    <div class="c-checkbox has-info">
-                      <input type="checkbox" id="checkbox12-111" class="c-check" name="news_seo" {{ article.news_seo?'checked':'' }}>
-                      <label for="checkbox12-111">
-                        <span></span>
-                        <span class="check"></span>
-                        <span class="box"></span>
-                        Published as News and SEO </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group c-margin-t-40">
-                <div class="col-sm-offset-4 col-md-8">
-                  <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update Indexing</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-
       </div>
-      <!-- END: CONTENT/MISC/SERVICES-1-1 -->
-      <!-- END: PAGE CONTENT -->
+
+      <div class="c-content-panel">
+        <div class="c-label">
+          Current Status of the Paper
+        </div>
+        <div class="c-body">
+          <form class="form-horizontal" method="post">
+            {{ csrfField() }}
+            <div class="form-group form-c-radios">
+              <label class="col-md-4 control-label">Status of Article</label>
+              <div class="col-md-6">
+                <div class="c-radio-list">
+                  <div class="c-radio has-success">
+                    <input type="radio" id="radio7-112" class="c-radio" name="radios3" value="under_review"
+                      {{ article.status=='under_review'?'checked':'' }}>
+                    <label for="radio7-112">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Under Review</label>
+                  </div>
+                  <div class="c-radio has-error">
+                    <input type="radio" id="radio8-112" class="c-radio" name="radios3" value="rejected"
+                      {{ article.status=='rejected'?'checked':'' }}>
+                    <label for="radio8-112">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Rejected</label>
+                  </div>
+                  <div class="c-radio has-warning">
+                    <input type="radio" id="radio9-112" class="c-radio" name="radios3" value="revised"
+                      {{ article.status=='revised'?'checked':'' }}>
+                    <label for="radio9-112">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Revised</label>
+                  </div>
+                  <div class="c-radio has-info">
+                    <input type="radio" id="radio10-112" class="c-radio" name="radios3" value="published"
+                      {{ article.status=='published'?'checked':'' }}>
+                    <label for="radio10-112">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Accepted & Published</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group c-margin-t-40">
+              <div class="col-sm-offset-4 col-md-8">
+                <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update the
+                  Status</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="c-content-panel">
+        <div class="c-label">
+          Statistics of Articles
+        </div>
+        <div class="c-body">
+          <div class="c-content-ver-nav">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="c-content-ver-nav">
+                  <ul class="c-menu">
+                    <li>
+                      <a href="#">Views <span class="badge c-bg-blue">{{ article.views }}</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="c-content-ver-nav">
+                  <ul class="c-menu c-arrow-dot">
+                    <li class="c-bg-before-blue">
+                      <a href="#">Downloads <span class="badge c-bg-blue-1">{{ article.downloads }}</span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="c-content-ver-nav">
+                  <ul class="c-menu c-theme c-font-uppercase">
+                    <li>
+                      <a href="#">Citations <span class="badge c-bg-blue-2">{{ article.citiations }} </span></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-content-panel">
+        <div class="c-label">
+          Indexing the Article
+        </div>
+        <div class="c-body">
+          <form class="form-horizontal" method="post">
+            {{ csrfField() }}
+            <div class="form-group form-c-checkboxes">
+              <div class="col-md-6">
+                <div class="c-checkbox-list">
+                  <div class="c-checkbox has-success">
+                    <input type="checkbox" id="checkbox9-111" class="c-check" name="shared_on_social"
+                      {{ article.shared_on_social?'checked':'' }}>
+                    <label for="checkbox9-111">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Shared on Social Medias </label>
+                  </div>
+                  <div class="c-checkbox has-warning">
+                    <input type="checkbox" id="checkbox11-111" class="c-check" name="scientific_database"
+                      {{ article.scientific_database?'checked':'' }}>
+                    <label for="checkbox11-111">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Indexing in Scientific Databases </label>
+                  </div>
+                  <div class="c-checkbox has-info">
+                    <input type="checkbox" id="checkbox12-111" class="c-check" name="news_seo"
+                      {{ article.news_seo?'checked':'' }}>
+                    <label for="checkbox12-111">
+                      <span></span>
+                      <span class="check"></span>
+                      <span class="box"></span>
+                      Published as News and SEO </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group c-margin-t-40">
+              <div class="col-sm-offset-4 col-md-8">
+                <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">Update Indexing</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
     </div>
-    <!-- END: PAGE CONTAINER -->
+    <!-- END: CONTENT/MISC/SERVICES-1-1 -->
+    <!-- END: PAGE CONTENT -->
+  </div>
+  <!-- END: PAGE CONTAINER -->
 
-    <script>
-      function submitAuthor(form_id) {
-        var form_id = form_id?form_id:'author-info'
-        $("#"+form_id).submit();
+  <script>
+    function submitAuthor(form_id) {
+      var form_id = form_id ? form_id : 'author-info'
+      $("#" + form_id).submit();
+    }
+
+  </script>
+
+  @!component('components.foot')
+
+  @!component('components.scripts', {msg: msg, msg_type: msg_type})
+  <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js"></script>
+  <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+    var editors = [];
+    var uploadedImage = '{{ uploadedImage }}';
+
+    function checkEmail(dobj) {
+      console.log($(dobj).val());
+      var strlen = $(dobj).val().length;
+      if (strlen >= 3) {
+        $.post('', {
+          check_editor_email: $(dobj).val(),
+          '_csrf': '{{ csrfToken }}'
+        }, function (result) {
+          console.log('Result', result);
+          if (result.status) {
+            $("#editor_fname").val(result.data.fname);
+            $("#editor_lname").val(result.data.lname);
+            $("#editor_id").val(result.data.id);
+          }
+        });
       }
+    }
 
-    </script>
+    function assignEditor() {
+      if ($("#editor_id").val().trim() != '') {
+        $('#assign-form').submit();
+      } else {
+        if ($("#editor_fname").val().trim() != '' && $("#editor_lname").val().trim() != '') {
+          $('#assign-form').submit();
+        } else {
+          alert('Please Enter First Name and Last Name for the Editor.');
+        }
+      }
+    }
 
-    @!component('components.foot')
+    function sendImage() {
+      if (uploadedImage == '') {
+        alert('No Image was Uploaded yet!');
+        return false;
+      }
+      var selected_editor = parseInt($("#selected_editor").val(), 10);
+      if (isNaN(selected_editor) || selected_editor <= -1) {
+        alert('No Target Selected for Image');
+        return false;
+      }
+      var data = editors[selected_editor].getData();
+      editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
+    }
 
-    @!component('components.scripts', {msg: msg, msg_type: msg_type})
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/classic/ckeditor.js"></script>
-    <script>
-        var editors = [];
-        var uploadedImage = '{{ uploadedImage }}';
-        function checkEmail(dobj) {
-          console.log($(dobj).val());
-          var strlen = $(dobj).val().length;
-          if(strlen>=3) {
-            $.post('', {
-              check_editor_email: $(dobj).val(),
-              '_csrf': '{{ csrfToken }}'
-            }, function(result) {
-              console.log('Result', result);
-              if(result.status) {
-                $("#editor_fname").val(result.data.fname);
-                $("#editor_lname").val(result.data.lname);
-                $("#editor_id").val(result.data.id);
+    function editorify() {
+      $(".editor").each(function (id, field) {
+        ClassicEditor
+          .create(field)
+          .then(theEditor => {
+            editors.push(theEditor);
+            var theButton = $(field).parent().parent().parent().parent().parent().parent().prev().find('button');
+            theButton.prop('editorindex', editors.length - 1);
+            theButton.click(function () {
+              if (!isNaN(parseInt(this.editorindex, 10))) {
+                $("#selected_editor").val(parseInt(this.editorindex, 10));
               }
             });
-          }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      });
+    }
+    editorify();
+    var userEmails = {{{ userEmails }}};
+    var select_email = '';
+    $("#reviewer-email").autocomplete({
+        source: userEmails,
+        select: function(event, ui) {
+            console.log('select', event, ui);
+            select_email = ui.item.value;
         }
-        function assignEditor() {
-          if($("#editor_id").val().trim()!='') {
-            $('#assign-form').submit();
-          }else {
-            if($("#editor_fname").val().trim()!='' && $("#editor_lname").val().trim()!='') {
-              $('#assign-form').submit();
-            }else {
-              alert('Please Enter First Name and Last Name for the Editor.');
-            }
-          }
-        }
-        function sendImage() {
-            if(uploadedImage=='') {
-                alert('No Image was Uploaded yet!');
-                return false;
-            }
-            var selected_editor = parseInt($("#selected_editor").val(), 10);
-            if(isNaN(selected_editor) || selected_editor<=-1) {
-                alert('No Target Selected for Image');
-                return false;
-            }
-            var data = editors[selected_editor].getData();
-            editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
-        }
-        function editorify() {
-            $(".editor").each(function(id, field){
-              ClassicEditor
-                .create( field )
-                .then(theEditor => {
-                  editors.push(theEditor);
-                  var theButton = $(field).parent().parent().parent().parent().parent().parent().prev().find('button');
-                  theButton.prop('editorindex', editors.length-1);
-                  theButton.click(function(){
-                    if(!isNaN(parseInt(this.editorindex, 10))){
-                        $("#selected_editor").val(parseInt(this.editorindex, 10));
-                    }
-                  });
-                })
-                .catch( error => {
-                        console.error( error );
-                    } 
-                );
-            });
-        }
-        editorify();
-    </script>
-</body>
+    });
+  </script>
+  </body>
 
-</html>
+  </html>

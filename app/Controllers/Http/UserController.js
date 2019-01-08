@@ -5,6 +5,7 @@ const User = use('App/Models/User')
 const Journal = use('App/Models/Journal')
 const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
+const UserKeyword = use('App/Models/UserKeyword')
 const Database = use('Database')
 
 class UserController {
@@ -151,6 +152,19 @@ class UserController {
         user.country_id = country_id
         user.university_institute = university_institute
         await user.save()
+
+        let keywords = request.all()['keywords']
+        if(keywords!='' && keywords) {
+            keywords = keywords.split(',')
+            let insertArray = []
+            for(let i = 0;i < keywords.length;i++) {
+                insertArray.push({
+                    users_id: user.id,
+                    keyword: keywords[i]
+                })
+            }
+            await UserKeyword.createMany(insertArray)
+        }
 
         session.put('msg', 'You are Signed Up. Now you can Login with you email and password')
 
