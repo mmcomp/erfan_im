@@ -93,6 +93,11 @@ class UserController {
 
         let articles = await Artical.query().with('journal').where('status', 'published').orderBy('citiations', 'desc').limit(3).fetch()
         articles = articles.toJSON()
+        for(let i = 0;i < articles.length;i++) {
+            if(articles[i].abstract && articles[i].abstract.split(" ").length>30) {
+                articles[i].abstract = articles[i].abstract.split(" ").splice(0,30).join(" ") + '...'
+            }
+        }
 
         let editorCount = await Database.raw('select count(id) as c from (select id from users_edits group by users_id) tb1')
         editorCount = editorCount[0][0].c

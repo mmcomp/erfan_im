@@ -13,6 +13,7 @@ const Mail = use('Mail')
 const phantom = require('phantom')
 const Env = use('Env')
 const fs = require('fs')
+const moment = require('moment')
 
 class ArticalController {
     async calcKeywords(article) {
@@ -241,102 +242,18 @@ class ArticalController {
 
         let uploadedImage = '', selected_editor = -1
 
-        let mainArticle = await Artical.query().with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
+        let mainArticle = await Artical.query().with('journal').with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
         if(!mainArticle) {
             session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
-
-        let whereClause = "'" + mainArticle.running_title + "' like concat('%', keyword, '%')"
-        let preEditors = await UserKeyword.query().whereRaw(whereClause).with('user').fetch()
-        // console.log('Pre Editors', whereClause, preEditors.toJSON())
-        preEditors = preEditors.toJSON()
-        let PreEditors = {}, allCount = 0, sortable = []
-        for(let tmpE of preEditors) {
-            if(!PreEditors[tmpE.users_id]) {
-                allCount = await UserKeyword.query().where('users_id', tmpE.users_id).count('* as total')
-                allCount = allCount[0].total
-                PreEditors[tmpE.users_id] = {
-                    id: tmpE.users_id,
-                    fname: tmpE.user.fname,
-                    lname: tmpE.user.lname,
-                    count: 0,
-                    allCount: allCount,
-                    percent: 0,
-                }
-            }
-            PreEditors[tmpE.users_id].count++
-            if(PreEditors[tmpE.users_id].allCount>0) {
-                PreEditors[tmpE.users_id].percent = parseInt(100*PreEditors[tmpE.users_id].count/PreEditors[tmpE.users_id].allCount, 10)
-            }
-        }
-        
-        for(let id in PreEditors) {
-            sortable.push([id, PreEditors[id].percent]);
-        }
-
-        sortable.sort(function(a, b) {
-            return a[1] - b[1];
-        });
-
-        console.log('PreEditors', PreEditors)
-        console.log('Sorted', sortable)
-
-        let tmpEd = PreEditors
-        PreEditors = []
-        if(sortable.length>0) {
-            for(let i = sortable.length-1;i >= Math.max(0, sortable.length-5);i--) {
-                PreEditors.push(tmpEd[sortable[i][0]])
-            }    
-        }
-
-        let userEmails = await User.query().whereNotNull('email').pluck('email')
-
-
-        // console.log('Sorted PreEditors', PreEditors)
-
         await mainArticle.getScholar()
 
         let article = mainArticle.toJSON()
-        article['reviewers'] = []
-        let userEdits = await UserArticleEditor.query().with('comments').where('article_id', article.id).fetch()
-        // article['comments'] = userEdits.toJSON()
-        userEdits = userEdits.toJSON()
-        // console.log('Editors and Reviewers', userEdits)
-        let finalEditors = []
-        for(let uEdit of userEdits) {
-            for(let i = 0;i < article.editors.length;i++) {
-                let editor = article.editors[i]
-                if(editor.id == uEdit.users_id) {
-                    article.editors[i]['comments'] = uEdit.comments
-                    if(uEdit.type=='reviewer') {
-                        article.reviewers.push(article.editors[i])    
-                    }else if(uEdit.type=='editor') {
-                        finalEditors.push(article.editors[i])
-                    }
-                }
-            }
+        if(article.publish_date) {
+            article.publish_date = moment(article.publish_date).format('YYYY-MM-DD')
         }
-        article.editors = finalEditors
-        let userArticles = await UserArticle.query().with('user').where('article_id', article.id).fetch()
-        userArticles = userArticles.toJSON()
-        for(let userArt of userArticles) {
-            if(!article[userArt.position]) {
-                article[userArt.position] = []
-            }
-            article[userArt.position].push(userArt.user)
-        }
-
-        // console.log('Article', article)
-
-        let status_color = 'primary'
-        if(article.status == 'published') {
-            status_color = 'success'
-        }else if(article.status == 'rejected') {
-            status_color = 'danger'
-        }
-
         if(request.method()=='POST') {
             if(request.all()['position']) {
                 if(request.all()['position']=='corresponding') {
@@ -478,8 +395,13 @@ class ArticalController {
                 }
             }else if(request.all()['radios3']) {
                 mainArticle.status = request.all()['radios3']
+                if(mainArticle.status=='published') {
+                    mainArticle.publish_date = moment().format('YYYY-MM-DD HH:mm:ss')
+                }
                 await mainArticle.save()
                 article.status = mainArticle.status
+                article.publish_date = mainArticle.publish_date
+                
             }else if(request.file('image_upload')) {
                 const imageUpload = request.file('image_upload', {
                     types: ['image'],
@@ -524,6 +446,95 @@ class ArticalController {
                 await mainArticle.save()
             }
         }
+
+        let whereClause = "'" + mainArticle.running_title + "' like concat('%', keyword, '%')"
+        let preEditors = await UserKeyword.query().whereRaw(whereClause).with('user').fetch()
+        // console.log('Pre Editors', whereClause, preEditors.toJSON())
+        preEditors = preEditors.toJSON()
+        let PreEditors = {}, allCount = 0, sortable = []
+        for(let tmpE of preEditors) {
+            if(!PreEditors[tmpE.users_id]) {
+                allCount = await UserKeyword.query().where('users_id', tmpE.users_id).count('* as total')
+                allCount = allCount[0].total
+                PreEditors[tmpE.users_id] = {
+                    id: tmpE.users_id,
+                    fname: tmpE.user.fname,
+                    lname: tmpE.user.lname,
+                    count: 0,
+                    allCount: allCount,
+                    percent: 0,
+                }
+            }
+            PreEditors[tmpE.users_id].count++
+            if(PreEditors[tmpE.users_id].allCount>0) {
+                PreEditors[tmpE.users_id].percent = parseInt(100*PreEditors[tmpE.users_id].count/PreEditors[tmpE.users_id].allCount, 10)
+            }
+        }
+        
+        for(let id in PreEditors) {
+            sortable.push([id, PreEditors[id].percent]);
+        }
+
+        sortable.sort(function(a, b) {
+            return a[1] - b[1];
+        });
+
+        console.log('PreEditors', PreEditors)
+        console.log('Sorted', sortable)
+
+        let tmpEd = PreEditors
+        PreEditors = []
+        if(sortable.length>0) {
+            for(let i = sortable.length-1;i >= Math.max(0, sortable.length-5);i--) {
+                PreEditors.push(tmpEd[sortable[i][0]])
+            }    
+        }
+
+        let userEmails = await User.query().whereNotNull('email').pluck('email')
+
+
+        // console.log('Sorted PreEditors', PreEditors)
+
+
+        article['reviewers'] = []
+        let userEdits = await UserArticleEditor.query().with('comments').where('article_id', article.id).fetch()
+        // article['comments'] = userEdits.toJSON()
+        userEdits = userEdits.toJSON()
+        // console.log('Editors and Reviewers', userEdits)
+        let finalEditors = []
+        for(let uEdit of userEdits) {
+            for(let i = 0;i < article.editors.length;i++) {
+                let editor = article.editors[i]
+                if(editor.id == uEdit.users_id) {
+                    article.editors[i]['comments'] = uEdit.comments
+                    if(uEdit.type=='reviewer') {
+                        article.reviewers.push(article.editors[i])    
+                    }else if(uEdit.type=='editor') {
+                        finalEditors.push(article.editors[i])
+                    }
+                }
+            }
+        }
+        article.editors = finalEditors
+        let userArticles = await UserArticle.query().with('user').where('article_id', article.id).fetch()
+        userArticles = userArticles.toJSON()
+        for(let userArt of userArticles) {
+            if(!article[userArt.position]) {
+                article[userArt.position] = []
+            }
+            article[userArt.position].push(userArt.user)
+        }
+
+        // console.log('Article', article)
+
+        let status_color = 'primary'
+        if(article.status == 'published') {
+            status_color = 'success'
+        }else if(article.status == 'rejected') {
+            status_color = 'danger'
+        }
+
+
         let msg = session.get('msg')
         let msg_type = session.get('msg_type')
         session.forget('msg')
