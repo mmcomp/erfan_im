@@ -442,11 +442,12 @@
                         <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
                             <h3 class="c-font-bold c-font-uppercase">Filters</h3>
                         </div>
-                        <form method="post">
+                        <form method="post" id="article-search-form">
                             <div class="input-group">
                                 {{ csrfField() }}
                                 <input type="hidden" name="journal_id" value="{{ journal.id }}" />
                                 <input name="search_articles" type="text" class="form-control c-square c-theme-border" placeholder="Search blog..." >
+                                <input type="hidden" name="sort" id="sort" value="" />
                                 <span class="input-group-btn">
 							<button class="btn c-theme-btn c-theme-border c-btn-square" type="submit">Go!</button>
 							</span>
@@ -460,15 +461,16 @@
                             </div>
                             <ul class="c-menu c-arrow-dot1 c-theme">
                                 <li>
-                                    <a href="#">Sort by Date</a>
+                                    <a href="javascript:sortbyDate()">Sort by Date</a>
                                 </li>
+                                <!--
                                 <li>
                                     <a href="#">Sort by X</a>
                                 </li>
                                 <li>
                                     <a href="#">Sort by Y</a>
                                 </li>
-
+                                -->
                             </ul>
                         </div>
 
@@ -569,6 +571,13 @@
             $("#tabdata-form").submit();
         }
         editorify();
+    </script>
+    @else
+    <script>
+        function sortbyDate() {
+            $("#sort").val("created_at");
+            $("#article-search-form").submit();
+        }
     </script>
     @endif
 </body>

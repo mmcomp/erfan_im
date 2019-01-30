@@ -233,7 +233,11 @@ class JournalController {
         let searchTitle = ''
         if(request.all()['search_articles']){
             searchTitle = request.all()['search_articles']
-            console.log('Search Title', searchTitle)
+        }
+        let sort = 'created_at';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
         }
         let articleIds = []
         let articles = await Artical.query().where(function () {
@@ -242,7 +246,7 @@ class JournalController {
                 .where('running_title', 'like', '%' + searchTitle + '%')
                 .orWhere('full_title', 'like', '%' + searchTitle + '%')
             }
-          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -253,13 +257,18 @@ class JournalController {
         for(let i = 1;i <= recentPublished.lastPage;i++) {
             recentPublished.pages.push(i)
         }
+        sort = 'citiations';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
+        }
         articles = await Artical.query().where(function () {
             if(searchTitle!='') {
                 this
                 .where('running_title', 'like', '%' + searchTitle + '%')
                 .orWhere('full_title', 'like', '%' + searchTitle + '%')
             }
-          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {
