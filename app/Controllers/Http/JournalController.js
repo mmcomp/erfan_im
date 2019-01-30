@@ -8,6 +8,7 @@ const JournalKeyword = use('App/Models/JournalKeyword')
 const Database = use('Database')
 const Helpers = use('Helpers')
 const User = use('App/Models/User')
+const Artical = use('App/Models/Artical')
 
 class JournalController {
     async index ({ view, session }) {
@@ -215,6 +216,44 @@ class JournalController {
             }
         }
         // console.log('c1', c1)
+        //----ARTICLES
+        let pageNumber = 1
+        if(request.all()['page_number']) {
+            pageNumber = parseInt(request.all()['page_number'],10)
+            if(isNaN(pageNumber)) {
+                pageNumber = 1
+            }
+        }
+        if(request.all()['page_move']) {
+            let page_move = parseInt(request.all()['page_move'],10)
+            if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                pageNumber += page_move
+            }
+        }
+        let articleIds = []
+        let articles = await Artical.query().where('journal_id', theJournal.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let recentPublished = articles.toJSON()
+        for(let tmp of recentPublished.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        recentPublished['pages'] = []
+        for(let i = 1;i <= recentPublished.lastPage;i++) {
+            recentPublished.pages.push(i)
+        }
+        articles = await Artical.query().where('journal_id', theJournal.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        let highlyCited = articles.toJSON()
+        for(let tmp of highlyCited.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        highlyCited['pages'] = []
+        for(let i = 1;i <= highlyCited.lastPage;i++) {
+            highlyCited.pages.push(i)
+        }
+        //\---ARTICLES
         if(request.method()=='GET') {
             if(theJournal.status == 'requested') {
                 theJournal.status = 'pending'
@@ -309,7 +348,11 @@ class JournalController {
             selected_editor: selected_editor,
             c1: c1,
             c2: c2,
-            c3: c3
+            c3: c3,
+            articles : {
+                recentPublished: recentPublished,
+                highlyCited: highlyCited
+            },
         })
     }
 

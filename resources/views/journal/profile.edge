@@ -221,7 +221,7 @@
 
 
         <!-- BEGIN: CONTENT/BLOG/RECENT-POSTS-2 -->
-        <!--<div class="c-content-box c-size-md c-bg-white">
+        <div class="c-content-box c-size-md c-bg-white">
             <div class="container">
                 <div class="row">
 
@@ -242,21 +242,23 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="blog_recent_posts_2">
                                         <ul class="c-content-recent-posts-1">
+                                            @each(art in articles.recentPublished.data)
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
+                                                    <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
                                                 </div>
                                                 <div class="c-post">
-                                                    <a href="" class="c-title">
-												UX Design Expo 2015... </a>
+                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
-                                                        27 Jan 2015
+                                                        {{ art.updated_at }}
                                                     </div>
                                                 </div>
                                             </li>
+                                            @endeach
+                                            <!--
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/08.jpg" alt="" class="img-responsive">
+                                                    <img src="assets/base/img/content/stock/08.jpg" alt="" class="img-responsive">
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -268,7 +270,7 @@
                                             </li>
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/07.jpg" alt="" class="img-responsive">
+                                                    <img src="assets/base/img/content/stock/07.jpg" alt="" class="img-responsive">
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -280,7 +282,7 @@
                                             </li>
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/32.jpg" alt="" class="img-responsive">
+                                                    <img src="assets/base/img/content/stock/32.jpg" alt="" class="img-responsive">
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -290,13 +292,43 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            -->
                                         </ul>
+                                        <div class="c-body">
+                                            <ul class="c-content-pagination c-theme">
+                                                <li class="c-prev">
+                                                <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                                                </li>
+                                                @each(pg in articles.recentPublished.pages)
+                                                <li @if(pg==articles.recentPublished.page) class="c-active" @endif>
+                                                <a href="?page_number={{ pg }}">{{ pg }}</a>
+                                                </li>
+                                                @endeach
+                                                <li class="c-next">
+                                                <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="tab-pane" id="blog_popular_posts_2">
                                         <ul class="c-content-recent-posts-1">
+                                            @each(art in articles.highlyCited.data)
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/34.jpg" class="img-responsive" alt="" />
+                                                    <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
+                                                </div>
+                                                <div class="c-post">
+                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                                                    <div class="c-date">
+                                                        {{ art.updated_at }}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            @endeach
+                                            <!--
+                                            <li>
+                                                <div class="c-image">
+                                                    <img src="assets/base/img/content/stock/34.jpg" class="img-responsive" alt="" />
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -308,7 +340,7 @@
                                             </li>
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/37.jpg" class="img-responsive" alt="" />
+                                                    <img src="assets/base/img/content/stock/37.jpg" class="img-responsive" alt="" />
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -320,7 +352,7 @@
                                             </li>
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/32.jpg" class="img-responsive" alt="" />
+                                                    <img src="assets/base/img/content/stock/32.jpg" class="img-responsive" alt="" />
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -332,7 +364,7 @@
                                             </li>
                                             <li>
                                                 <div class="c-image">
-                                                    <img src="/assets/base/img/content/stock/54.jpg" class="img-responsive" alt="" />
+                                                    <img src="assets/base/img/content/stock/54.jpg" class="img-responsive" alt="" />
                                                 </div>
                                                 <div class="c-post">
                                                     <a href="" class="c-title">
@@ -342,13 +374,28 @@
                                                     </div>
                                                 </div>
                                             </li>
+                                            -->
                                         </ul>
-
+                                        <div class="c-body">
+                                            <ul class="c-content-pagination c-theme">
+                                                <li class="c-prev">
+                                                <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                                                </li>
+                                                @each(pg in articles.highlyCited.pages)
+                                                <li @if(pg==articles.highlyCited.page) class="c-active" @endif>
+                                                <a href="?page_number={{ pg }}">{{ pg }}</a>
+                                                </li>
+                                                @endeach
+                                                <li class="c-next">
+                                                <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <br/>
+                        <!--</br>
                         <div class="c-body">
                             <ul class="c-content-pagination c-theme">
                                 <li class="c-prev">
@@ -388,9 +435,10 @@
                                     <a href="#"><i class="fa fa-angle-right"></i></a>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="col-md-3">
+                        <!-- BEGIN: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
                         <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
                             <h3 class="c-font-bold c-font-uppercase">Filters</h3>
                         </div>
@@ -421,10 +469,12 @@
 
                             </ul>
                         </div>
+
+                        <!-- END: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
 
         <!-- END: PAGE CONTENT -->
     </div>
