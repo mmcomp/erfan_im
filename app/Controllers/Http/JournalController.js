@@ -230,8 +230,19 @@ class JournalController {
                 pageNumber += page_move
             }
         }
+        let searchTitle = ''
+        if(request.all()['search_articles']){
+            searchTitle = request.all()['search_articles']
+            console.log('Search Title', searchTitle)
+        }
         let articleIds = []
-        let articles = await Artical.query().where('journal_id', theJournal.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -242,7 +253,13 @@ class JournalController {
         for(let i = 1;i <= recentPublished.lastPage;i++) {
             recentPublished.pages.push(i)
         }
-        articles = await Artical.query().where('journal_id', theJournal.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {

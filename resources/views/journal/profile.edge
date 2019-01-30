@@ -442,11 +442,13 @@
                         <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
                             <h3 class="c-font-bold c-font-uppercase">Filters</h3>
                         </div>
-                        <form action="#" method="post">
+                        <form method="post">
                             <div class="input-group">
-                                <input type="text" class="form-control c-square c-theme-border" placeholder="Search blog...">
+                                {{ csrfField() }}
+                                <input type="hidden" name="journal_id" value="{{ journal.id }}" />
+                                <input name="search_articles" type="text" class="form-control c-square c-theme-border" placeholder="Search blog..." >
                                 <span class="input-group-btn">
-							<button class="btn c-theme-btn c-theme-border c-btn-square" type="button">Go!</button>
+							<button class="btn c-theme-btn c-theme-border c-btn-square" type="submit">Go!</button>
 							</span>
                             </div>
                         </form>
