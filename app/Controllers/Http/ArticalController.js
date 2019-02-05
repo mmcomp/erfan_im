@@ -472,18 +472,19 @@ class ArticalController {
                         mainArticle.status = 'editor_assigned'
                         await mainArticle.save()
                         try{
-                            await Mail.send('emails.welcome', {}, (message) => {
+                            let mailResult = await Mail.send('emails.welcome', {}, (message) => {
                                 message.from('info@imaqpress.com')
                                 message.to(assignEditor.email)
                                 message.subject('Subjected Mail')
                             })
+                            console.log('Mail Result', mailResult)
                         }catch(e) {
                             console.log('Send Mail Error')
                             console.log(e)
                         }
                     }
                 }
-                console.log('Request', request.all())
+                // console.log('Request', request.all())
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
