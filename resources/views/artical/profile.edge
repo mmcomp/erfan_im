@@ -1,5 +1,4 @@
-@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user, title:
-article.running_title})
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, partners: partners, user: user, title: article.running_title, extra_css: '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" /><link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"><style> #ui-id-1 { z-index: 999999; } </style>'})
 
 <!-- BEGIN: PAGE CONTAINER -->
 <div class="c-layout-page" style="margin-top: 100px !important;">
@@ -229,15 +228,14 @@ article.running_title})
                             <p>
                               Percentage (%) shows the matching ratio of Editor / Reviewer based on their keywords
                             </p>
-                            <form autocomplete="off">
-                              <input type="hidden" autocomplete="false" />
+                            <form method="post">
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label class="col-md-4 control-label">Choose Role</label>
                                 <div class="col-md-6">
-                                  <select class="paper-role c-square c-theme">
-                                    <option value="1">Editor</option>
-                                    <option value="2">Reviewer</option>
+                                  <select class="paper-role c-square c-theme" name="editor-role">
+                                    <option value="editor">Editor</option>
+                                    <option value="reviewer">Reviewer</option>
                                   </select>
                                 </div>
                               </div>
@@ -245,7 +243,7 @@ article.running_title})
                               <div class="form-group">
                                 <label for="available-reviewer" class="col-md-4 control-label">Available Reviewers</label>
                                 <div class="col-md-8">
-                                  <select class="form-control c-square c-theme" multiple>
+                                  <select class="form-control c-square c-theme" multiple id="selected_id" name="selected_id">
                                     @each(editor in preeditors)
                                     <option value="{{ editor.id }}">{{ editor.fname }} {{ editor.lname }} ({{ editor.percent }})</option>
                                     <!--
@@ -262,14 +260,14 @@ article.running_title})
                               <br><br><br>
                               <div class="form-group">
                                 <label for="reviewer-email" class="show">Search by Email</label>
-                                <input type="Email" class="form-control input-lg c-square" id="reviewer-email"
+                                <input type="Email" class="form-control input-lg c-square" id="reviewer-email" name="reviewer-email"
                                   placeholder="Email">
                               </div>
 
                               <div class="form-group">
 
                                 <div class="c-checkbox">
-                                  <input type="checkbox" id="invite-new-reviewer" class="c-check">
+                                  <input type="checkbox" id="invite-new-reviewer" class="c-check" onclick="notInList(this);">
                                   <label for="invite-new-reviewer" class="c-font-thin c-font-17">
                                     <span></span>
                                     <span class="check"></span>
@@ -280,22 +278,22 @@ article.running_title})
                               <div class="form-group">
                                 <label class="col-md-4 control-label">Salutation</label>
                                 <div class="col-md-8">
-                                  <select class="form-control c-square c-theme">
-                                    <option value="1">Dr. </option>
-                                    <option value="2">Prof. </option>
-                                    <option value="2">None</option>
+                                  <select class="form-control c-square c-theme new-editor" name="new-editor-salut">
+                                    <option value="Dr">Dr. </option>
+                                    <option value="Prof">Prof. </option>
+                                    <option value="">None</option>
                                   </select>
                                 </div>
                               </div><br>
                               <div class="form-group">
-                                <label for="login-password" class="hide">First and Last Name</label>
-                                <input type="password" class="form-control input-lg c-square" id="name-of-invited-reviewer"
-                                  placeholder="First and Last Name">
+                                <label for="login-password" class="hide">First and Last Name Camma seperated</label>
+                                <input type="test" class="form-control input-lg c-square new-editor" id="name-of-invited-reviewer"
+                                  placeholder="First Name,Last Name" name="new-editor-name">
                               </div>
                               <div class="form-group">
                                 <label for="login-password" class="hide">Email</label>
-                                <input type="password" class="form-control input-lg c-square" id="email-invited-reviewer"
-                                  placeholder="Email">
+                                <input type="email" class="form-control input-lg c-square new-editor" id="email-invited-reviewer"
+                                  placeholder="Email" name="new-editor-email">
                               </div>
 
                               <div class="form-group">
@@ -1085,6 +1083,21 @@ article.running_title})
     editorify();
     var userEmails = {{{ userEmails }}};
     var select_email = '';
+    function notInList(dobj) {
+      if($(dobj).prop('checked')) {
+        select_email = '';
+        $("#reviewer-email").val('');
+        $("#reviewer-email").prop('disabled', true);
+        $(".new-editor").val('').prop('disabled', false);
+        $("#selected_id").find('option').prop('selected', false);
+        $("#selected_id").prop('disabled', true);
+      }else {
+        $("#reviewer-email").prop('disabled', false);
+        $(".new-editor").val('').prop('disabled', true);
+        $("#selected_id").prop('disabled', false);
+      }
+
+    }
     $("#reviewer-email").autocomplete({
         source: userEmails,
         select: function(event, ui) {
@@ -1092,6 +1105,7 @@ article.running_title})
             select_email = ui.item.value;
         }
     });
+    $(".new-editor").prop('disabled', true);
   </script>
   </body>
 

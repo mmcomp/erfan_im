@@ -435,6 +435,55 @@ class ArticalController {
                 article.publish_no = request.all()['publish_no']
                 article.publish_startpage = request.all()['publish_startpage']
                 article.publish_endpage = request.all()['publish_endpage']
+            }else if(request.all()['editor-role']){
+                let editorType = request.all()['editor-role'], editorId = 0, assignEditor
+                if(request.all()['selected_id:']) {
+                    editorId = parseInt(request.all()['selected_id:'], 10)
+                    assignEditor = await User.query().where('id', editorId).first()
+                    if(!assignEditor) {
+                        editorId = 0
+                    }
+                }else if(request.all()['reviewer-email'] && request.all()['reviewer-email']!='') {
+                    assignEditor = await User.query().where('email', request.all()['reviewer-email']).first()
+                    if(assignEditor) {
+                        editorId = assignEditor.id
+                    }
+                }else if(request.all()['new-editor-email'] && request.all()['new-editor-email']!='' && request.all()['new-editor-name']!='') {
+                    assignEditor = new User
+                    assignEditor.email = request.all()['new-editor-email']
+                    assignEditor.lname = (request.all()['new-editor-name'].split(',').length!=2)?request.all()['new-editor-name']:request.all()['new-editor-name'].split(',')[1]
+                    assignEditor.fname = (request.all()['new-editor-name'].split(',').length!=2)?'':request.all()['new-editor-name'].split(',')[0]
+                    assignEditor.salutation = request.all()['new-editor-salut']
+                    await assignEditor.save()
+                    editorId = assignEditor.id
+                }
+                if(editorId>0) {
+                    let userArticleEditor = await UserArticleEditor.query().where('users_id', editorId).where('article_id', article.id).first()
+                    if(!userArticleEditor) {
+                        userArticleEditor = new UserArticleEditor
+                        userArticleEditor.sender_id = user.id
+                        userArticleEditor.users_id = editorId
+                        userArticleEditor.article_id = article.id
+                        userArticleEditor.status = 'pending'
+                        userArticleEditor.type = editorType
+                        await userArticleEditor.save()
+                        article.editors.push(assignEditor.toJSON())
+                        article.status = 'editor_assigned'
+                        mainArticle.status = 'editor_assigned'
+                        await mainArticle.save()
+                        try{
+                            await Mail.send('emails.welcome', {}, (message) => {
+                                message.from('info@imaqpress.com')
+                                message.to(assignEditor.email)
+                                message.subject('Subjected Mail')
+                            })
+                        }catch(e) {
+                            console.log('Send Mail Error')
+                            console.log(e)
+                        }
+                    }
+                }
+                console.log('Request', request.all())
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -484,8 +533,8 @@ class ArticalController {
             return a[1] - b[1];
         });
 
-        console.log('PreEditors', PreEditors)
-        console.log('Sorted', sortable)
+        // console.log('PreEditors', PreEditors)
+        // console.log('Sorted', sortable)
 
         let tmpEd = PreEditors
         PreEditors = []
