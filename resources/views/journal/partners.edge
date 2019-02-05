@@ -1,0 +1,185 @@
+@!component('components.head', { isLogged: isLogged , csrf: csrfToken, user: user, title: title, partners: partners})
+
+<!-- BEGIN: PAGE CONTAINER -->
+<div class="c-layout-page">
+	<!-- BEGIN: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+	<div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold" style="margin-top: 120px;">
+		<div class="container">
+			<div class="c-page-title c-pull-left">
+				<h3 class="c-font-uppercase c-font-bold">Organizations Who Have Published Their Scientific Work With Us</h3>
+			</div>
+			<ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
+				<li>
+					<a href="#">iMaQPress</a>
+				</li>
+				<li>
+					/
+				</li>
+				<li class="c-state_active">
+					Publishing Partners
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- END: LAYOUT/BREADCRUMBS/BREADCRUMBS-1 -->
+	<!-- BEGIN: PAGE CONTENT -->
+	<div class="c-content-box c-size-md">
+		<div class="container">
+      <!--
+			<div id="filters-container" class="cbp-l-filters-button">
+				<div data-filter="*" class="cbp-filter-item-active cbp-filter-item">
+					 All
+					<div class="cbp-filter-counter">
+					</div>
+        </div>
+				<div data-filter=".identity" class="cbp-filter-item">
+					 Number of Articles
+					<div class="cbp-filter-counter">
+					</div>
+				</div>
+				<div data-filter=".web-design" class="cbp-filter-item">
+					 No of Citations
+					<div class="cbp-filter-counter">
+					</div>
+				</div>
+				<div data-filter=".graphic" class="cbp-filter-item">
+					 No of Authors
+					<div class="cbp-filter-counter">
+					</div>
+				</div>
+      </div>
+      -->
+			<div id="grid-container" class="cbp">
+        @each(partner in partners)
+        @if(partner.university_institute && partner.university_institute!='')
+        <div class="cbp-item">
+          <div class="cbp-caption">
+            <div class="cbp-caption-defaultWrap">
+              <img src="assets/base/img/content/stock/60.jpg" alt="">
+            </div>
+            <div class="cbp-caption-activeWrap">
+              <div class="cbp-l-caption-alignCenter">
+                <div class="cbp-l-caption-body">
+                  <a href="ajax/projects/project1.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cbp-l-grid-projects-title">
+            {{ partner.university_institute }}
+          </div>
+          <div class="cbp-l-grid-projects-desc">
+            @if(partner.country)
+            {{ partner.country.COUNTRY_NAME }}
+            @endif
+          </div>
+        </div>
+        @endif
+        @endeach
+        <!--
+				<div class="cbp-item graphic">
+					<div class="cbp-caption">
+						<div class="cbp-caption-defaultWrap">
+							<img src="assets/base/img/content/stock/60.jpg" alt="">
+						</div>
+						<div class="cbp-caption-activeWrap">
+							<div class="cbp-l-caption-alignCenter">
+								<div class="cbp-l-caption-body">
+									<a href="ajax/projects/project1.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="cbp-l-grid-projects-title">
+						Ferdowsi University of Mashhad
+					</div>
+					<div class="cbp-l-grid-projects-desc">
+						Mashhad / Iran
+					</div>
+				</div>
+				<div class="cbp-item web-design logos">
+					<div class="cbp-caption">
+						<div class="cbp-caption-defaultWrap">
+							<img src="assets/base/img/content/stock/61.jpg" alt="">
+						</div>
+						<div class="cbp-caption-activeWrap">
+							<div class="cbp-l-caption-alignCenter">
+								<div class="cbp-l-caption-body">
+									<a href="ajax/projects/project2.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="cbp-l-grid-projects-title">
+						University of Lahore
+					</div>
+					<div class="cbp-l-grid-projects-desc">
+						Lahore / Pakistan
+					</div>
+				</div>
+				<div class="cbp-item graphic logos">
+					<div class="cbp-caption">
+						<div class="cbp-caption-defaultWrap">
+							<img src="assets/base/img/content/stock/62.jpg" alt="">
+						</div>
+						<div class="cbp-caption-activeWrap">
+							<div class="cbp-l-caption-alignCenter">
+								<div class="cbp-l-caption-body">
+									<a href="ajax/projects/project3.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="cbp-l-grid-projects-title">
+						UAE University
+					</div>
+					<div class="cbp-l-grid-projects-desc">
+						Al-ain / UAE
+					</div>
+				</div>
+				<div class="cbp-item web-design graphic">
+					<div class="cbp-caption">
+						<div class="cbp-caption-defaultWrap">
+							<img src="assets/base/img/content/stock/63.jpg" alt="">
+						</div>
+						<div class="cbp-caption-activeWrap">
+							<div class="cbp-l-caption-alignCenter">
+								<div class="cbp-l-caption-body">
+									<a href="ajax/projects/project4.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="cbp-l-grid-projects-title">
+						University of the Pubjab
+					</div>
+					<div class="cbp-l-grid-projects-desc">
+						Lahore / Pakistan
+					</div>
+				</div>
+        -->
+      </div>
+      <!--
+			<div id="loadMore-container" class="cbp-l-loadMore-button c-margin-t-60">
+				<a href="ajax/4col-portfolio/load-more.html" class="cbp-l-loadMore-link btn btn-sm c-btn-square c-btn-border-2x c-btn-dark c-btn-uppercase">
+				<span class="cbp-l-loadMore-defaultText">LOAD MORE</span>
+				<span class="cbp-l-loadMore-loadingText">LOADING...</span>
+				<span class="cbp-l-loadMore-noMoreLoading">NO MORE WORKS</span>
+				</a>
+      </div>
+      -->
+		</div>
+	</div>
+	<!-- END: PAGE CONTENT -->
+</div>
+<!-- END: PAGE CONTAINER -->
+
+@!component('components.foot')
+
+@!component('components.scripts')
+<!-- BEGIN: PAGE SCRIPTS -->
+<script src="assets/base/js/scripts/pages/4col-portfolio.js" type="text/javascript"></script>
+<!-- END: PAGE SCRIPTS -->
+</body>
+
+</html>

@@ -2,7 +2,7 @@
 
 const Country = use('App/Models/Country')
 const Journal = use('App/Models/Journal')
-const Article = use('App/Models/Artical')
+const ArticleKeyword = use('App/Models/ArticleKeyword')
 const JournalExtra = use('App/Models/JournalExtra')
 const JournalKeyword = use('App/Models/JournalKeyword')
 const Database = use('Database')
@@ -500,6 +500,27 @@ class JournalController {
         })
     }
 
+    async partners ({ request, auth, view, response, session, params }) {
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        let partners = await User.query().with('country').groupBy('university_institute').fetch()
+        partners =  partners.toJSON()
+        
+        console.log('Partners')
+        console.log(partners)
+
+        return view.render('journal.partners', {
+            isLogged: isLogged,
+            user: user,
+            partners: partners,
+        })
+    }
+
     async keyword ({ request, auth, view, response, session, params }) {
         if(!params || !params.keyword) {
             session.put('msg', 'Wrong Usage')
@@ -508,12 +529,105 @@ class JournalController {
             return response.route('home')
         }
 
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
         let journalKeyword = await JournalKeyword.query().where('theword', params.keyword).first()
 
-        session.put('msg', 'UI not developed yet')
-        session.put('msg_type', 'danger')
+        if(!journalKeyword) {
+            session.put('msg', 'KeyWord Not Used')
+            session.put('msg_type', 'danger')
 
-        return response.route('home')
+            return response.route('home')
+        }
+
+        let articleKeyword = await ArticleKeyword.query().where('journal_keywords_id', journalKeyword.id).fetch()
+        articleKeyword = articleKeyword.toJSON()
+        let theArticleIds = []
+        for(let theArtKw of articleKeyword) {
+            theArticleIds.push(theArtKw.article_id)
+        }
+
+        //----ARTICLES
+        let pageNumber = 1
+        if(request.all()['page_number']) {
+            pageNumber = parseInt(request.all()['page_number'],10)
+            if(isNaN(pageNumber)) {
+                pageNumber = 1
+            }
+        }
+        if(request.all()['page_move']) {
+            let page_move = parseInt(request.all()['page_move'],10)
+            if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                pageNumber += page_move
+            }
+        }
+        let searchTitle = ''
+        if(request.all()['search_articles']){
+            searchTitle = request.all()['search_articles']
+        }
+        let sort = 'created_at';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
+        }
+        let articleIds = []
+        let articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).whereIn('id', theArticleIds).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+        let recentPublished = articles.toJSON()
+        for(let tmp of recentPublished.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        recentPublished['pages'] = []
+        for(let i = 1;i <= recentPublished.lastPage;i++) {
+            recentPublished.pages.push(i)
+        }
+        sort = 'citiations';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
+        }
+        articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).whereIn('id', theArticleIds).with('journal').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+        let highlyCited = articles.toJSON()
+        for(let tmp of highlyCited.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        highlyCited['pages'] = []
+        for(let i = 1;i <= highlyCited.lastPage;i++) {
+            highlyCited.pages.push(i)
+        }
+        //\---ARTICLES
+
+        return view.render('journal.keyword', { 
+            isLogged: isLogged, 
+            user: user, 
+            title: params.keyword, 
+            keyword: params.keyword,
+            articles : {
+                recentPublished: recentPublished,
+                highlyCited: highlyCited
+            },
+            search_title: searchTitle,
+        })
     }
 }
 

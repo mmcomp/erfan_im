@@ -14,6 +14,7 @@ const phantom = require('phantom')
 const Env = use('Env')
 const fs = require('fs')
 const moment = require('moment')
+const docx = require('./docx')
 
 class ArticalController {
     async calcKeywords(article) {
@@ -111,6 +112,10 @@ class ArticalController {
                 return response.route('artical_create')
             }else {
                 artical.file_path = 'static/articals/' + filename
+                let ref = await docx.reference(Helpers.publicPath('static/articals') + '/' + filename)
+                if(ref.length>0) {
+                    artical.ref = ref.join("\n")
+                }
             }
 
             artical.type = (request.all()['type_research'])?'research':'non-research'
@@ -576,6 +581,9 @@ class ArticalController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
+        theArticle.views++
+        await theArticle.save()
+        
         if(request.all()['pdf']) {
             const ph = await phantom.create()
             const page = await ph.createPage()
