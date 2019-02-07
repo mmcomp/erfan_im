@@ -25,7 +25,7 @@
   <!-- BEGIN: PAGE CONTENT -->
 
   <!-- BEGIN: CONTENT/BARS/BAR-5 -->
-  <div class="c-content-box c-size-md c-bg-parallax" style="background-image: url(assets/base/img/content/backgrounds/bg-29.jpg); padding:70px !important;">
+  <div class="c-content-box c-size-md c-bg-parallax" style="background-image: url(/assets/base/img/content/backgrounds/bg-29.jpg); padding:70px !important;">
 
   </div>
   <!-- END: CONTENT/BARS/BAR-5 -->
@@ -178,17 +178,19 @@
           <div class="c-content-ver-nav">
             <ul class="c-content-list-1 c-theme c-separator-dot c-square">
               <li>
-                Views: 00
+                Views: {{ article.views }}
               </li>
               <li>
-                Downloads: 00
+                Downloads: {{ article.downloads }}
               </li>
               <li>
-                Citations: 00
+                Citations: {{ article.citiations }}
               </li>
+              <!--
               <li>
                 <a href="http://imaqpress.com/demographs/articles/immortalized-cell-lines">Article Demographs</a>
               </li>
+              -->
             </ul>
           </div>
           <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
@@ -250,6 +252,203 @@
 </div>
 <!-- END: PAGE CONTAINER -->
 
+<!-- BEGIN: CONTENT/BARS/BAR-3 -->
+<div class="container"> 
+  <div class="panel panel-primary" style="height: 90px">
+      <div class="panel-heading">
+          <h3 class="panel-title">Open Access Policy<a class="anchorjs-link" href="#panel-title"><span class="anchorjs-icon"></span></a></h3>
+      </div>
+      <div class="panel-body">
+              Copyright © 2018 iMaQPress. Open access article distributed under the Creative Commons Attribution License (CC-BY). For more details, see our <a href="http://imaqpress.com/privacy">Privacy Rules</a>                                     
+      </div>
+  </div>
+</div>
+
+  <!-- END: CONTENT/BARS/BAR-3 -->
+
+<!-- START: SIMILAR ARTICLES -->
+
+<div class="c-content-box c-size-md c-bg-grey-1">
+      <div class="container">
+          <!-- Begin: Testimonals 1 component -->
+          <div class="c-content-blog-post-card-1-slider" data-slider="owl" data-items="3" data-auto-play="8000">
+              <!-- Begin: Title 1 component -->
+              <div class="c-content-title-1">
+                  <h3 class="c-center c-font-uppercase c-font-bold">See Top Similar Articles</h3>
+                  <div class="c-line-center c-theme-bg">
+                  </div>
+              </div>
+              <!-- End-->
+              <!-- Begin: Owlcarousel -->
+              <div class="owl-carousel owl-theme c-theme">
+                  @each(art in articles)
+                  <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-media c-content-overlay">
+                              <div class="c-overlay-wrapper">
+                                  <div class="c-overlay-content">
+                                      <a href="/article/{{ art.running_title.replace(/ /g,'-') }}"><i class="icon-link"></i></a>
+                                      <a href="{{ art.abstract_image_path }}" data-lightbox="fancybox" data-fancybox-group="gallery">
+                                          <i class="icon-magnifier"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <img class="c-overlay-object img-responsive" src="{{ art.abstract_image_path }}" alt="{{ art.running_title }}">
+                          </div>
+                          <div class="c-body">
+                                  <div class="c-panel">
+                                          DOI <a href="https://doi.org/10.15562/{{ art.journal.doi_code }}.{{ art.doi }}"><span class="c-font-uppercase">10.15562/{{ art.journal.doi_code }}.{{ art.doi }}</span>
+                                  </div>
+                              <div class="c-title c-font-uppercase c-font-bold">
+                                  <a href="/article/{{ art.running_title.replace(/ /g,'-') }}">{{ art.full_title }}</a>
+                              </div>
+                              <div class="c-author">
+                                  @if(art.journal)
+                                  By <a href="/journal/{{ art.journal.name.replace(/ /g,'-') }}"><span class="c-font-uppercase">{{ art.journal.name }}</span></a>
+                                  @endif
+                                   on <span class="c-font-uppercase">{{ art.publish_date }}</span>
+                              </div>
+                              <div class="c-panel">
+                                  <p>
+                                      {{ art.abstract }}
+                                  </p>
+                                  <br/>
+                                  <div class="c-comments">
+                                      <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.citiations }} </a> &nbsp&nbsp
+                                      <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments }} </a>&nbsp&nbsp
+                                      <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{ art.downloads }}</a>
+                                  </div>
+                                  <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="/article/{{ art.running_title.replace(/ /g,'-') }}" style="float: right !important;">Read More</a>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  @endeach
+                  <!--
+                  <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-media c-content-overlay">
+                              <div class="c-overlay-wrapper">
+                                  <div class="c-overlay-content">
+                                      <a href="http://genesandcells.com/journal/index.php/gnc/article/view/15"><i class="icon-link"></i></a>
+                                      <a href="static/img/MSC.jpg" data-lightbox="fancybox" data-fancybox-group="gallery">
+                                          <i class="icon-magnifier"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <img class="c-overlay-object img-responsive" src="static/img/MSC.jpg" alt="MSC based therapies">
+                          </div>
+                          <div class="c-body">
+                                  <div class="c-panel">
+                                          DOI <a href="https://doi.org/10.15562/gnc.15"><span class="c-font-uppercase">10.15562/gnc.15</span>
+                                  </div>
+                              <div class="c-title c-font-uppercase c-font-bold">
+                                  <a href="http://genesandcells.com/journal/index.php/gnc/article/view/15">Mesenchymal Stem Cells; Defining the Future of Regenerative Medicine</a>
+                              </div>
+                              <div class="c-author">
+                                  By <a href="http://genesandcells.com/journal"><span class="c-font-uppercase">Journal of Genes and Cells</span></a> on <span class="c-font-uppercase">1 April 2015</span>
+                              </div>
+                              <div class="c-panel">
+                                  <p>Cell therapy has been considered as the third pillar of medicine. There are several kinds of cells...</p>
+                                  </br>
+                                  <div class="c-comments">
+                                      <a href="#"><span class="icon-eye" aria-hidden="true"></span> 826 </a> &nbsp&nbsp
+                                      <a href="#"><span class="icon-note" aria-hidden="true"></span> 6 </a>&nbsp&nbsp
+                                      <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> 178</a>
+                                  </div>
+                                  <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="https://docs.google.com/viewer?url=http://genesandcells.com/journal/index.php/gnc/article/viewFile/15/62" style="float: right !important;">Read More</a>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-media c-content-overlay">
+                              <div class="c-overlay-wrapper">
+                                  <div class="c-overlay-content">
+                                      <a href="#"><i class="icon-link"></i></a>
+                                      <a href="static/img/Neuro.jpg" data-lightbox="fancybox" data-fancybox-group="gallery">
+                                          <i class="icon-magnifier"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <img class="c-overlay-object img-responsive" src="static/img/Neuro.jpg" alt="">
+                          </div>
+                          <div class="c-body">
+                                  <div class="c-panel">
+                                          DOI <a href="https://doi.org/10.15562/gnc.15"><span class="c-font-uppercase">10.15562/gnc.15</span>
+                                  </div>
+                              <div class="c-title c-font-uppercase c-font-bold">
+                                  <a href="#">Stem Cell Therapy for Neurodegenerative Diseases: Strategies for Regeneration against Degeneration</a>
+                              </div>
+                              <div class="c-author">
+                                  By <a href="#"><span class="c-font-uppercase">Journal of Genes and Cells</span></a> on <span class="c-font-uppercase">12 Feb 2016</span>
+                              </div>
+                              <div class="c-panel">
+                                  <p> Neurodegeneration is a general term for the progressive loss of structure and/or function of neurons, gives rise to dysfunction or death of.... </p>
+                                  </br>
+                                  <div class="c-comments">
+                                      <a href="#"><span class="icon-eye" aria-hidden="true"></span> 1080 </a> &nbsp&nbsp
+
+                                      <a href="#"><span class="icon-note" aria-hidden="true"></span> 4 </a>&nbsp&nbsp
+                                      <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> 340</a>
+                                  </div>
+                                  <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="#" style="float: right !important;">Read More</a>
+
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                          <div class="c-media c-content-overlay">
+                              <div class="c-overlay-wrapper">
+                                  <div class="c-overlay-content">
+                                      <a href="http://thecancerpress.com/index.php/cp/article/view/18"><i class="icon-link"></i></a>
+                                      <a href="static/img/Probiotic.png" data-lightbox="fancybox" data-fancybox-group="gallery">
+                                          <i class="icon-magnifier"></i>
+                                      </a>
+                                  </div>
+                              </div>
+                              <img class="c-overlay-object img-responsive" src="static/img/Probiotic.png" alt="Probiotics and Cancer">
+                          </div>
+                          <div class="c-body">
+                                  <div class="c-panel">
+                                          DOI <a href="https://doi.org/10.15562/tcp.18"><span class="c-font-uppercase">10.15562/tcp.18</span>
+                                  </div>
+                              <div class="c-title c-font-uppercase c-font-bold">
+                                  <a href="http://thecancerpress.com/index.php/cp/article/view/18">Critical Review on Probiotics and its Effect on Cancer                                            </a>
+                              </div>
+                              <div class="c-author">
+                                  By <a href="http://thecancerpress.com"><span class="c-font-uppercase">The Cancer Press</span></a> on <span class="c-font-uppercase">1 May 2016</span>
+                              </div>
+                              <div class="c-panel">
+                                  <p>  Probiotics are defined as live microbial food ingredients that produce several beneficial effects to human health . The effects of probiotics may be classified... </p>
+                                  </br>
+                                  <div class="c-comments">
+                                      <a href="#"><span class="icon-eye" aria-hidden="true"></span> 453 </a> &nbsp&nbsp
+
+                                      <a href="#"><span class="icon-note" aria-hidden="true"></span> 3 </a>&nbsp&nbsp
+                                      <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> 178</a>
+                                  </div>
+                                  <a class="btn btn-xs c-btn-green c-btn-square c-btn-border-1x" href="https://docs.google.com/viewer?url=http://thecancerpress.com/index.php/cp/article/viewFile/18/17" style="float: right !important;">Read More</a>
+
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+                  -->
+              </div>
+              <!-- End-->
+          </div>
+          <!-- End-->
+      </div>
+  </div>
+<!-- END: SIMILAR ARTICLES -->
 
 @!component('components.foot')
 

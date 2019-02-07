@@ -631,10 +631,10 @@ class ArticalController {
             session.put('msg_type', 'danger')
             return response.redirect('/')
         }
-        theArticle.views++
-        await theArticle.save()
         
         if(request.all()['pdf']) {
+            theArticle.downloads++
+            await theArticle.save()
             const ph = await phantom.create()
             const page = await ph.createPage()
             await page.property('viewportSize', { width: 2000, height: 768 });
@@ -649,6 +649,18 @@ class ArticalController {
             return response.send(content)
 
         }
+
+        theArticle.views++
+        await theArticle.save()
+
+        let articles = await Artical.query().with('journal').where('journal_id', theArticle.journal_id).where('status', 'published').where('id', '!=', theArticle.id).orderBy('citiations', 'desc').limit(3).fetch()
+        articles = articles.toJSON()
+        for(let i = 0;i < articles.length;i++) {
+            if(articles[i].abstract && articles[i].abstract.split(" ").length>30) {
+                articles[i].abstract = articles[i].abstract.split(" ").splice(0,30).join(" ") + '...'
+            }
+        }
+
         // console.log('!!!!!')
         let article = theArticle.toJSON() , otherAuthors = [], corAuthors = []
         if(article.author) {
@@ -685,6 +697,7 @@ class ArticalController {
             corAuthors: corAuthors,
             msg: msg, 
             msg_type: msg_type,
+            articles: articles,
         })
     }
 }
