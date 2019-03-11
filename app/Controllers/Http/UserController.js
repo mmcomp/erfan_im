@@ -7,6 +7,7 @@ const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
 const UserKeyword = use('App/Models/UserKeyword')
 const Database = use('Database')
+const docx = require('./docx')
 
 class UserController {
     async logout ({ auth, response, session }) {
@@ -172,6 +173,19 @@ class UserController {
         }
 
         session.put('msg', 'You are Signed Up. Now you can Login with you email and password')
+
+        try{
+            let mailResult = await docx.sendMail(user.email, 'Welcome to iMaqPress', 
+                `<h1>iMaqPress</h1>
+                <p>
+                Dear ${ user.fname } ${ user.lname }<br/>
+                You account has created on iMaqPress. Please sign in the <a href="${ Env.get('APP_URL') }">iMaqPress</a> 
+                with this email and the password you provided before.<br/>
+                </p>`)
+        }catch(e) {
+            console.log('Send Mail Error')
+            console.log(e)
+        }
 
         return response.redirect('/')
     }

@@ -78,6 +78,7 @@ Route.any('developer', async ({view, session}) => {
     return view.render('components.mehrdad', { isLogged: loggedIn, user: user })
 })
 
+Route.any('email', 'ArticalController.email')
 
 Route.get('/', 'UserController.home').as('home')
 

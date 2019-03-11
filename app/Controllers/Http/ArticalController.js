@@ -370,10 +370,9 @@ class ArticalController {
                     assignEditor = new User
                     assignEditor.fname = request.all()['editor_fname']
                     assignEditor.lname = request.all()['editor_lname']
+                    assignEditor.email = request.all()['editor_email']
+                    assignEditor.password = '123456'
                     await assignEditor.save()
-                    // session.put('msg', 'Email not Registered!')
-                    // session.put('msg_type', 'danger')
-                    // return response.redirect('/article_id/' + article.id)
                 }
                 let userArticleEditor = await UserArticleEditor.query().where('users_id', assignEditor.id).where('article_id', article.id).first()
                 if(!userArticleEditor) {
@@ -388,11 +387,18 @@ class ArticalController {
                     mainArticle.status = 'editor_assigned'
                     await mainArticle.save()
                     try{
-                        await Mail.send('emails.welcome', {}, (message) => {
-                            message.from('info@imaqpress.com')
-                            message.to(request.all()['editor_email'])
-                            message.subject('Subjected Mail')
-                        })
+                        // await Mail.send('emails.welcome', {}, (message) => {
+                        //     message.from('info@imaqpress.com')
+                        //     message.to(request.all()['editor_email'])
+                        //     message.subject('Subjected Mail')
+                        // })
+                        let mailResult = await docx.sendMail(assignEditor.email, 'Assigning to article as editor', 
+                            `<h1>iMaqPress</h1>
+                            <p>
+                            Dear ${ assignEditor.fname } ${ assignEditor.lname }<br/>
+                            You are assigned as editor for ${ article.running_title }. Please sign in the <a href="${ Env.get('APP_URL') }">iMaqPress</a> 
+                            with this email and in case you did not register on our site, you shall login with password of <b>123456</b>.<br/>
+                            </p>`)
                     }catch(e) {
                         console.log('Send Mail Error')
                         console.log(e)
@@ -454,6 +460,7 @@ class ArticalController {
                     assignEditor.lname = (request.all()['new-editor-name'].split(',').length!=2)?request.all()['new-editor-name']:request.all()['new-editor-name'].split(',')[1]
                     assignEditor.fname = (request.all()['new-editor-name'].split(',').length!=2)?'':request.all()['new-editor-name'].split(',')[0]
                     assignEditor.salutation = request.all()['new-editor-salut']
+                    assignEditor.password = '123456'
                     await assignEditor.save()
                     editorId = assignEditor.id
                 }
@@ -472,11 +479,18 @@ class ArticalController {
                         mainArticle.status = 'editor_assigned'
                         await mainArticle.save()
                         try{
-                            let mailResult = await Mail.send('emails.welcome', {}, (message) => {
-                                message.from('info@imaqpress.com')
-                                message.to(assignEditor.email)
-                                message.subject('Subjected Mail')
-                            })
+                            // let mailResult = await Mail.send('emails.welcome', {}, (message) => {
+                            //     message.from('info@imaqpress.com')
+                            //     message.to(assignEditor.email)
+                            //     message.subject('Subjected Mail')
+                            // })
+                            let mailResult = await docx.sendMail(assignEditor.email, 'Assigning to article as ' + editorType, '', 
+                                `<h1>iMaqPress</h1>
+                                <p>
+                                Dear ${ assignEditor.fname } ${ assignEditor.lname }<br/>
+                                You are assigned as ${ editorType } for ${ article.running_title }. Please sign in the <a href="${ Env.get('APP_URL') }">iMaqPress</a> 
+                                with this email and in case you did not register on our site, you shall login with password of <b>123456</b>.<br/>
+                                </p>`)
                             console.log('Mail Result', mailResult)
                         }catch(e) {
                             console.log('Send Mail Error')
@@ -699,6 +713,17 @@ class ArticalController {
             msg_type: msg_type,
             articles: articles,
         })
+    }
+
+    async email ({ view, response, session, request, params }) {
+        try{
+            let mailResult = await docx.sendMail('mad_moon_lover@yahoo.com', 'Test Email', 'Text Mail', '<h1>Html Mail</h1>')
+            console.log('Mail Result', mailResult)
+        }catch(e) {
+            console.log('Send Mail Error')
+            console.log(e)
+        }
+        return 'ok';
     }
 }
 

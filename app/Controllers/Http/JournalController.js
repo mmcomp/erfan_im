@@ -9,6 +9,7 @@ const Database = use('Database')
 const Helpers = use('Helpers')
 const User = use('App/Models/User')
 const Artical = use('App/Models/Artical')
+const docx = require('./docx')
 
 class JournalController {
     async index ({ view, session }) {
@@ -164,7 +165,18 @@ class JournalController {
 
         await journal.save()
 
-
+        try{
+            let mailResult = await docx.sendMail(journal.email, journal.name + ' Journal Submitted Succefully', 
+                `<h1>iMaqPress</h1>
+                <p>
+                Dear ${ journal.contact_fname } ${ journal.contact_lname }<br/>
+                You jornal as <b>${ journal.name }</b> submitted on iMaqPress. We will review your journal as soon as possible and will contact you later on this 
+                email or this <b>${ journal.tell }.</b> .<br/>
+                </p>`)
+        }catch(e) {
+            console.log('Send Mail Error')
+            console.log(e)
+        }
         
         // return view.render('journal.index', { isLogged: isLogged })
         return response.route('journals', {isLogged: isLogged})

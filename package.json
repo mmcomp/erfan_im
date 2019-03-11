@@ -28,11 +28,13 @@
     "@adonisjs/session": "^1.0.25",
     "@adonisjs/shield": "^1.0.6",
     "axios": "^0.18.0",
+    "dns": "^0.2.2",
     "docx-extractor": "^1.1.4",
     "google-scholar": "^1.5.1",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "node-stream-zip": "^1.8.0",
+    "nodemailer": "^5.1.1",
     "phantom": "^6.0.3",
     "sqlite3": "^4.0.2"
   },
