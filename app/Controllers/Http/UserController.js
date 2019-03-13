@@ -80,22 +80,23 @@ class UserController {
 
     async googleLogin ({ ally, request, auth, response, session }) {
         const guser = await ally.driver('google').getUser()
-        let lname = guser.name.split(' ')
-        let fname = ''
-        if(lname.length>1) {
-            lname = lname[lname.length-1]
-            fname = guser.name.replace(' ' + lname, '')
-        }
+        console.log(guser)
+        // let lname = guser.name.split(' ')
+        // let fname = ''
+        // if(lname.length>1) {
+        //     lname = lname[lname.length-1]
+        //     fname = guser.name.replace(' ' + lname, '')
+        // }
         
-        let user = await User.query().where('email', guser.email).first()
-        if(!user) {
-            user = new User
-            user.email = guser.email
-            user.fname = fname
-            user.lname = lname
-            user.password = '123456'
-            await user.save()
-        }
+        // let user = await User.query().where('email', guser.email).first()
+        // if(!user) {
+        //     user = new User
+        //     user.email = guser.email
+        //     user.fname = fname
+        //     user.lname = lname
+        //     user.password = '123456'
+        //     await user.save()
+        // }
 
         return guser
     }
