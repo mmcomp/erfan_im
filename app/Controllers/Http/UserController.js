@@ -98,7 +98,7 @@ class UserController {
             await user.save()
         }
 
-        await auth.login(user)
+        await auth.attempt(user.email, user.password)
 
         return response.route('home', {message: '', isLogged: true})
     }
