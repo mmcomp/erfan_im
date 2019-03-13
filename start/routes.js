@@ -85,11 +85,7 @@ Route.get('google', async ({ ally }) => {
     await ally.driver('google').redirect()
 })
 
-Route.get('authenticated/google', async ({ ally }) => {
-    const user = await ally.driver('google').getUser()
-
-    return user
-})
+Route.get('authenticated/google', 'UserController.googleLogin')
 
 Route.get('/', 'UserController.home').as('home')
 
