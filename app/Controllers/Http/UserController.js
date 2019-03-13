@@ -98,9 +98,21 @@ class UserController {
             await user.save()
         }
 
-        await auth.attempt(user.email, user.password)
+        await auth.login(user)
+        msg = 'Logged in successfully'
 
-        return response.route('home', {message: '', isLogged: true})
+        let user = await User.query().where('id', auth.user.id).with('permissions').first()
+        // console.log('User', user.toJSON())
+        user = user.toJSON()
+        let permissions = {}
+        for(let i = 0;i < user.permissions.length;i++) {
+            permissions[user.permissions[i].permission_key] = true
+        }
+        user.permissions = permissions
+        // console.log(user)
+        session.put('user', user)
+
+        return response.route('home', {message: msg, isLogged: true})
     }
 
     async home ({ view, auth, session }) {
