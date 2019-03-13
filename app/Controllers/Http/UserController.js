@@ -8,6 +8,7 @@ const UserArticle = use('App/Models/UserArticle')
 const UserKeyword = use('App/Models/UserKeyword')
 const Database = use('Database')
 const docx = require('./docx')
+const Randomatic = require('randomatic')
 
 class UserController {
     async logout ({ auth, response, session }) {
@@ -75,6 +76,38 @@ class UserController {
             session.put('msg_type', 'danger')
 
             return response.route('home', {message: msg, isLogged: logedIn})
+        }
+    }
+
+    async forget ({ request, auth, response, session }) {
+        if(!request.all()['forget_email']){
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+            return response.route('home')
+        }
+
+        let user = await User.query().where('email', request.all()['forget_email']).first()
+        if(!user) {
+            session.put('msg', 'Email not found!')
+            session.put('msg_type', 'danger')
+            return response.route('home')
+        }
+        try{
+            let password = Randomatic('*', 8)
+            user.password = password
+            await user.save()
+            let mailResult = await docx.sendMail(user.email, 'Reset Password', 'Your new password is ' + password, `<h1>iMaqPress</h1>
+            <p>Dear ${ user.fname } ${ user.lname }<br/>
+            You can temporarily sign in with this email and <b>${ password }</b> as your password.
+            `)
+            console.log('Mail Result', mailResult)
+            session.put('msg', 'Email sent to you with reset password details.')
+            session.put('msg_type', '')
+            return response.route('home')
+        }catch(e) {
+            session.put('msg', 'Error sending reset password to you!')
+            session.put('msg_type', 'danger')
+            return response.route('home')
         }
     }
 
@@ -496,6 +529,19 @@ class UserController {
             },
             user_articles: userArticles,
         })
+    }
+
+    async emailExists ({ request, auth, view, response, session, params }) {
+        let result = false
+        if(params.email) {
+            let user  = await User.query().where('email', params.email).first()
+            if(!user) {
+                result = true
+            }
+        }
+        return {
+            result: result
+        }
     }
 }
 

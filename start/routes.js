@@ -87,6 +87,10 @@ Route.get('google', async ({ ally }) => {
 
 Route.get('authenticated/google', 'UserController.googleLogin')
 
+Route.post('forget', 'UserController.forget')
+
+Route.get('email_exists/:email', 'UserController.emailExists')
+
 Route.get('/', 'UserController.home').as('home')
 
 Route.get('*', async ({response, session}) => {

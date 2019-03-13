@@ -717,11 +717,11 @@ class ArticalController {
 
     async email ({ view, response, session, request, params }) {
         try{
-            let mailResult = await docx.sendMail('mad_moon_lover@yahoo.com', 'Test Email', 'Text Mail', '<h1>Html Mail</h1>')
+            let mailResult = await docx.sendMail('m.mirsamie@gmail.com', 'Test Email', 'Text Mail', '<h1>Html Mail</h1>')
             console.log('Mail Result', mailResult)
         }catch(e) {
             console.log('Send Mail Error')
-            console.log(e)
+            // console.log(e)
         }
         return 'ok';
     }

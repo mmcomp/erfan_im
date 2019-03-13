@@ -207,10 +207,11 @@ Follow: www.twitter.com/themehats
                             <p>
                                 To recover your password please fill in your email address
                             </p>
-                            <form>
+                            <form method="post" action="forget">
+                                <input type="hidden" name="_csrf" value="{{ csrf }}">
                                 <div class="form-group">
                                     <label for="forget-email" class="hide">Email</label>
-                                    <input type="email" class="form-control input-lg c-square" id="forget-email" placeholder="Email">
+                                    <input type="email" class="form-control input-lg c-square" name="forget_email" id="forget-email" placeholder="Email">
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Submit</button>
@@ -238,7 +239,7 @@ Follow: www.twitter.com/themehats
                             <p>
                                 Please fill in below form to create an account with us to submit article
                             </p>
-                            <form action="/signup" method="POST" id="signup-form" >
+                            <form action="/signup" method="POST" id="signup-form" id="signup_frm">
                                 <input type="hidden" name="_csrf" value="{{ csrf }}">
                                 <div class="form-group">
                                     <label for="signup-email" class="hide">Email</label>
@@ -274,7 +275,7 @@ Follow: www.twitter.com/themehats
                                     <textarea name="keywords" class="form-control input-lg c-square" id="keywords" placeholder="Keywords Camma Seperated"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Signup</button>
+                                    <button onclick="return preSignupCheck();" type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Signup</button>
                                     <a href="javascript:;" class="c-btn-forgot" data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
                                 </div>
                             </form>
@@ -317,7 +318,7 @@ Follow: www.twitter.com/themehats
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Login</button>
-                                    <!-- <a href="javascript:;" data-toggle="modal" data-target="#forget-password-form" data-dismiss="modal" class="c-btn-forgot">Forgot Your Password ?</a> -->
+                                    <a href="javascript:;" data-toggle="modal" data-target="#forget-password-form" data-dismiss="modal" class="c-btn-forgot">Forgot Your Password ?</a>
                                 </div>
                                 <div class="clearfix">
                                     <div class="c-content-divider c-divider-sm c-icon-bg c-bg-grey c-margin-b-20">

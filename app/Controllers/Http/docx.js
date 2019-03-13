@@ -2,7 +2,8 @@ const StreamZip = require('node-stream-zip');
 const fs = require('fs')
 const dxe = require('docx-extractor')
 const dns = require('dns');
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
+let addressIndex = 0
 
 module.exports = {
 
@@ -107,45 +108,72 @@ module.exports = {
         )
     },
 
+    _sendMail: function (addresses, email, subject, text, html, _sendMail, fn) {
+      let i = addressIndex
+      // console.log('Send mail function', _sendMail)
+      // console.log('Sending email mx ', addresses[i].exchange)
+      try{
+        if(!addresses[i]) {
+          // console.log('finish trying')
+          fn(false)
+          return false
+        }
+        // console.log('Sending email mx ', addresses[i].exchange)
+        let transporter = nodemailer.createTransport({
+          host: addresses[i].exchange,
+          port: 25,
+          secure: false,
+        })
+
+        let mailOptions = {
+          from: '"iMaqPress" <info@imaqpress.com>',
+          to: email,
+          subject: subject,
+          text: text,
+          html: html,
+        }
+      
+        transporter.sendMail(mailOptions).then(info => {
+          addressIndex = 0
+          fn(info)
+        }).catch(error => {
+          // console.log('Error happend', error)
+          // console.log('Error sending')
+          addressIndex++
+          _sendMail(addresses, email, subject, text, html, _sendMail, fn)
+        })
+
+      }catch(e) {
+        // console.log('Error sending', e)
+        // console.log("Error total")
+        addressIndex++
+        _sendMail(addresses, email, subject, text, html, _sendMail, fn)
+      }
+    },
+
     sendMail: function(email, subject, text, html) {
-        return new Promise(
-          function(resolve, reject) {
-            // const email = 'arjunphp@gmail.com';
-            const domain = email.split('@')[1];  
-            dns.resolve(domain, 'MX', function(err, addresses) {    
-              if (err) {
-                console.log('No MX record exists, so email is invalid.');  
-                reject('No MX record exists, so email is invalid.');  
-              } else if (addresses && addresses.length > 0) {      
-                console.log('This MX records exists So I will accept this email as valid.', addresses);
-                for(var i = 0;i < addresses.length;i++) {
-                  try{
-                    let transporter = nodemailer.createTransport({
-                      host: addresses[i].exchange,
-                      port: 25,
-                      secure: false,
-                    });
-    
-                    let mailOptions = {
-                      from: '"iMaqPress" <info@imaqpress.com>',
-                      to: email,
-                      subject: subject,
-                      text: text,
-                      html: html,
-                    };
-                  
-    
-                    transporter.sendMail(mailOptions).then(info => {
-                        resolve(info);
-                    })
-                  }catch(e) {
-    
-                  }
+      var _sendMail = this._sendMail
+      return new Promise(
+        function(resolve, reject) {
+          // const email = 'arjunphp@gmail.com';
+          const domain = email.split('@')[1]
+          dns.resolve(domain, 'MX', function(err, addresses) {    
+            if (err) {
+              console.log('No MX record exists, so email is invalid.')
+              reject('No MX record exists, so email is invalid.'); 
+            } else if (addresses && addresses.length > 0) {      
+              // console.log('This MX records exists So I will accept this email as valid.', addresses)
+              _sendMail(addresses, email, subject, text, html, _sendMail, function(info) {
+                if(info===false) {
+                  reject()
+                }else {
+                  resolve(info)
                 }
-              }
-            });
-          }
-        );
+              })
+            }
+          })
+        }
+      );
     }
 }
 
