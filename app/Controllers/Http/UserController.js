@@ -98,7 +98,9 @@ class UserController {
             await user.save()
         }
 
-        return guser
+        await auth.login(user)
+
+        return redirect('/')
     }
 
     async home ({ view, auth, session }) {
