@@ -101,15 +101,15 @@ class UserController {
         await auth.login(user)
         msg = 'Logged in successfully'
 
-        let user = await User.query().where('id', auth.user.id).with('permissions').first()
-        // console.log('User', user.toJSON())
+        user = await User.query().where('id', auth.user.id).with('permissions').first()
+
         user = user.toJSON()
         let permissions = {}
         for(let i = 0;i < user.permissions.length;i++) {
             permissions[user.permissions[i].permission_key] = true
         }
         user.permissions = permissions
-        // console.log(user)
+
         session.put('user', user)
 
         return response.route('home', {message: msg, isLogged: true})
