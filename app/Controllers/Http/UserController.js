@@ -99,7 +99,7 @@ class UserController {
         }
 
         await auth.login(user)
-        msg = 'Logged in successfully'
+        let msg = 'Logged in successfully'
 
         user = await User.query().where('id', auth.user.id).with('permissions').first()
 
