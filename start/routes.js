@@ -80,6 +80,17 @@ Route.any('developer', async ({view, session}) => {
 
 Route.any('email', 'ArticalController.email')
 
+
+Route.get('google', async ({ ally }) => {
+    await ally.driver('google').redirect()
+})
+
+Route.get('google/authenticated', async ({ ally }) => {
+    const user = await ally.driver('google').getUser()
+
+    return user
+})
+
 Route.get('/', 'UserController.home').as('home')
 
 Route.get('*', async ({response, session}) => {
