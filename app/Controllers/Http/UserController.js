@@ -100,7 +100,7 @@ class UserController {
 
         await auth.login(user)
 
-        return redirect('/')
+        return response.route('home', {message: '', isLogged: true})
     }
 
     async home ({ view, auth, session }) {
