@@ -39,7 +39,7 @@ Route.any('keyword/:keyword', 'JournalController.keyword')
 
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
-Route.any('journal_artical_submission', 'ArticalController.createForJournal')
+Route.any('journal_artical_submission/:journal_id', 'ArticalController.createForJournal')
 
 Route.any('article_id/:article_id', 'ArticalController.profile')
 

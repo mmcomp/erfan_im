@@ -114,7 +114,7 @@ class ArticalController {
                 artical.file_path = 'static/articals/' + filename
                 let ref = await docx.reference(Helpers.publicPath('static/articals') + '/' + filename)
                 if(ref.length>0) {
-                    artical.ref = ref.join("\n")
+                    artical.ref = ref.join("<br/>\n")
                 }
             }
 
@@ -134,7 +134,7 @@ class ArticalController {
         return response.route('home', {isLogged: isLogged})
     }
 
-    async createForJournal ({ view, response, session, request }) {
+    async createForJournal ({ view, response, session, request, params }) {
         let isLogged = false, user = {}, msg = '', msg_type = ''
         if(session.get('user')) {
             isLogged = true
@@ -149,15 +149,21 @@ class ArticalController {
             return response.route('home', {isLogged: isLogged})
         }
 
-        if(!session.get('selected_journal')) {
+        if(!params || !params.journal_id) {
             session.put('msg', 'Wrong Usage')
             session.put('msg_type', 'danger')
             return response.route('home', {isLogged: isLogged})
         }
 
+        // if(!session.get('selected_journal')) {
+        //     session.put('msg', 'Wrong Usage')
+        //     session.put('msg_type', 'danger')
+        //     return response.route('home', {isLogged: isLogged})
+        // }
+
         if(request.method()=='GET') {
             let journals = await Journal.all()
-            let theJournalId  = parseInt(session.get('selected_journal'), 10)
+            let theJournalId  = parseInt(params.journal_id, 10)//parseInt(session.get('selected_journal'), 10)
 
             return view.render('artical.create', { 
                 isLogged: isLogged,
@@ -414,6 +420,7 @@ class ArticalController {
                 article.publish_date = mainArticle.publish_date
                 
             }else if(request.file('image_upload')) {
+                console.log('uploading image')
                 const imageUpload = request.file('image_upload', {
                     types: ['image'],
                     size: '2mb'
@@ -428,6 +435,7 @@ class ArticalController {
                     console.log(imageUpload.error())
                 }else {
                     uploadedImage = '/static/img/uploads/' + filename
+                    console.log('Upload done', uploadedImage)
                 }
             }else if(request.all()['doi']) {
                 mainArticle.doi = request.all()['doi']

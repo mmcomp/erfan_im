@@ -81,6 +81,9 @@ module.exports = {
                         refs = null
                       }else {
                         refs = refs[refs.length-1].split(':')
+                        // console.log('Refs when split by ";" :')
+                        // console.log(refs)
+                        var refIndex = 1
                         for(let i = 0;i < refs.length;i++) {
                           theRef = refs[i]
                           if(i>0) {
@@ -89,15 +92,18 @@ module.exports = {
                           if(refs[i+1]) {
                             theRef += ':' + refs[i+1].split('.')[0]
                           }
-                          ok = false
-                          for(let j = 0;j < usedRefs.length;j++) {
-                            if(theRef.indexOf(usedRefs[j])>=0) {
-                              ok = true
-                            }
+                          // ok = false
+                          // for(let j = 0;j < usedRefs.length;j++) {
+                          //   if(theRef.indexOf(usedRefs[j])>=0) {
+                          //     ok = true
+                          //   }
+                          // }
+                          // if(ok) {
+                          if(theRef!='') {
+                            references.push(refIndex + ' : ' + theRef)
+                            refIndex++
                           }
-                          if(ok) {
-                            references.push(theRef)
-                          }
+                          // }
                         }
                       }
                       console.log(references)

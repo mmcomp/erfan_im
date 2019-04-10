@@ -258,7 +258,7 @@ class JournalController {
                 .where('running_title', 'like', '%' + searchTitle + '%')
                 .orWhere('full_title', 'like', '%' + searchTitle + '%')
             }
-          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+          }).where('journal_id', theJournal.id).where('status', 'published').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -280,7 +280,7 @@ class JournalController {
                 .where('running_title', 'like', '%' + searchTitle + '%')
                 .orWhere('full_title', 'like', '%' + searchTitle + '%')
             }
-          }).where('journal_id', theJournal.id).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+          }).where('journal_id', theJournal.id).where('status', 'published').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {

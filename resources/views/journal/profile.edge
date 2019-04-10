@@ -59,18 +59,30 @@
                         <div class="col-md-6">
                             <!-- Begin: Title 1 component -->
                             <div class="c-content-title-1" data-height="height">
-                                <h3 id="name" class="c-font-uppercase c-font-bold">{{journal.name}}</h3>
-                                <p id="description" class="c-font-uppercase c-font-sbold">
+                                <h3 id="name" class="c-font-uppercase c-font-bold editor" 
+                                @if(user.group_id==1 || user.group_id==2)
+                                contenteditable="true"
+                                @endif
+                                >{{journal.name}}</h3>
+                                <p id="description" class="c-font-uppercase c-font-sbold editor" 
+                                @if(user.group_id==1 || user.group_id==2)
+                                contenteditable="true"
+                                @endif
+                                >
                                     {{journal.description}}
                                 </p>
-                                <a href="/journal_artical_submission" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</a>
+                                <a href="/journal_artical_submission/{{ journal.id }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Submit Manuscript</a>
                             </div>
                             <!-- End-->
                         </div>
                         <div class="col-md-6">
                             <div class="c-content-v-center c-bg-red" data-height="height">
                                 <div class="c-wrapper">
-                                    <div class="c-body editor" id="google_indexes">
+                                    <div class="c-body editor" id="google_indexes" 
+                                    @if(user.group_id==1 || user.group_id==2)
+                                    contenteditable="true"
+                                    @endif
+                                    >
                                         {{{ journal.google_indexes?journal.google_indexes:'<h3 class="c-font-white c-font-bold">Indexed in Google Scholar, DOAJ, DOI, CrossRef, HINARI etc.</h3>' }}}
                                     </div>
                                 </div>
@@ -129,8 +141,17 @@
                                     active
                                     @endif
                                     " id="tab_{{ ($loop.index + 1) }}">
-                                        <div id="tb{{ ($loop.index + 1) }}_content" class="editor tbcon">
-                                                {{{ extr.tbcontent }}}
+                                        @if(user.group_id==1 || user.group_id==2)
+                                        <a href="#" style="float: right;" onclick="return deleteTab({{ ($loop.index + 1) }});" >
+                                            <i class="fa fa-times-circle" style="color: red;"></i>
+                                        </a>
+                                        @endif
+                                        <div id="tb{{ ($loop.index + 1) }}_content" class="editor tbcon" 
+                                        @if(user.group_id==1 || user.group_id==2)
+                                        contenteditable="true"
+                                        @endif
+                                        >
+                                            {{{ extr.tbcontent }}}
                                         </div>
                                     </div>
                                     @endeach
@@ -156,7 +177,7 @@
                                         <p>
                                             <h3>Please Insert New Tab Name and Content Here</h3>
                                             <input type="text" id="tb" placeholder="Tab Name" />
-                                            <div id="tb-content" class="editor">Content</div>
+                                            <div id="tb-content" class="editor" contenteditable="true">Content</div>
                                             <a class="btn btn-success pull-right" href="javascript:addTab();">Add</a>
                                         </p>
                                     </div>
@@ -199,14 +220,15 @@
                 </div>
                 <input type="hidden" name="tabdata" id="tabdata" />
                 <input type="hidden" name="google_indexes" id="google_indexes-input" />
-                <!--
+                
                 <input type="hidden" name="name" id="name-input" />
                 <input type="hidden" name="description" id="description-input" />
-                -->
+                
             </form>
             <a class="btn btn-success pull-right" href="javascript:saveData();">Save</a>
             <h3 onclick="sendImage();" style="cursor: pointer;">
-                <img src="{{ uploadedImage }}" style="width: 30px;" />
+                <!--<img src="{{ uploadedImage }}" style="width: 30px;" />-->
+                <input id="image-url" value="{{ uploadedImage }}" readonly style="width: 310px;border: none;cursor: pointer;" />
             </h3>
             <form method="post"  enctype="multipart/form-data">
                 {{ csrfField() }}
@@ -244,11 +266,13 @@
                                         <ul class="c-content-recent-posts-1">
                                             @each(art in articles.recentPublished.data)
                                             <li>
+                                                <!--
                                                 <div class="c-image">
                                                     <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
                                                 </div>
+                                                -->
                                                 <div class="c-post">
-                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                                                    <a class="c-title" href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
                                                         {{ art.updated_at }}
                                                     </div>
@@ -314,9 +338,11 @@
                                         <ul class="c-content-recent-posts-1">
                                             @each(art in articles.highlyCited.data)
                                             <li>
+                                                <!--
                                                 <div class="c-image">
                                                     <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
                                                 </div>
+                                                -->
                                                 <div class="c-post">
                                                     <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
@@ -483,11 +509,13 @@
         <!-- END: PAGE CONTENT -->
     </div>
     <!-- END: PAGE CONTAINER -->
+
     @!component('components.foot')
 
     @!component('components.scripts')
     @if(user.group_id==1 || user.group_id==2)
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/inline/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
+    <!--<script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/inline/ckeditor.js"></script>-->
     <!--<script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>-->
     <script>
         var lastid = 3;
@@ -498,37 +526,53 @@
                 alert('No Image was Uploaded yet!');
                 return false;
             }
-            var selected_editor = parseInt($("#selected_editor").val(), 10);
-            if(isNaN(selected_editor) || selected_editor<=-1) {
-                alert('No Target Selected for Image');
-                return false;
-            }
-            var data = editors[selected_editor].getData();
-            editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
+            /* Get the text field */
+            var copyText = document.getElementById("image-url");
+
+            /* Select the text field */
+            copyText.select();
+
+            /* Copy the text inside the text field */
+            document.execCommand("copy");
+
+            /* Alert the copied text */
+            alert("Copied the Image Url: " + copyText.value);
+            // var selected_editor = parseInt($("#selected_editor").val(), 10);
+            // if(isNaN(selected_editor) || selected_editor<=-1) {
+            //     alert('No Target Selected for Image');
+            //     return false;
+            // }
+            // var data = editors[selected_editor].getData();
+            // editors[selected_editor].setData('<img src="' + uploadedImage + '" />' + data);
         }
         function editorify() {
-            // CKEDITOR.disableAutoInline = true;
+            CKEDITOR.disableAutoInline = true;
             // CKEDITOR.inline( 'editor1' );
             // var start = true;
             $(".editor").each(function(id, field){
-                console.log(id, field);
-                InlineEditor
-                .create( field )
-                .then(theEditor => {
-                    editors.push(theEditor);
-                    $(field).prop('editorindex', editors.length-1);
-                    $(field).click(function(){
-                        // console.log('Click', this.editorindex);
-                        if(!isNaN(parseInt(this.editorindex, 10))){
-                            $("#selected_editor").val(parseInt(this.editorindex, 10));
-                        }
-                        // console.log(editors[this.editorindex].getData());
-                    });
-                })
-                .catch( error => {
-                        console.error( error );
-                    } 
-                );
+                console.log(field.id);
+                // CKEDITOR.disableAutoInline = true;
+                // CKEDITOR.inline( field.id );
+                // InlineEditor
+                // .create( field )
+                // .then(theEditor => {
+                //     editors.push(theEditor);
+                //     $(field).prop('editorindex', editors.length-1);
+                //     $(field).click(function(){
+                //         // console.log('Click', this.editorindex);
+                //         if(!isNaN(parseInt(this.editorindex, 10))){
+                //             $("#selected_editor").val(parseInt(this.editorindex, 10));
+                //         }
+                //         // console.log(editors[this.editorindex].getData());
+                //     });
+                // })
+                // .catch( error => {
+                //         console.error( error );
+                //     } 
+                // );
+
+                CKEDITOR.inline( field );
+
                 // if(start) {
                 // CKEDITOR.disableAutoInline = true;
                 // CKEDITOR.inline( field , {
@@ -550,6 +594,14 @@
             $("#tb").val('');
             $("#tb-content").html('Content');
         }
+        function deleteTab(index) {
+            console.log('delete tab', index);
+            if(confirm('Are you sure?')) {
+                $("#tab_" + index).remove();
+                $("#tb" + index).parent().remove();
+            }
+            return false;
+        }
         function saveData() {
             var tabs = [], tmp = {}, theid = 1;
             $(".tbs").each(function(id, field) {
@@ -566,8 +618,8 @@
             console.log(tabs);
             $("#tabdata").val(JSON.stringify(tabs));
             $("#google_indexes-input").val($("#google_indexes").html());
-            // $("#name-input").val($("#name").html());
-            // $("#description-input").val($("#description").html());
+            $("#name-input").val($("#name").html());
+            $("#description-input").val($("#description").html());
             $("#tabdata-form").submit();
         }
         editorify();
