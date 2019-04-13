@@ -88,8 +88,13 @@
                     <div class="form-group c-margin-t-40">
                       <div class="col-sm-offset-4 col-md-8">
                         <button type="submit" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">
-                          Update Information
+                          Update
                         </button>
+                        @if(user.group_id == 1 || user.group_id == 2)
+                        <a href="#" onclick="return deleteUser({{ user.id }});" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold" style="background: #ce1b20 !important;">
+                          Delete
+                        </a>
+                        @endif
                       </div>
                     </div>
                     {{ csrfField() }}
@@ -636,7 +641,10 @@
     </div>
     -->
 <!-- END: CONTENT/MISC/ABOUT-1 -->
-
+<form method="post" id="del-frm">
+    {{ csrfField() }}
+    <input type="hidden" id="delete_id" name="delete_id" value="{{ selected_user.id }}" />
+</form>
 @!component('components.foot')
 
 @!component('components.scripts')
@@ -649,6 +657,12 @@
     }else {
       $("#frm1").submit();
     }
+  }
+  function deleteUser(user_id) {
+    if(confirm('Are You sure?!')) {
+      $("#del-frm").submit();
+    }
+    return false;
   }
 </script>
 </body>

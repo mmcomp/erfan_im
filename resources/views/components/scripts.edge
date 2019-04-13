@@ -53,25 +53,25 @@
                 hideThumbsUnderResolution: 0
             });
 
-            $("#signup-form").submit(function(event){
-                var thePassword = $("#signup-password").val();
-                if(thePassword.length>=8) {
-                    var a1 = /[A-Z]+/g;
-                    var a2 = /[a-z]+/g;
-                    var a3 = /[0-9]+/g;
-                    var a4 = /[@!.()&*^%$#]+/g;
+            // $("#signup-form").submit(function(event){
+            //     var thePassword = $("#signup-password").val();
+            //     if(thePassword.length>=8) {
+            //         var a1 = /[A-Z]+/g;
+            //         var a2 = /[a-z]+/g;
+            //         var a3 = /[0-9]+/g;
+            //         var a4 = /[@!.()&*^%$#]+/g;
 
-                    if(a1.test(thePassword) && a2.test(thePassword) && a3.test(thePassword) && a4.test(thePassword)) {
-                        return true;
-                    }else {
-                        alert('Password should be alphanumeric + one symbol');
-                    }
+            //         if(a1.test(thePassword) && a2.test(thePassword) && a3.test(thePassword) && a4.test(thePassword)) {
+            //             return true;
+            //         }else {
+            //             alert('Password should be alphanumeric + one symbol');
+            //         }
 
-                }else {
-                    alert('Password is shorter than 8 charactors');
-                }
-                event.preventDefault();
-            });
+            //     }else {
+            //         alert('Password is shorter than 8 charactors');
+            //     }
+            //     event.preventDefault();
+            // });
             
             let msg = '{{msg}}';
             let msg_type = '{{msg_type}}';

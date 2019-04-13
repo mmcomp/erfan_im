@@ -520,7 +520,7 @@ class JournalController {
             user = session.get('user')
         }
 
-        let partners = await User.query().with('country').groupBy('university_institute').fetch()
+        let partners = await User.query().where('status', 'enabled').with('country').groupBy('university_institute').fetch()
         partners =  partners.toJSON()
         
         console.log('Partners')

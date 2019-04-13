@@ -123,6 +123,11 @@ class UserController {
         
         let user = await User.query().where('email', guser._original.email).first()
         if(!user) {
+            let name_index = 0
+            user = await User.query().where('lname', lname).where('fname', fname).orderBy('name_index', 'desc').first()
+            if(user) {
+                name_index = user.name_index+1
+            }
             user = new User
             user.email = guser._original.email
             user.fname = fname
@@ -220,6 +225,12 @@ class UserController {
             return response.redirect('/')
         }
 
+        let name_index = 0
+        user = await User.query().where('lname', lname).where('fname', fname).orderBy('name_index', 'desc').first()
+        if(user) {
+            name_index = user.name_index+1
+        }
+
         user = new User
         user.email = email
         user.password = password
@@ -227,6 +238,7 @@ class UserController {
         user.lname = lname
         user.country_id = country_id
         user.university_institute = university_institute
+        user.name_index = name_index
         await user.save()
 
         let keywords = request.all()['keywords']
@@ -286,7 +298,7 @@ class UserController {
                     cities.push(journal.city_id)
                 }
             }
-            let users = await User.all()
+            let users = await User.query().where('status', 'enabled').fetch()
             users = users.toJSON()
             let directors = []
             let chiefEditors = []
@@ -455,12 +467,16 @@ class UserController {
         if(params.author_name) {
             let author_name = params.author_name.split('-')
             // console.log('Author Name', author_name, author_name.length)
-            let fname = (author_name.length==2)?author_name[0]:''
-            let lname = (author_name.length==2)?author_name[1]:author_name[0]
-            // console.log('Fname', fname, 'Lname', lname)
-            selected_user = await User.query().where('fname', fname).where('lname', lname).first()
+            let fname = (author_name.length>=2)?author_name[0]:''
+            let lname = (author_name.length>=2)?author_name[1]:author_name[0]
+            let name_index = (author_name.length==3)?parseInt(author_name[2], 10):0
+            if(isNaN(name_index)) {
+                name_index = 0
+            }
+            console.log('Fname', fname, 'Lname', lname, 'name_index', name_index)
+            selected_user = await User.query().where('status', 'enabled').where('fname', fname).where('lname', lname).where('name_index', name_index).first()
         }else if(params.author_id) {
-            selected_user = await User.find(params.author_id)
+            selected_user = await User.query().where('id', params.author_id).where('status', 'enabled').first()
         }else {
             session.put('msg', 'Wrong Usage')
             session.put('msg_type', 'danger')
@@ -473,6 +489,13 @@ class UserController {
             return response.redirect('/')
         }
 
+        if(request.all()['delete_id']) {
+            console.log('Deleting User', request.all()['delete_id'])
+            await User.query().where('id', request.all()['delete_id']).update({
+                status: 'deleted',
+            })
+            return response.redirect('back')
+        }
         if(request.all()['email']) {
             selected_user.email = request.all()['email']
             selected_user.academic_page = request.all()['academic_page']

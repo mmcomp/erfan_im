@@ -601,19 +601,36 @@
         @!component('components.scripts', {msg: msg, msg_type: msg_type})
     <script>
         function preSignupCheck() {
+            console.log('preSignup');
             var selectedSignUpEmail = $("#signup-email").val().trim();
             if(selectedSignUpEmail.length<=3) {
                 alert('Email is requierd!');
                 return false;
             }
+            console.log('check Email', '/email_exists/' + selectedSignUpEmail);
             $.get('/email_exists/' + selectedSignUpEmail, function(result) {
+                console.log('Result', result);
                 if(result.result===true) {
-                    $("#signup_frm").submit();
+                    console.log($("#signup-frm"));
+                    $("#signup-frm").submit();
                 }else {
                     alert('Email is already signedup!');
                 }
+            }).fail(function() {
+                console.log('failed!');
             });
             
+            // fetch('/email_exists/' + selectedSignUpEmail)
+            //   .then(function (response) {
+            //     return response.json();
+            //   }).then(function (result) {
+            //     if(result.result===true) {
+            //         $("#signup_frm").submit();
+            //     }else {
+            //         alert('Email is already signedup!');
+            //     }
+            //   })
+
             return false;
         }
     </script>
