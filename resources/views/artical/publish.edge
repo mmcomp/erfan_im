@@ -449,7 +449,27 @@
       </div>
   </div>
 <!-- END: SIMILAR ARTICLES -->
-
+<div class="modal fade" id="refModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content c-square">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body">
+          <h5 class="modal-title" id="refLabel" style="background: #eaeaea;padding: 10px;font-size: 12px;">
+              Irfan Maqsood, Muhammad, Maryam M. Matin, Ahmad Reza Bahrami, and Mohammad M.
+              Ghasroldasht. "Immortality of cell lines: challenges and advantages of establishment."
+              Cell biology international 37, no. 10 (2013): 1038-1045.
+          </h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
+          data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 @!component('components.foot')
 
 @!component('components.scripts', {msg: msg, msg_type: msg_type})
@@ -458,9 +478,49 @@
   <input type="hidden" name="pdf" value="pdf" />
 </form>
 <script>
+  var theArticle = {{{ toJSON(article) }}};
+  var articleRefs = [];
+  if(theArticle.refs) {
+    try{
+      articleRefs = JSON.parse(theArticle.refs);
+    }catch(e){}
+  }
+  var docReady = false;
   function requestPDF() {
     $("#pdf-form").submit();
   }
+  function showRef(inp) {
+    $("#refLabel").text(inp);
+    $("#refModal").modal('show');
+    // alert(inp);
+  }
+  function openRef(ref_id) {
+    if(ref_id>1) {
+      console.log('opening ref id', ref_id);
+      ref_id--;
+      if(articleRefs[ref_id]){
+        showRef(articleRefs[ref_id]);
+      }
+    }
+  }
+  function handleHashData(hash) {
+    if(hash.indexOf('_ENREF_')==0) {
+      var ref_id = hash.replace('_ENREF_', '');
+      openRef(ref_id);
+    }
+  }
+  $("a").click(function() {
+    if(docReady) {
+      console.log('clicked on ', this);
+      x = (this.href.split('#').length>1)?this.href.split('#')[1]:'';
+      if(x!='') {
+        handleHashData(x);
+      }
+    }
+  });
+  $(document).ready(function () {
+    docReady = true;
+  });
 </script>
 </body>
 

@@ -80,6 +80,8 @@ module.exports = {
                       if(refs.length<=1) {
                         refs = null
                       }else {
+                        // let searchRes = refs[refs.length-1].search(/([0-9])([:])([0-9])+/g)
+                        // console.log('Search Result', searchRes)
                         refs = refs[refs.length-1].split(':')
                         // console.log('Refs when split by ";" :')
                         // console.log(refs)
@@ -100,7 +102,7 @@ module.exports = {
                           // }
                           // if(ok) {
                           if(theRef!='') {
-                            references.push(refIndex + ' : ' + theRef)
+                            references.push(/*refIndex + ' : ' + */theRef)
                             refIndex++
                           }
                           // }

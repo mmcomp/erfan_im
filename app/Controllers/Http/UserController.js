@@ -457,7 +457,8 @@ class UserController {
 
     async profile ({ request, auth, view, response, session, params }) {
         let user = session.get('user')
-        // console.log('params', params)
+        console.log('params', params)
+        console.log('URL', request.url())
         if(!params) {
             session.put('msg', 'Wrong Usage')
             session.put('msg_type', 'danger')

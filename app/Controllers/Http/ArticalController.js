@@ -115,6 +115,9 @@ class ArticalController {
                 let ref = await docx.reference(Helpers.publicPath('static/articals') + '/' + filename)
                 if(ref.length>0) {
                     artical.ref = ref.join("<br/>\n")
+                    artical.refs = JSON.stringify(ref)
+                }else {
+                    artical.refs = '[]'
                 }
             }
 
