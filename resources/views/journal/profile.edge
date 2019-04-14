@@ -189,6 +189,19 @@
                 </div>
             </div>
             @if(user.group_id==1 || user.group_id==2)
+            <h4>
+                In order to replace Journal Cover Image , you can upload it here.
+                @if(journal.cover_image_path && journal.cover_image_path!='')
+                    <a target="_blank" href="/{{ journal.cover_image_path }}">View</a>
+                @endif
+            </h4>
+            <form method="post"  enctype="multipart/form-data">
+                {{ csrfField() }}
+                <input type="file" name="cover_image_path" />
+                <button class="btn btn-success pull-left">
+                    Replace Cover Image
+                </button>
+            </form>
             <form method="post" id="tabdata-form">
                 {{ csrfField() }}
                 <div class="container">
@@ -230,6 +243,9 @@
                 <!--<img src="{{ uploadedImage }}" style="width: 30px;" />-->
                 <input id="image-url" value="{{ uploadedImage }}" readonly style="width: 310px;border: none;cursor: pointer;" />
             </h3>
+            <h4>
+                In order to include Image in Journal Tabs above, you need to upload tha image here and then use the upload address up here.
+            </h4>
             <form method="post"  enctype="multipart/form-data">
                 {{ csrfField() }}
                 <input type="hidden" id="selected_editor" name="selected_editor" value="{{ selected_editor }}" />
