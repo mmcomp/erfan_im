@@ -74,7 +74,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Journal</label>
 														<div class="col-md-6">
-															<select name="journal_id" class="form-control c-square c-theme" >
+															<select name="journal_id" id="journal_id" class="form-control c-square c-theme" >
 																<option>Journal</option>
 																@each(jour in journals)
 																	@if(jour.id==thejournal_id)
@@ -90,21 +90,21 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Full Title of Article</label>
 														<div class="col-md-6">
-															<input name="full_title" class="form-control c-square c-theme" type="text" placeholder="Article Title of 11-13 Words">
+															<input id="full_title" name="full_title" class="form-control c-square c-theme keyword-check" type="text" placeholder="Article Title of 11-13 Words">
 															<span class="help-block">Write down the full title of article</span>
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="col-md-4 control-label">Running Title of Article</label>
 														<div class="col-md-6">
-															<input name="running_title" class="form-control c-square c-theme" type="text" placeholder="Article Title of 3-5 Words">
+															<input id="running_title" name="running_title" class="form-control c-square c-theme keyword-check" type="text" placeholder="Article Title of 3-5 Words">
 															<span class="help-block">Write down the full title of article</span>
 														</div>
 													</div>
 													<div class="form-group">
 														<label class="col-md-4 control-label">One Sentence Summary of Article</label>
 														<div class="col-md-6">
-															<textarea name="summery" class="form-control c-square c-theme" rows="3"></textarea>
+															<textarea id="summery" name="summery" class="form-control c-square c-theme keyword-check" rows="3"></textarea>
 															<span class="help-block">Write down the summary of 70-150 characters</span>
 														</div>
 													</div>
@@ -232,6 +232,41 @@
 	$('select option:not(:selected)').prop('disabled',true);
 </script>
 @endif
+<script>	
+	function keywordCheck(dobj, fn) {
+		var inp = dobj.value;
+		var journal_id = $("#journal_id").val();
+		console.log('Check Keyword ', '/keyword_check/' + journal_id, { data: inp });
+		$.post('/keyword_check/' + journal_id, { 
+			data: inp,
+			_csrf: '{{ csrfToken }}',
+		}, function(result) {
+			console.log('result', result);
+			fn(result, dobj);
+		}).fail(function() {
+			console.log('Error connection');
+			fn(false, dobj);
+		});
+	}
+	$(".keyword-check").blur(function() {
+		var dobj = this;
+		console.log('checking', dobj);
+		$("#" + dobj.id + "_percent").remove();
+		keywordCheck(dobj, function(res, dobj) {
+			if(res!==false) {
+				var percent = 25;
+				if(res.data.c1>0) {
+					percent = 100;
+				}else if(res.data.c2>0) {
+					percent = 75;
+				}else if(res.data.c3>0) {
+					percent = 50;
+				}
+				$(dobj).after('<span style="float: right;color: red;" id="' + dobj.id + '_percent">' + percent + '%</span>');
+			}
+		});
+	});
+</script>
 </body>
 </html>
 

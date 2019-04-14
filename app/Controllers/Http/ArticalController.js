@@ -21,23 +21,49 @@ class ArticalController {
         let articleKeyword, journalKeywords = await JournalKeyword.query().where('journal_id', article.journal_id).fetch()
         journalKeywords = journalKeywords.toJSON()
         for(let journalKeyword of journalKeywords) {
-            if(article.running_title.indexOf(journalKeyword.theword)>=0){
+            if(article.running_title.toLowerCase().indexOf(journalKeyword.theword.toLowerCase())>=0){
                 articleKeyword = new ArticleKeyword
                 articleKeyword.article_id = article.id
                 articleKeyword.journal_keywords_id = journalKeyword.id
                 await articleKeyword.save()
-            }else if(article.full_title.indexOf(journalKeyword.theword)>=0){
+            }else if(article.full_title.toLowerCase().indexOf(journalKeyword.theword.toLowerCase())>=0){
                 articleKeyword = new ArticleKeyword
                 articleKeyword.article_id = article.id
                 articleKeyword.journal_keywords_id = journalKeyword.id
                 await articleKeyword.save()
-            }else if(article.summery.indexOf(journalKeyword.theword)>=0){
+            }else if(article.summery.toLowerCase().indexOf(journalKeyword.theword.toLowerCase())>=0){
                 articleKeyword = new ArticleKeyword
                 articleKeyword.article_id = article.id
                 articleKeyword.journal_keywords_id = journalKeyword.id
                 await articleKeyword.save()
             }
         }
+    }
+
+    async keywordCheck({ view, response, session, request, params }) {
+        let out = {
+            error: "Journal Id not defined!",
+            data: null,
+        }
+        if(params && params.journal_id) {
+            let journalKeywords = await JournalKeyword.query().where('journal_id', params.journal_id).fetch()
+            journalKeywords = journalKeywords.toJSON()
+            out.error = null
+            // out.data = journalKeywords
+            let inp = String(request.all()['data']).toLowerCase()
+            let result = {
+                c1: 0,
+                c2: 0,
+                c3: 0,
+            }
+            for(let jK of journalKeywords) {
+                if(inp.indexOf(jK.theword.toLowerCase())>=0) {
+                    result[jK.category]++
+                }
+            }
+            out.data = result
+        }
+        return out
     }
 
     async create ({ view, response, session, request }) {
