@@ -247,7 +247,7 @@ Follow: www.twitter.com/themehats
                             <p>
                                 Please fill in below form to create an account with us to submit article
                             </p>
-                            <form action="/signup" method="POST" id="signup-form" id="signup_frm">
+                            <form action="/signup" method="POST" id="signup_frm">
                                 <input type="hidden" name="_csrf" value="{{ csrf }}">
                                 <div class="form-group">
                                     <label for="signup-email" class="hide">Email</label>
@@ -272,7 +272,7 @@ Follow: www.twitter.com/themehats
                                 <div class="form-group">
                                     <label for="signup-country" class="hide">Country</label>
                                     <select name="country_id" class="form-control input-lg c-square" id="signup-country">
-                                        <option>Country</option>
+                                        <option value="0">Country</option>
                                         @each(county in country)
                                         <option value="{{ county.id }}">{{ county.COUNTRY_NAME }}</option>
                                         @endeach
@@ -283,7 +283,8 @@ Follow: www.twitter.com/themehats
                                     <textarea name="keywords" class="form-control input-lg c-square" id="keywords" placeholder="Keywords Camma Seperated"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button onclick="return preSignupCheck();" type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Signup</button>
+                                    <!-- onclick="return preSignupCheck();" -->
+                                    <a href="#" onclick="return submitSignup();" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Signup</a>
                                     <a href="javascript:;" class="c-btn-forgot" data-toggle="modal" data-target="#login-form" data-dismiss="modal">Back To Login</a>
                                 </div>
                             </form>

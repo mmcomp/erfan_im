@@ -601,24 +601,30 @@
         @!component('components.scripts', {msg: msg, msg_type: msg_type})
     <script>
         function preSignupCheck() {
-            console.log('preSignup');
-            var selectedSignUpEmail = $("#signup-email").val().trim();
-            if(selectedSignUpEmail.length<=3) {
-                alert('Email is requierd!');
-                return false;
-            }
-            console.log('check Email', '/email_exists/' + selectedSignUpEmail);
-            $.get('/email_exists/' + selectedSignUpEmail, function(result) {
-                console.log('Result', result);
-                if(result.result===true) {
-                    console.log($("#signup-frm"));
-                    $("#signup-frm").submit();
-                }else {
-                    alert('Email is already signedup!');
-                }
-            }).fail(function() {
-                console.log('failed!');
-            });
+            // console.log('preSignup');
+            // var selectedSignUpEmail = $("#signup-email").val().trim();
+            // if(selectedSignUpEmail.length<=3) {
+            //     alert('Email is requierd!');
+            //     return false;
+            // }
+            // var emailIsValid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(selectedSignUpEmail);
+            // console.log('Email', selectedSignUpEmail, 'IsValid', emailIsValid);
+            // if(!) {
+            //     alert('Email must be a valid email address');
+            //     return false;
+            // }
+            // console.log('check Email', '/email_exists/' + selectedSignUpEmail);
+            // $.get('/email_exists/' + selectedSignUpEmail, function(result) {
+            //     console.log('Result', result);
+            //     if(result.result===true) {
+            //         console.log($("#signup-frm"));
+            //         $("#signup-frm").submit();
+            //     }else {
+            //         alert('Email is already signedup!');
+            //     }
+            // }).fail(function() {
+            //     console.log('failed!');
+            // });
             
             // fetch('/email_exists/' + selectedSignUpEmail)
             //   .then(function (response) {

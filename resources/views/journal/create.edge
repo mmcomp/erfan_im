@@ -44,13 +44,13 @@
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="c-tab3-1">
                                     <div class="col-md-6 col-sm-12">
-										<form method="post"  class="form-horizontal" enctype="multipart/form-data">
+										<form method="post"  class="form-horizontal" id="journal-form" enctype="multipart/form-data">
 											<ul class="c-items">
 												<li>
 													<div class="form-group">
 														<label class="col-md-4 control-label">Journal Name</label>
 														<div class="col-md-6">
-															<input name="name" class="form-control c-square c-theme" type="text" placeholder="Journal Name or Proposed Name">
+															<input name="name" id="name" class="form-control c-square c-theme" type="text" placeholder="Journal Name or Proposed Name">
 															<span class="help-block">Write down the current or proposed name of journal</span>
 														</div>
 													</div>
@@ -59,7 +59,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">ISSN</label>
 														<div class="col-md-6">
-															<input name="issn" class="form-control c-square c-theme" type="text" placeholder="0000:0000">
+															<input name="issn" id="issn" class="form-control c-square c-theme" type="text" placeholder="0000:0000">
 															<span class="help-block">Leave blank if it is proposed journal</span>
 														</div>
 													</div>
@@ -68,7 +68,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Frequency</label>
 														<div class="col-md-6">
-															<input name="frequency" class="form-control c-square c-theme" type="text" placeholder="input">
+															<input name="frequency" id="frequency" class="form-control c-square c-theme" type="text" placeholder="input">
 															<span class="help-block">A block of help text.</span>
 														</div>
 													</div>
@@ -77,7 +77,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Publisher</label>
 														<div class="col-md-6">
-															<input name="publisher" class="form-control c-square c-theme" type="text" placeholder="Write the publishing organization or person"> 
+															<input name="publisher" id="publisher" class="form-control c-square c-theme" type="text" placeholder="Write the publishing organization or person"> 
 															<span class="help-block">A block of help text.</span>
 														</div>
 													</div>
@@ -99,7 +99,7 @@
 															<select class="form-control c-square c-theme the-city-select2">
 															</select>
 															-->
-															<span class="help-block">A block of help text.</span>
+															<span class="help-block">You must select you city from the List.</span>
 														</div>
 													</div>
 												</li>
@@ -107,7 +107,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Aim & Scope of Journal</label>
 														<div class="col-md-6">
-															<textarea name="description" class="form-control c-square c-theme" rows="3"></textarea>
+															<textarea name="description" id="description" class="form-control c-square c-theme" rows="3"></textarea>
 														</div>
 													</div>
 												</li>
@@ -115,9 +115,9 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Contact Name</label>
 														<div class="col-md-6">
-															<input name="contact_fname" class="form-control c-square c-theme" type="text" placeholder="ّFirst Name"> 
-															<input name="contact_lname" class="form-control c-square c-theme" type="text" placeholder="Last Name">
-															<input name="contact_position" class="form-control c-square c-theme" type="text" placeholder="Position in Journal">                                                                                                                                 
+															<input name="contact_fname" id="contact_fname" class="form-control c-square c-theme" type="text" placeholder="ّFirst Name"> 
+															<input name="contact_lname" id="contact_lname" class="form-control c-square c-theme" type="text" placeholder="Last Name">
+															<input name="contact_position" id="contact_position" class="form-control c-square c-theme" type="text" placeholder="Position in Journal">                                                                                                                                 
 															<span class="help-block">A block of help text.</span>
 														</div>
 													</div>
@@ -126,7 +126,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Contact Person's ID Document</label>
 														<div class="col-md-6">
-															<input name="communication_officer" class="form-control c-square c-theme" type="text" placeholder="Name the communication officer"> 
+															<input name="communication_officer" id="communication_officer" class="form-control c-square c-theme" type="text" placeholder="Name the communication officer"> 
 															<span class="help-block">A block of help text.</span>
 														</div>
 													</div>
@@ -135,7 +135,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Cell/Mobile Number</label>
 														<div class="col-md-6">
-															<input name="tell" class="form-control c-square c-theme" type="text" placeholder="Write your active mobile number"> 
+															<input name="tell" id="tell" class="form-control c-square c-theme" type="text" placeholder="Write your active mobile number"> 
 															<span class="help-block">Preferable way of communication</span>
 														</div>
 													</div>
@@ -144,7 +144,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Email</label>
 														<div class="col-md-6">
-															<input name="email" class="form-control c-square c-theme" type="text" placeholder="Write your communication email id"> 
+															<input name="email" id="email" class="form-control c-square c-theme" type="text" placeholder="Write your communication email id"> 
 															<span class="help-block">Preferable way of communication</span>
 														</div>
 													</div>
@@ -153,7 +153,7 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Web Site</label>
 														<div class="col-md-6">
-															<input name="web_site" class="form-control c-square c-theme" type="text" placeholder="Write your website URL"> 
+															<input name="web_site" id="web_site" class="form-control c-square c-theme" type="text" placeholder="Write your website URL"> 
 															<span class="help-block">Web Site Complete Address</span>
 														</div>
 													</div>
@@ -162,14 +162,14 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Cover Photo</label>
 														<div class="col-md-6">
-															<input name="cover_image" class="form-control c-square c-theme" type="file" > 
+															<input name="cover_image" id="cover_image" class="form-control c-square c-theme" type="file" > 
 															<span class="help-block">Image must be 304 × 427</span>
 														</div>
 													</div>
 												</li>
 											</ul>
 											<input type="hidden" name="_csrf" value="{{ csrfToken }}">
-											<button class="btn btn-lg c-btn-green c-btn-square c-btn-bold" >Submit Publishing Request</button>
+											<a href="#" onclick="return submitJournal();" class="btn btn-lg c-btn-green c-btn-square c-btn-bold" >Submit Publishing Request</a>
 										</form>
 								</div>
                                     <div class="col-md-6 col-sm-12">
@@ -255,6 +255,53 @@
 
 @!component('components.journals_create_scripts')
 
+	<script>
+		function submitJournal() {
+			if($("#name").val().trim().length<5) {
+				alert('Journal Name must be a proper Name at least 5 character.');
+				return false;
+			}
+			if($("#issn").val().trim().length>0) {
+				var issn = $("#issn").val().trim().split(':');
+				if(issn.length!=2) {
+					alert('ISSN must be in the format like 1234:5678');
+					return false;
+				}
+			}
+			if($("#frequency").val().trim().length<2) {
+				alert('Frequency must be a proper Name at least 2 character.');
+				return false;
+			}
+			if($("#publisher").val().trim().length<5) {
+				alert('Publisher must be a proper Name at least 5 character.');
+				return false;
+			}
+			if($("#city_id").val().trim()=='') {
+				alert('City must be selected.');
+				return false;
+			}
+			if (window.FileReader) {
+				var cover_image = document.getElementById('cover_image');
+				if(cover_image.files){
+					if(cover_image.files.length!=1) {
+						alert('You must select a cover image for the Journal.');
+						return false;
+					}else {
+						if(cover_image.files[0].type.indexOf('image')!==0) {
+							alert('You must select an image for the Cover of the Journal.');
+							return false;
+						}else if(cover_image.files[0].size > 2*1024*1024){
+							alert('Image size should not exceed 2MB')
+							return false;
+						}
+					}
+				}
+			}
+			console.log('submit journal');
+			$("#journal-form").submit();
+			return false;
+		}
+	</script>
 </body>
 </html>
 

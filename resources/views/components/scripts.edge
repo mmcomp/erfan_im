@@ -20,6 +20,52 @@
     <script src="/assets/base/js/components.js" type="text/javascript"></script>
     <script src="/assets/base/js/app.js" type="text/javascript"></script>
     <script>
+        function checkEMail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+        }
+        function submitSignup(){
+            var thePassword = $("#signup-password").val();
+            if(thePassword.length>=8) {
+                var a1 = /[A-Z]+/g;
+                var a2 = /[a-z]+/g;
+                var a3 = /[0-9]+/g;
+                var a4 = /[@!.()&*^%$#]+/g;
+
+                if(a1.test(thePassword) && a2.test(thePassword) && a3.test(thePassword) && a4.test(thePassword)) {
+                    var theEmail = $("#signup-email").val().trim();
+                    var emailValid = checkEMail(theEmail);
+                    console.log('Email', theEmail, 'Validation', emailValid);
+                    if(emailValid) {
+                        console.log('check Email', '/email_exists/' + theEmail);
+                        $.get('/email_exists/' + theEmail, function(result) {
+                            console.log('Result', result);
+                            if(result.result===true) {
+                                console.log('Email is new');
+                                if($("#signup-firstname").val().trim().length>=3 && $("#signup-lastname").val().trim().length>=3) {
+                                    $("#signup_frm").submit();
+                                    return false;
+                                }else {
+                                    alert('You must enter a proper value for FirstName and LastName Fields.');
+                                }
+                            }else {
+                                alert('Email is already signedup!');
+                            }
+                        }).fail(function() {
+                            console.log('failed!');
+                            alert('Error Network Connection!');
+                        });
+                    }else {
+                        alert('Email must be a valid email address');
+                    }
+                }else {
+                    alert('Password should be alphanumeric + one symbol');
+                }
+
+            }else {
+                alert('Password is shorter than 8 charactors');
+            }
+            return false;
+        }
         $(document).ready(function() {
             App.init(); // init core   
 
@@ -53,25 +99,7 @@
                 hideThumbsUnderResolution: 0
             });
 
-            // $("#signup-form").submit(function(event){
-            //     var thePassword = $("#signup-password").val();
-            //     if(thePassword.length>=8) {
-            //         var a1 = /[A-Z]+/g;
-            //         var a2 = /[a-z]+/g;
-            //         var a3 = /[0-9]+/g;
-            //         var a4 = /[@!.()&*^%$#]+/g;
-
-            //         if(a1.test(thePassword) && a2.test(thePassword) && a3.test(thePassword) && a4.test(thePassword)) {
-            //             return true;
-            //         }else {
-            //             alert('Password should be alphanumeric + one symbol');
-            //         }
-
-            //     }else {
-            //         alert('Password is shorter than 8 charactors');
-            //     }
-            //     event.preventDefault();
-            // });
+            // $("#signup_frm").on('submit', );
             
             let msg = '{{msg}}';
             let msg_type = '{{msg_type}}';
