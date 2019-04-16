@@ -43,7 +43,7 @@
 							<div class="tab-content">
 								<div class="tab-pane fade in active" id="c-tab3-1">
 									<div class="col-md-6 col-sm-12">
-										<form class="form-horizontal"  enctype="multipart/form-data" method="post">
+										<form class="form-horizontal" id="article-form" enctype="multipart/form-data" method="post">
 											<ul class="c-items">
 												<li>
 													<div class=" form-group form-c-checkboxes">
@@ -75,7 +75,7 @@
 														<label class="col-md-4 control-label">Journal</label>
 														<div class="col-md-6">
 															<select name="journal_id" id="journal_id" class="form-control c-square c-theme" >
-																<option>Journal</option>
+																<option value="0">Journal</option>
 																@each(jour in journals)
 																	@if(jour.id==thejournal_id)
 																	<option value="{{ jour.id }}" selected>{{ jour.name }}</option>
@@ -111,21 +111,21 @@
 													<div class="form-group">
 														<label class="col-md-4 control-label">Graphical Abstract</label>
 														<div class="col-md-6">
-															<input name="abstract_image_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
+															<input id="abstract_image_path" name="abstract_image_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
 															<span class="help-block">Graphical abstract should be in JPG, PNG, GIF format only and atmost 2MB</span>
 														</div>
 													</div>
 													<div class="form-group">
-														<label class="col-md-4 control-label">Artical File</label>
+														<label class="col-md-4 control-label">Article File</label>
 														<div class="col-md-6">
-															<input name="file_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
+															<input id="file_path" name="file_path" class="form-control c-square c-theme" type="file" placeholder="Browse file/upload file">
 															<span class="help-block">Artical File should be in Microsoft Word DOC or DOCX format only</span>
 														</div>
 													</div>	
 												</li>												
 											</ul>
 											<input type="hidden" name="_csrf" value="{{ csrfToken }}">
-											<button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">Submit and Pay the APC</button>
+											<a href="#" onclick="return submitArticle();" class="btn btn-lg c-btn-green c-btn-square c-btn-bold">Submit</a>
 										</form>
 									</div>
 									<div class="col-md-6 col-sm-12">
@@ -232,7 +232,61 @@
 	$('select option:not(:selected)').prop('disabled',true);
 </script>
 @endif
-<script>	
+<script>
+	function submitArticle() {
+		if($("#journal_id").val()=='0') {
+			alert('No Journal Selected');
+			return false;
+		}
+		if($("#full_title").val().trim().split(' ').length<11) {
+			alert('Article Full Title must be of 11-13 Words .');
+			return false;
+		}
+		if($("#running_title").val().trim().split(' ').length<3) {
+			alert('Article Running Title must be of 3-5 Words .');
+			return false;
+		}
+		if($("#summery").val().trim().split(' ').length<70) {
+			alert('Article Summery must be of 70-150 Words .');
+			return false;
+		}
+		if (window.FileReader) {
+			var abstract_image_path = document.getElementById('abstract_image_path');
+			if(abstract_image_path.files){
+				if(abstract_image_path.files.length!=1) {
+					alert('You must select a Graphical Abstract for the Article.');
+					return false;
+				}else {
+					if(abstract_image_path.files[0].type.indexOf('image')!==0) {
+						alert('You must select an image for the Graphical Abstract of the Article.');
+						return false;
+					}else if(abstract_image_path.files[0].size > 2*1024*1024){
+						alert('Image size should not exceed 2MB')
+						return false;
+					}
+				}
+			}
+			var file_path = document.getElementById('file_path');
+			if(file_path.files){
+				if(file_path.files.length!=1) {
+					alert('You must select a Article File for the Article.');
+					return false;
+				}else {
+					if(file_path.files[0].type.indexOf('officedocument')<0) {
+						alert('You must select a DOCX file for the Article File of the Article.');
+						return false;
+					}else if(file_path.files[0].size > 2*1024*1024){
+						alert('File size should not exceed 2MB')
+						return false;
+					}
+				}
+			}
+		}
+		console.log('submit article');
+		$("#article-form").submit();
+		return false;
+	}
+
 	function keywordCheck(dobj, fn) {
 		var inp = dobj.value;
 		var journal_id = $("#journal_id").val();
