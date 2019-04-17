@@ -1,12 +1,16 @@
-const StreamZip = require('node-stream-zip');
+const StreamZip = require('node-stream-zip')
 const fs = require('fs')
 const dxe = require('docx-extractor')
-const dns = require('dns');
+const dns = require('dns')
 const nodemailer = require("nodemailer")
+var JSZip = require('jszip')
+var Docxtemplater = require('docxtemplater')
+var path = require('path')
+const word2pdf = require('word2pdf')
 let addressIndex = 0
 
 module.exports = {
-
+    // Reference
     open: function(filePath) {
         return new Promise(
             function(resolve, reject) {
@@ -115,7 +119,7 @@ module.exports = {
             }
         )
     },
-
+    // EMAIL
     _sendMail: function (addresses, email, subject, text, html, _sendMail, fn) {
       let i = addressIndex
       // console.log('Send mail function', _sendMail)
@@ -182,7 +186,55 @@ module.exports = {
           })
         }
       );
-    }
+    },
+    // PDF
+    fillTemplateWord: function(data, outputname) {
+      let baseDirAr = __dirname.split('/'), baseDir = ''
+      for(var i = baseDirAr.length - 4;i>=0;i--) {
+        baseDir = '/' + baseDirAr[i] + baseDir
+      }
+      baseDir = baseDir.substring(1)
+      
+      return new Promise(function (resolve, reject) {
+        try {
+          var content = fs.readFileSync(path.resolve(baseDir, 'template.docx'), 'binary')
+          var zip = new JSZip(content)
+    
+          var doc = new Docxtemplater()
+          doc.loadZip(zip)
+    
+          doc.setData(data)
+  
+        
+          doc.render()
+          
+          var buf = doc.getZip().generate({type: 'nodebuffer'})
+
+          fs.writeFileSync(path.resolve(baseDir + '/public/pdf', outputname + '.docx'), buf)
+          resolve(baseDir + '/public/pdf/' + outputname + '.docx')
+        }catch (error) {
+          var e = {
+              message: error.message,
+              name: error.name,
+              stack: error.stack,
+              properties: error.properties,
+          }
+          console.log(JSON.stringify({error: e}))
+          reject({error: e})
+        }
+      });
+      
+    },
+
+    docxToPdf:async function(docxfile, outputname) {
+      let baseDirAr = __dirname.split('/'), baseDir = ''
+      for(var i = baseDirAr.length - 4;i>=0;i--) {
+        baseDir = '/' + baseDirAr[i] + baseDir
+      }
+      baseDir = baseDir.substring(1)
+      const data = await word2pdf(docxfile)
+      fs.writeFileSync(baseDir + '/public/pdf/' + outputname + '.pdf', data);
+    } 
 }
 
 return module.exports

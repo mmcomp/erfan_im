@@ -762,6 +762,23 @@ class ArticalController {
         }
         return 'ok';
     }
+
+    async pdf ({ view, response, session, request, params }) {
+        try{
+            let docxfile = await docx.fillTemplateWord({
+                first_name: 'Adel',
+                last_name: 'Ghorbani',
+                phone: '10.15562',
+                description: 'Human and Bacterial Amylases',
+            }, 'hh')
+            console.log('Docx file Result', docxfile)
+            await docx.docxToPdf(docxfile, 'hh')
+        }catch(e) {
+            console.log('Pdf Error')
+            console.log(e)
+        }
+        return 'ok';
+    }
 }
 
 module.exports = ArticalController

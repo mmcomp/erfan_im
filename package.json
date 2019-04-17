@@ -31,14 +31,17 @@
     "axios": "^0.18.0",
     "dns": "^0.2.2",
     "docx-extractor": "^1.1.4",
+    "docxtemplater": "^3.10.1",
     "google-scholar": "^1.5.1",
+    "jszip": "^2.6.1",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "node-stream-zip": "^1.8.0",
     "nodemailer": "^5.1.1",
     "phantom": "^6.0.3",
     "randomatic": "^3.1.1",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "word2pdf": "^1.0.7"
   },
   "devDependencies": {},
   "autoload": {

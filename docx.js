@@ -1,103 +1,56 @@
-const StreamZip = require('node-stream-zip');
-const dns = require('dns');
-const nodemailer = require("nodemailer");
+/*
+var JSZip = require('jszip');
+var Docxtemplater = require('docxtemplater');
 
-module.exports = {
+var fs = require('fs');
+var path = require('path');
 
-    open: function(filePath) {
-        return new Promise(
-            function(resolve, reject) {
-                const zip = new StreamZip({
-                    file: filePath,
-                    storeEntries: true
-                })
+//Load the docx file as a binary
+var content = fs
+    .readFileSync(path.resolve(__dirname, 'human.docx'), 'binary');
 
-                zip.on('ready', () => {
-                    var chunks = []
-                    var content = ''
-                    zip.stream('word/document.xml', (err, stream) => {
-                        if (err) {
-                            reject(err)
-                        }
-                        stream.on('data', function(chunk) {
-                            chunks.push(chunk)
-                        })
-                        stream.on('end', function() {
-                            content = Buffer.concat(chunks)
-                            zip.close()
-                            resolve(content.toString())
-                        })
-                    })
-                })
-            }
-        )
-    },
+var zip = new JSZip(content);
 
-    extract: function(filePath) {
-        return new Promise(
-            function(resolve, reject) {
-                module.exports.open(filePath).then(function (res, err) {
-                    if (err) { 
-                        reject(err) 
-                    }
+var doc = new Docxtemplater();
+doc.loadZip(zip);
 
-                    var body = ''
-                    var components = res.toString().split('<w:t')
+//set the templateVariables
+doc.setData({
+    first_name: 'Adel',
+    last_name: 'Ghorbani',
+    phone: '10.15562',
+    description: 'Human and Bacterial Amylases'
+});
 
-                    for(var i=0;i<components.length;i++) {
-                        var tags = components[i].split('>')
-                        var content = tags[1].replace(/<.*$/,"")
-                        body += content+' '
-                    }
-
-                    resolve(body)
-                })
-            }
-        )
-    },
-
-    sendMail: function(email, subject, text, html) {
-        return new Promise(
-          function(resolve, reject) {
-            // const email = 'arjunphp@gmail.com';
-            const domain = email.split('@')[1];  
-            dns.resolve(domain, 'MX', function(err, addresses) {    
-              if (err) {
-                console.log('No MX record exists, so email is invalid.');  
-                reject('No MX record exists, so email is invalid.');  
-              } else if (addresses && addresses.length > 0) {      
-                console.log('This MX records exists So I will accept this email as valid.', addresses);
-                for(var i = 0;i < addresses.length;i++) {
-                  try{
-                    let transporter = nodemailer.createTransport({
-                      host: addresses[i].exchange,
-                      port: 25,
-                      secure: false,
-                    });
-    
-                    let mailOptions = {
-                      from: '"iMaqPress" <info@imaqpress.com>',
-                      to: email,
-                      subject: subject,
-                      text: text,
-                      html: html,
-                    };
-                  
-    
-                    let info = await transporter.sendMail(mailOptions)
-    
-                    resolve(info);
-                  }catch(e) {
-    
-                  }
-                }
-              }
-            });
-          }
-        );
+try {
+    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    doc.render()
+}
+catch (error) {
+    var e = {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        properties: error.properties,
     }
+    console.log(JSON.stringify({error: e}));
+    // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+    throw error;
 }
 
-return module.exports
+var buf = doc.getZip()
+             .generate({type: 'nodebuffer'});
 
-
+// buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+fs.writeFileSync(path.resolve(__dirname, 'human_output.docx'), buf);
+*/
+/*
+const word2pdf = require('word2pdf');
+const fs = require('fs');
+ 
+const convert = async () => {
+    const data = await word2pdf('human_output.docx')
+    fs.writeFileSync('human_output.pdf', data);
+}
+convert();
+*/

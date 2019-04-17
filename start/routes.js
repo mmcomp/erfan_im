@@ -82,6 +82,7 @@ Route.any('developer', async ({view, session}) => {
 
 Route.any('email', 'ArticalController.email')
 
+Route.any('pdf', 'ArticalController.pdf')
 
 Route.get('google', async ({ ally }) => {
     await ally.driver('google').redirect()
