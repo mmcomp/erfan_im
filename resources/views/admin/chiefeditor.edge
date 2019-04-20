@@ -52,7 +52,7 @@
 					<div class="row">
 						<div class="col-md-4">
 							<p>
-								<span class="label label-danger c-font-slim c-font-uppercase c-font-bold">Newly Submitted Articles (5) </span>
+								<span class="label label-danger c-font-slim c-font-uppercase c-font-bold">Newly Submitted Articles ({{ newlySubmitedArticles.length }}) </span>
 							</p>
 							<ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in newlySubmitedArticles)
@@ -64,7 +64,7 @@
 						</div>
 						<div class="col-md-4">
 							<p>
-								<span class="label label-success c-font-slim c-font-uppercase c-font-bold">Under-review articles (10) </span>
+								<span class="label label-success c-font-slim c-font-uppercase c-font-bold">Under-review articles ({{ underReviewArticles.length }}) </span>
 							</p>
                             <ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in underReviewArticles)
@@ -76,7 +76,7 @@
 						</div>
 						<div class="col-md-4">
 							<p>
-								<span class="label label-info c-font-slim c-font-uppercase c-font-bold">List of Published Articles (10) </span>
+								<span class="label label-info c-font-slim c-font-uppercase c-font-bold">List of Published Articles ({{ publishedArticles.length }}) </span>
 							</p>
                             <ul class="c-content-list-1 c-separator-dot">
                                 @each(newArticle in publishedArticles)
@@ -100,61 +100,81 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu">
 										<li>
-											<a href="javascript:$('#allusers').toggle()">All Registered Users <span class="badge c-bg-blue">{{ statics.registeredUsers.length }}</span></a>
+											<a href="#" onclick="$('#allusers').toggle(); return false;">All Registered Users <span class="badge c-bg-blue">{{ statics.registeredUsers.length }}</span></a>
 											<ul id="allusers" style="display:none">
 												@each(directo in statics.registeredUsers)
 												<li>
-													{{ directo.fname }} {{ directo.lname }}
+													@if(directo.name_index==0)
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@else
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@endif
 												</li>
 												@endeach
 											</ul>
 										</li>
                                         <li>
-											<a href="javascript:$('#maneditor').toggle()">Managing Editors <span class="badge c-bg-purple">{{ statics.managingEdiors.length }}</span></a>
+											<a href="#" onclick="$('#maneditor').toggle(); return false;">Managing Editors <span class="badge c-bg-purple">{{ statics.managingEdiors.length }}</span></a>
 											<ul id="maneditor" style="display:none">
 												@each(directo in statics.managingEdiors)
 												<li>
-													{{ directo.fname }} {{ directo.lname }}
+													@if(directo.name_index==0)
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@else
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@endif												
 												</li>
 												@endeach
 											</ul>
                                         </li>
 										<li>
-											<a href="javascript:$('#asseditor').toggle()">Associate Editors <span class="badge c-bg-red">{{ statics.assocEditors.length }}</span></a>
+											<a href="#" onclick="$('#asseditor').toggle(); return false;">Associate Editors <span class="badge c-bg-red">{{ statics.assocEditors.length }}</span></a>
 											<ul id="asseditor" style="display:none">
 												@each(directo in statics.assocEditors)
 												<li>
-													{{ directo.fname }} {{ directo.lname }}
+													@if(directo.name_index==0)
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@else
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@endif												
 												</li>
 												@endeach
 											</ul>
                                         </li>
 										<li>
-											<a href="javascript:$('#revi').toggle()">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{ statics.reviewers.length }}</span></a>
+											<a href="#" onclick="$('#revi').toggle(); return false;">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{ statics.reviewers.length }}</span></a>
 											<ul id="revi" style="display:none">
 												@each(directo in statics.reviewers)
 												<li>
-													{{ directo.fname }} {{ directo.lname }}
+													@if(directo.name_index==0)
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@else
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@endif												
 												</li>
 												@endeach
 											</ul>
 										</li>
                                         <li>
-											<a href="javascript:$('#inst').toggle()">Institutes/Universities <span class="badge c-bg-yellow">{{ statics.institutesUniversities.length }}</span></a>
+											<a href="#" onclick="$('#inst').toggle(); return false;">Institutes/Universities <span class="badge c-bg-yellow">{{ statics.institutesUniversities.length }}</span></a>
 											<ul id="inst" style="display:none">
 												@each(directo in statics.institutesUniversities)
 												<li>
-													{{ directo }}
+													<a href="/partners/{{ directo.replace(/ /g, '-') }}">{{ directo }}</a>
 												</li>
 												@endeach
 											</ul>
 										</li>
                                         <li>
-											<a href="javascript:$('#author').toggle()">Authors & Co-authors <span class="badge c-bg-yellow">{{ statics.authors.length }}</span></a>
+											<a href="#" onclick="$('#author').toggle(); return false;">Authors & Co-authors <span class="badge c-bg-yellow">{{ statics.authors.length }}</span></a>
 											<ul id="author" style="display:none">
 												@each(directo in statics.authors)
 												<li>
-													{{ directo.fname }} {{ directo.lname }}
+													@if(directo.name_index==0)
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@else
+													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													@endif												
 												</li>
 												@endeach
 											</ul>
@@ -166,7 +186,14 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-arrow-dot">
 										<li class="c-bg-before-blue">
-											<a href="#">Total Articles  <span class="badge c-bg-blue-1">{{ articles.length }}</span></a>
+											<a href="#" onclick="$('#arts').toggle();return false;">Total Articles  <span class="badge c-bg-blue-1">{{articles.length}}</span></a>
+											<ul id="arts" style="display:none">
+												@each(art in articles)
+												<li>
+													<a href="/article_id/{{ art.id }}">{{ art.running_title }}</a>
+												</li>
+												@endeach
+											</ul>
 										</li>
 										<li class="c-bg-before-red">
 											<a href="#">Article Views <span class="badge c-bg-green-1">{{ articleViews }}</span></a>

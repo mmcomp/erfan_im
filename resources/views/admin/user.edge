@@ -75,8 +75,10 @@
                       <label for="inputPassword3" class="col-md-4 control-label">User Access Level</label>
                       <div class="col-md-6">
                         <select class="form-control c-square c-theme" name="group_id">
-                          <option value="0">Select Access Level</option>
+                          <option value="0" disabled>Select Access Level</option>
+                          @if(user.group_id == 1)
                           <option value="1" {{ (selected_user.group_id == 1)?' selected':'' }}>Deputy Director</option>
+                          @endif
                           <option value="2" {{ (selected_user.group_id == 2)?' selected':'' }}>Chief Editor</option>
                           <option value="6" {{ (selected_user.group_id == 6)?' selected':'' }}>Associate Editor</option>
                           <option value="5" {{ (selected_user.group_id == 5)?' selected':'' }}>Author</option>
@@ -84,6 +86,19 @@
                         </select>
                       </div>
                     </div>
+                    @if(user.group_id == 1)
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-md-4 control-label">User Journal</label>
+                        <div class="col-md-6">
+                          <select class="form-control c-square c-theme" name="journal_id">
+                            <option value="0" disabled>Select Journal</option>
+                            @each(theJounal in allJournals)
+                            <option value="{theJournal.id}}" {{ (theJounal.id==user.journal_id)?'selected':'' }}>{{ theJounal.name }}</option>
+                            @endeach
+                          </select>
+                        </div>
+                      </div>
+                    @endif
                     @endif
                     <div class="form-group c-margin-t-40">
                       <div class="col-sm-offset-4 col-md-8">
@@ -179,11 +194,10 @@
                         <div class="c-content-blog-post-card-1 c-option-2">
                           <div class="c-body">
                             <div class="c-panel">
-                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{
-                                  art.doi?artdoi:'' }}</span>
+                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{art.doi?artdoi:'' }}</span>
                             </div>
                             <div class="c-title c-font-uppercase c-font-bold">
-                              <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                              <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                             </div>
                             <div class="c-author">
                               By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
@@ -191,10 +205,8 @@
                               <div class="c-comments">
                                 <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
                                 &nbsp&nbsp
-                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length
-                                  }} </a>&nbsp&nbsp
-                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{
-                                  art.downloads }}</a>
+                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length}} </a>&nbsp&nbsp
+                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{art.downloads }}</a>
                               </div>
                             </div>
                           </div>
@@ -247,11 +259,10 @@
                         <div class="c-content-blog-post-card-1 c-option-2">
                           <div class="c-body">
                             <div class="c-panel">
-                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{
-                                  art.doi?artdoi:'' }}</span>
+                              DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{art.doi?artdoi:'' }}</span>
                             </div>
                             <div class="c-title c-font-uppercase c-font-bold">
-                              <a href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                              <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                             </div>
                             <div class="c-author">
                               By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
@@ -259,10 +270,8 @@
                               <div class="c-comments">
                                 <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
                                 &nbsp&nbsp
-                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length
-                                  }} </a>&nbsp&nbsp
-                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{
-                                  art.downloads }}</a>
+                                <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length}} </a>&nbsp&nbsp
+                                <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{art.downloads }}</a>
                               </div>
                             </div>
                           </div>

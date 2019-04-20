@@ -363,7 +363,7 @@
                                                 </div>
                                                 -->
                                                 <div class="c-post">
-                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                                                    <a class="c-title" href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
                                                         {{ art.updated_at }}
                                                     </div>

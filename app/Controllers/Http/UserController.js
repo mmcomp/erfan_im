@@ -369,7 +369,7 @@ class UserController {
             })
         }else if(user.group_id==2){
             let cities = [], countries = []
-            let journals = await Journal.all()
+            let journals = await Journal.query().where('id', user.journal_id).fetch()
             journals = journals.toJSON()
             for(let jour of journals) {
                 if(cities.indexOf(jour.city_id)<0) {
@@ -377,7 +377,7 @@ class UserController {
                 }
             }
             console.log('Cities', cities)
-            let articles = await Artical.all()
+            let articles = await Artical.query().where('journal_id', user.journal_id).fetch()
             articles = articles.toJSON()
             let newlySubmitedArticles = [], underReviewArticles = [], publishedArticles = [], articleViews = 0
             let articleDownloads = 0, articleCitiations = 0
@@ -394,7 +394,7 @@ class UserController {
                 }
             }
             console.log('ArticleViews', articleViews)
-            let users = await User.query().whereNotIn('group_id', [1, 2]).fetch()
+            let users = await User.query().whereNotIn('group_id', [1]).where('journal_id', user.journal_id).where('journal_id', '>', 0).fetch()
             users = users.toJSON()
             let statics = {
                 registeredUsers: users,
@@ -501,6 +501,7 @@ class UserController {
             selected_user.email = request.all()['email']
             selected_user.academic_page = request.all()['academic_page']
             selected_user.group_id = request.all()['group_id']
+            selected_user.journal_id = request.all()['journal_id']
             await selected_user.save()
         }
 
@@ -518,7 +519,7 @@ class UserController {
             }
         }
         let articleIds = []
-        let articles = await Artical.query().where('author_id', selected_user.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let articles = await Artical.query().where('status', 'published').where('author_id', selected_user.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -529,7 +530,7 @@ class UserController {
         for(let i = 1;i <= recentPublished.lastPage;i++) {
             recentPublished.pages.push(i)
         }
-        articles = await Artical.query().where('author_id', selected_user.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        articles = await Artical.query().where('status', 'published').where('author_id', selected_user.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -543,6 +544,8 @@ class UserController {
         let userArticles = await UserArticle.query().with('user').whereIn('article_id', articleIds).fetch()
         userArticles = userArticles.toJSON()
         console.log('Recently : ', recentPublished)
+        let allJournals = await Journal.all()
+        console.log('allJournals', allJournals)
         return view.render('admin.user', {
             isLogged: true, 
             user: user, 
@@ -552,6 +555,7 @@ class UserController {
                 highlyCited: highlyCited
             },
             user_articles: userArticles,
+            allJournals: allJournals.toJSON(),
         })
     }
 

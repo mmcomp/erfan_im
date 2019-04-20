@@ -53,7 +53,7 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu">
 										<li>
-											<a href="javascript:$('#directors').toggle()">Directors <span class="badge c-bg-blue">{{statics.directors.length}}</span></a>
+											<a href="#" onclick="$('#directors').toggle(); return false;">Directors <span class="badge c-bg-blue">{{statics.directors.length}}</span></a>
 											<ul id="directors" style="display:none">
 												@each(directo in statics.directors)
 												<li>
@@ -67,7 +67,7 @@
 											</ul>
 										</li>
 										<li>
-											<a href="javascript:$('#chiefs').toggle()">Chief Editors <span class="badge c-bg-green">{{statics.chiefEditors.length}}</span></a>
+											<a href="#" onclick="$('#chiefs').toggle(); return false;">Chief Editors <span class="badge c-bg-green">{{statics.chiefEditors.length}}</span></a>
 											<ul id="chiefs" style="display:none">
 												@each(directo in statics.chiefEditors)
 												<li>
@@ -81,7 +81,7 @@
 											</ul>
                                         </li>
 										<li>
-											<a href="javascript:$('#assoc').toggle()">Associate Editors <span class="badge c-bg-red">{{statics.assocEditors.length}}</span></a>
+											<a href="#" onclick="$('#assoc').toggle(); return false;">Associate Editors <span class="badge c-bg-red">{{statics.assocEditors.length}}</span></a>
 											<ul id="assoc" style="display:none">
 												@each(directo in statics.assocEditors)
 												<li>
@@ -95,7 +95,7 @@
 											</ul>
                                         </li>
 										<li>
-											<a href="javascript:$('#manage').toggle()">Managing Editors <span class="badge c-bg-purple">{{statics.managingEditors.length}}</span></a>
+											<a href="#" onclick="$('#manage').toggle(); return false;">Managing Editors <span class="badge c-bg-purple">{{statics.managingEditors.length}}</span></a>
 											<ul id="manage" style="display:none">
 												@each(directo in statics.managingEditors)
 												<li>
@@ -109,7 +109,7 @@
 											</ul>
 										</li>
 										<li>
-											<a href="javascript:$('#editor').toggle()">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{statics.editorials.length}}</span></a>
+											<a href="#" onclick="$('#editor').toggle(); return false;">Editorial/Reviewer Board Members <span class="badge c-bg-yellow">{{statics.editorials.length}}</span></a>
 											<ul id="editor" style="display:none">
 												@each(directo in statics.editorials)
 												<li>
@@ -123,7 +123,7 @@
 											</ul>	
 										</li>
                                         <li>
-											<a href="javascript:$('#instit').toggle()">Institutes/Universities <span class="badge c-bg-yellow">{{statics.institutesUniversities.length}}</span></a>
+											<a href="#" onclick="$('#instit').toggle(); return false;">Institutes/Universities <span class="badge c-bg-yellow">{{statics.institutesUniversities.length}}</span></a>
 											<ul id="instit" style="display:none">
 												@each(directo in statics.institutesUniversities)
 												<li>
@@ -133,7 +133,7 @@
 											</ul>	
 										</li>
                                         <li>
-											<a href="javascript:$('#author').toggle()">Authors & Co-authors <span class="badge c-bg-yellow">{{statics.authors.length}}</span></a>
+											<a href="#" onclick="$('#author').toggle(); return false;">Authors & Co-authors <span class="badge c-bg-yellow">{{statics.authors.length}}</span></a>
 											<ul id="author" style="display:none">
 												@each(directo in statics.authors)
 												<li>
@@ -153,7 +153,7 @@
 								<div class="c-content-ver-nav">
 									<ul class="c-menu c-arrow-dot">
 										<li class="c-bg-before-blue">
-											<a href="javascript:$('#arts').toggle()">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
+											<a href="#" onclick="$('#arts').toggle();return false;">Articles  <span class="badge c-bg-blue-1">{{statics.articles.length}}</span></a>
 											<ul id="arts" style="display:none">
 												@each(art in statics.articles)
 												<li>
