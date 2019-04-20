@@ -185,7 +185,7 @@ class UserController {
         session.put('msg', msg)
 
         // return response.redirect('/')
-        return 'ok'
+        return '<a href="/">Click to Continiue ... </a>'
         // return response.route('home', {message: msg, isLogged: true})
     }
 
