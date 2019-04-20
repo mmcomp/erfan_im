@@ -184,8 +184,8 @@ class UserController {
         session.put('user', user)
         session.put('msg', msg)
 
-        return response.redirect('/')
-        // return 'ok'
+        // return response.redirect('/')
+        return 'ok'
         // return response.route('home', {message: msg, isLogged: true})
     }
 
