@@ -133,6 +133,7 @@ class UserController {
             user.fname = fname
             user.lname = lname
             user.password = '123456'
+            user.name_index = name_index
             await user.save()
         }
 
