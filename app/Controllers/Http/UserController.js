@@ -182,8 +182,10 @@ class UserController {
 
         console.log('User in Session', user)
         session.put('user', user)
+        session.put('msg', msg)
 
-        return 'ok'
+        return response.redirect('/')
+        // return 'ok'
         // return response.route('home', {message: msg, isLogged: true})
     }
 
