@@ -123,6 +123,7 @@ class UserController {
         
         let user = await User.query().where('email', guser._original.email).first()
         if(!user) {
+            console.log('New User')
             let name_index = 0
             user = await User.query().where('lname', lname).where('fname', fname).orderBy('name_index', 'desc').first()
             if(user) {
