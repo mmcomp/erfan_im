@@ -183,7 +183,8 @@ class UserController {
         console.log('User in Session', user)
         session.put('user', user)
 
-        return response.route('home', {message: msg, isLogged: true})
+        return 'ok'
+        // return response.route('home', {message: msg, isLogged: true})
     }
 
     async home ({ view, auth, session }) {
