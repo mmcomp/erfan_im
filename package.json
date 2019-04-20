@@ -1,18 +1,19 @@
 {
-  "name": "adonis-fullstack-app",
+  "name": "imaqpress",
   "version": "4.1.0",
   "adonis-version": "4.1.0",
-  "description": "The fullstack application boilerplate for Adonisjs",
-  "main": "index.js",
+  "description": "IMaqpress journal web site.",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node ace test"
+    "test": "node ace test",
+    "build-package": "pkg package.json"
   },
   "keywords": [
     "adonisjs",
     "adonis-app"
   ],
-  "author": "",
+  "author": "Mehrdad Mirsamie",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
@@ -46,5 +47,10 @@
   "devDependencies": {},
   "autoload": {
     "App": "./app"
+  },
+  "bin": "server.js",
+  "pkg": { 
+    "assets": [ "package.json", "node_modules/**/*.*" ], 
+    "targets": [ "node8" ] 
   }
 }

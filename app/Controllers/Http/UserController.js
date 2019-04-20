@@ -136,8 +136,10 @@ class UserController {
             await user.save()
         }
 
+        console.log('Loging in user id', user.id)
         await auth.login(user)
         let msg = 'Logged in successfully'
+        console.log('loged in')
 
         user = await User.query().where('id', auth.user.id).with('permissions').first()
 
@@ -148,6 +150,7 @@ class UserController {
         }
         user.permissions = permissions
 
+        console.log('User in Session', user)
         session.put('user', user)
 
         return response.route('home', {message: msg, isLogged: true})
