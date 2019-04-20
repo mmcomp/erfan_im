@@ -312,8 +312,8 @@ class JournalController {
                 }catch(e){
                     console.log('json parse error', e)
                 }
+                await JournalExtra.query().where('journal_id', theJournal.id).delete()
                 if(tbdata.length>0) {
-                    await JournalExtra.query().where('journal_id', theJournal.id).delete()
                     await JournalExtra.createMany(tbdata)
                     console.log('saveing tb data', tbdata)
                 }

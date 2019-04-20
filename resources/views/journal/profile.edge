@@ -112,6 +112,11 @@
                                     class="active"
                                     @endif
                                     >
+                                    @if(user.group_id==1 || user.group_id==2)
+                                    <a href="#" style="float: right;z-index: 9999999;" onclick="return deleteTab({{ ($loop.index + 1) }});" >
+                                        <i class="fa fa-times-circle" style="color: red;"></i>
+                                    </a>
+                                    @endif
                                         <a class="tbs" id="tb{{ ($loop.index + 1) }}" href="#tab_{{ ($loop.index + 1) }}" data-toggle="tab">{{{ extr.tbname }}}</a>
                                     </li>
                                     @endeach
@@ -144,11 +149,6 @@
                                     active
                                     @endif
                                     " id="tab_{{ ($loop.index + 1) }}">
-                                        @if(user.group_id==1 || user.group_id==2)
-                                        <a href="#" style="float: right;" onclick="return deleteTab({{ ($loop.index + 1) }});" >
-                                            <i class="fa fa-times-circle" style="color: red;"></i>
-                                        </a>
-                                        @endif
                                         <div id="tb{{ ($loop.index + 1) }}_content" class="editor tbcon" 
                                         @if(user.group_id==1 || user.group_id==2)
                                         contenteditable="true"
