@@ -111,6 +111,24 @@ class UserController {
         }
     }
 
+    async test ({ params, auth }) {
+        let user = await User.find(params.id)
+        if(user) {
+            try{
+                await auth.logout()
+            }catch(e) {
+    
+            }
+            console.log('trying to login', user.id)
+            try{
+                await auth.login(user)
+            }catch(e) {
+    
+            }
+        }
+        return 'ok'
+    }
+
     async googleLogin ({ ally, request, auth, response, session }) {
         const guser = await ally.driver('google').getUser()
         console.log(guser)
@@ -139,7 +157,17 @@ class UserController {
         }
 
         console.log('Loging in user id', user.id)
-        await auth.login(user)
+        try{
+            await auth.logout()
+        }catch(e) {
+
+        }
+        console.log('trying to login', user.id)
+        try{
+            await auth.login(user)
+        }catch(e) {
+            console.log('Error logging in', e)
+        }
         let msg = 'Logged in successfully'
         console.log('loged in')
 

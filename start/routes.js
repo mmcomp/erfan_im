@@ -50,6 +50,7 @@ Route.any('article/:article_name', 'ArticalController.publish')
 Route.any('keyword_check/:journal_id', 'ArticalController.keywordCheck')
 
 
+Route.get('test/:id', 'UserController.test')
 
 Route.post('login', 'UserController.login')
 
