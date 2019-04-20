@@ -32,6 +32,8 @@ Route.any('jouranl/:journal_name', 'JournalController.profileByName')
 
 Route.any('jouranls/:journal_name/:issn', 'JournalController.profileByName')
 
+Route.post('journal_remove', 'JournalController.remove')
+
 Route.get('partners', 'JournalController.partners')
 
 Route.any('keyword/:keyword', 'JournalController.keyword')

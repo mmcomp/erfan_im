@@ -45,6 +45,9 @@
                 <button class="btn btn-lg c-btn-green c-btn-square c-btn-bold">
                     Save
                 </button>
+                <a href="#" onclick="return deleteJournal({{journal.id}})" class="btn btn-lg c-btn-green c-btn-square c-btn-bold" style="background-color: red !important;">
+                    Delete
+                </a>
             </form>
             @endif
         </div>
@@ -530,6 +533,10 @@
 
     @!component('components.scripts')
     @if(user.group_id==1 || user.group_id==2)
+    <form method="post" action="/journal_remove" id='jform'>
+        {{ csrfField() }}
+        <input type="hidden" id="jid" name="journal_id" value="{{ journal.id }}" />
+    </form>
     <script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>
     <!--<script src="https://cdn.ckeditor.com/ckeditor5/11.1.1/inline/ckeditor.js"></script>-->
     <!--<script src="https://cdn.ckeditor.com/4.11.1/standard/ckeditor.js"></script>-->
@@ -637,6 +644,12 @@
             $("#name-input").val($("#name").html());
             $("#description-input").val($("#description").html());
             $("#tabdata-form").submit();
+        }
+        function deleteJournal(journal_id) {
+            if(confirm('Are you sure?')) {
+                $("#jform").submit();
+            }
+            return false;
         }
         editorify();
     </script>

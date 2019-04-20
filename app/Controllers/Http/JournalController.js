@@ -657,6 +657,23 @@ class JournalController {
             search_title: searchTitle,
         })
     }
+
+    async remove ({ view, response, session, request, params }) {
+        let journal_id = 0
+             
+        session.put('msg', 'Journal Not Found')
+        session.put('msg_type', 'danger')
+
+        if(request.all()['journal_id']) {
+            journal_id = parseInt(request.all()['journal_id'], 10)
+            await Journal.query().where('id', journal_id).delete()
+            session.put('msg', 'Journal Removed Successfully')
+            session.put('msg_type', '')
+        }
+
+
+        return response.route('home')
+    }
 }
 
 module.exports = JournalController
