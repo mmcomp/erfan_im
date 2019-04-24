@@ -478,7 +478,7 @@
                               {{ csrfField() }}
                               <div class="form-group">
                                 <label for="message-text" class="control-label">Introduction:</label>
-                                <textarea name="introduction" class="form-control c-square editor" id="message-text">{{ article.introduction }}</textarea>
+                                <textarea id="introduction" name="introduction" class="form-control c-square editor" id="message-text">{{ article.introduction }}</textarea>
                               </div>
                             </form>
                           </div>
@@ -1106,8 +1106,24 @@
 
     function editorify() {
       CKEDITOR.disableAutoInline = true;
+      var ckIns;
       $(".editor").each(function (id, field) {
-        CKEDITOR.replace( field );
+        ckIns = CKEDITOR.replace( field )/*.on('dialogHide', function(evt) {
+          console.log('dialog hide', evt);
+          $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('show');
+        }).on('dialogShow', function(evt) {
+          console.log('dialog show', evt);
+          $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('hide');
+        });*/
+        console.log('Ckeditor Instance', ckIns);
+        ckIns.on('dialogHide', function(evt) {
+          console.log('dialog hide', evt);
+          $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('show');
+        });
+        ckIns.on('dialogShow', function(evt) {
+          console.log('dialog show', evt);
+          $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('hide');
+        });
         // ClassicEditor
         //   .create(field)
         //   .then(theEditor => {
