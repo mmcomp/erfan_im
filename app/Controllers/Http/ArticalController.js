@@ -694,13 +694,79 @@ class ArticalController {
     async pdf ({ view, response, session, request, params }) {
         try{
             let docxfile = await docx.fillTemplateWord({
-                first_name: 'Adel',
-                last_name: 'Ghorbani',
-                phone: '10.15562',
-                description: 'Human and Bacterial Amylases',
+                //---global
+                global_doi: '10.15562',
+                //---journal
+                journal_name: 'Journal of Genes and Cells',
+                journal_vol: '3',
+                jounral_n: '2017-Cell Therapy & Reg. Med.-I',
+                journal_doi: 'gnc',
+                //---article
+                header_author: 'Akhavanezayat et al.',
+                article_publish_month_year: 'January, 2017',
+                article_pages: '39-46',
+                article_doi: '55',
+                article_type: 'Research',
+                article_full_title: `Toxicity of Five Local Anesthesia Drugs on Cells and Multipotent Stem Cells`,
+                article_submision_date: '24 November 2016',
+                article_acceptance_date: '25 April 2017',
+                article_abstract: `<b>Objectives:</b> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells. `,
+                //---author
+                authors: [
+                    {
+                        name: 'Arash Akhavan Rezayat',
+                        index: '1',
+                    },
+                    {
+                        name: ', Hamid Reza Rahimi',
+                        index: '2',
+                    },
+                    {
+                        name: ', Atefe Joveini',
+                        index: '1',
+                    },
+                    {
+                        name: ', Shahrzad Maraghe Moghadam',
+                        index: '1',
+                    },
+                    {
+                        name: ', Ghasem Soltani',
+                        index: '3',
+                    },
+                    {
+                        name: ', Mohammad Reza Khojasteh',
+                        index: '5',
+                    },
+                    {
+                        name: ', Nahid Zirak',
+                        index: '5*',
+                    },
+                ],
+                author_affs: [
+                    {
+                        index: '1',
+                        name: 'Research Committee, Stem cell research group, Faculty of medicine, Mashhad University of Medical Sciences, Mashhad, Iran.\n',
+                    },
+                    {
+                        index: '2',
+                        name: 'Department of Modern Sciences & Technologies, Faculty of Medicine, Mashhad University of Medical Sciences, Mashhad, Iran.\n',
+                    },
+                    {
+                        index: '3',
+                        name: 'Department of Cardiac Surgery, Imam Reza Hospital, Mashhad University of Medical Sciences, Iran.\n',
+                    },
+                    {
+                        index: '4',
+                        name: 'Research Committee, Stem cell research group, Medical Student at Islamic Azad University, Mashhad Branch, Mashhad, Iran.\n',
+                    },
+                    {
+                        index: '5',
+                        name: 'Department of Anesthesia, Cardiac Anesthesia Research Center, Imam-Reza Hospital, Mashhad Iran.\n',
+                    },
+                ],
             }, 'hh')
             console.log('Docx file Result', docxfile)
-            await docx.docxToPdf(docxfile, 'hh')
+            // await docx.docxToPdf(docxfile, 'hh')
         }catch(e) {
             console.log('Pdf Error')
             console.log(e)

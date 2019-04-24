@@ -201,8 +201,11 @@ module.exports = {
           var zip = new JSZip(content)
     
           var doc = new Docxtemplater()
+          doc.setOptions({linebreaks:true});
+
           doc.loadZip(zip)
     
+          
           doc.setData(data)
   
         
