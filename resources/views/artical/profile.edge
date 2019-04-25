@@ -61,7 +61,11 @@
             <div class="c-content-tab-1 c-theme c-margin-t-30">
               <div class="clearfix">
                 <ul class="nav nav-tabs c-font-uppercase c-font-bold">
-                  <li class="active">
+                  <li
+                  @if(open_refs==false)
+                  class="active"
+                  @endif
+                  >
                     <a href="#tab_1_1_content" data-toggle="tab">AuthorsInfo</a>
                   </li>
                   <li>
@@ -82,13 +86,21 @@
                   <li>
                     <a href="#tab_1_7_content" data-toggle="tab">Acknowl.</a>
                   </li>
-                  <li>
+                  <li
+                  @if(open_refs==true)
+                  class="active"
+                  @endif
+                  >
                     <a href="#tab_1_8_content" data-toggle="tab">References</a>
                   </li>
                 </ul>
               </div>
               <div class="tab-content c-bordered c-padding-lg">
-                <div class="tab-pane active" id="tab_1_1_content">
+                <div class="tab-pane
+                 @if(open_refs==false)
+                 active
+                 @endif
+                 " id="tab_1_1_content">
                   <p>
                     <ul>
                       @if(article.first.length>0)
@@ -638,12 +650,33 @@
                     </div>
                   </p>
                 </div>
-                <div class="tab-pane" id="tab_1_8_content">
+                <div class="tab-pane
+                @if(open_refs==true)
+                active
+                @endif
+                " id="tab_1_8_content">
 
                   <p>
-                    {{{ article.ref }}}
+                    {{--{ article.ref }--}}
+                    @each(theRef in article.refs)
+                    <div class="input-group">
+                      <span class="input-group-addon">{{ $loop.index+1 }}</span>
+                      <input id="ref_{{ $loop.index }}" name="ref_{{ $loop.index }}" value="{{ theRef }}" type="text" class="form-control ref-data" placeholder="Username" aria-describedby="basic-addon1">
+                      <span class="input-group-addon" onclick="removeRef({{ $loop.index }});"><i class="fa fa-times" style="color: red;cursor: pointer;"></i></span>
+                      <span class="input-group-addon" onclick="moveUp({{ $loop.index }});"><i class="fa fa-caret-up" style="color: green;cursor: pointer;"></i></span>
+                      <span class="input-group-addon" onclick="moveDown({{ $loop.index }});"><i class="fa fa-caret-down" style="color: green;cursor: pointer;"></i></span>
+                    </div>
+                    @endeach
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1">+</span>
+                      <input id="ref_new" name="ref_new" value="" type="text" class="form-control" placeholder="New Reference" aria-describedby="basic-addon1">
+                    </div>
                   </p>
                   <p>
+                      <button onclick="saveRef();" type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
+                        save
+                      </button>
+                    <!--
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#referenceModel" data-whatever="bootstrap">Add/Edit References</button>
                     <div class="modal fade" id="referenceModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -682,6 +715,7 @@
                         </div>
                       </div>
                     </div>
+                    -->
                   </p>
                 </div>
               </div>
@@ -1023,6 +1057,10 @@
       </div>
     </div>
   </div>
+  <form id="ref-frm" method="post" >
+      {{ csrfField() }}
+    <input type="hidden" id="therefs" name="therefs" value="" />
+  </form>
   <script>
     function submitAuthor(form_id) {
       var form_id = form_id ? form_id : 'author-info'
@@ -1041,12 +1079,12 @@
     var editors = [];
     var uploadedImage = '{{ uploadedImage }}';
     var theArticle = {{{ toJSON(article) }}};
-    var articleRefs = [];
-    if(theArticle.refs) {
-      try{
-        articleRefs = JSON.parse(theArticle.refs);
-      }catch(e){}
-    }
+    var articleRefs = theArticle.refs;
+    // if(theArticle.refs) {
+    //   try{
+    //     articleRefs = JSON.parse(theArticle.refs);
+    //   }catch(e){}
+    // }
     var docReady = false;
 
     function checkEmail(dobj) {
@@ -1202,6 +1240,55 @@
     $(document).ready(function () {
       docReady = true;
     });
+    function removeRef(ref_id) {
+      if(confirm('Are you sure?')) {
+        console.log('remove id', ref_id);
+        console.log('current refs', theArticle.refs);
+        theArticle.refs.splice(ref_id, 1);
+        console.log('changed array', theArticle.refs)
+        $("#therefs").val(JSON.stringify(theArticle.refs));
+        $("#ref-frm").submit();
+      }
+    }
+    function saveRef() {
+      // ref-data
+      let refs = [];
+      $("input.ref-data").each(function(id, field) {
+        if($(field).val().trim()!='') {
+          refs.push($(field).val().trim());
+        }
+      });
+      if($("#ref_new").val().trim()!='') {
+        refs.push($("#ref_new").val().trim());
+      }
+      $("#therefs").val(JSON.stringify(refs));
+      $("#ref-frm").submit();
+    }
+    function moveUp(ref_id) {
+      var arr = theArticle.refs;
+      if(ref_id>0) {
+        [arr[ref_id-1], arr[ref_id]] = [arr[ref_id], arr[ref_id-1]];
+      }else {
+        var theRef = arr[ref_id];
+        arr.splice(ref_id, 1);
+        arr.push(theRef);
+      }
+      $("#therefs").val(JSON.stringify(arr));
+      $("#ref-frm").submit();
+    }
+    function moveDown(ref_id) {
+      var arr = theArticle.refs;
+      // console.log('move down', ref_id, arr.length)
+      if(ref_id<arr.length-1) {
+        [arr[ref_id], arr[ref_id+1]] = [arr[ref_id+1], arr[ref_id]];
+      }else {
+        var theRef = arr[ref_id];
+        arr.splice(ref_id, 1);
+        arr.unshift(theRef);
+      }
+      $("#therefs").val(JSON.stringify(arr));
+      $("#ref-frm").submit();
+    }
   </script>
   </body>
 

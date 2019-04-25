@@ -218,10 +218,19 @@ class ArticalController {
         }
         await mainArticle.getScholar()
 
+        try{
+            mainArticle.refs = JSON.parse(mainArticle.refs)
+        }catch(e) {
+            mainArticle.refs = []
+        }
+
+        console.log('the article refs', mainArticle.refs)
+
         let article = mainArticle.toJSON()
         if(article.publish_date) {
             article.publish_date = moment(article.publish_date).format('YYYY-MM-DD')
         }
+        var open_refs = false
         if(request.method()=='POST') {
             if(request.all()['position']) {
                 if(request.all()['position']=='corresponding') {
@@ -464,6 +473,18 @@ class ArticalController {
                     }
                 }
                 // console.log('Request', request.all())
+            }else if(request.all()['therefs']){
+                console.log('new refs', request.all()['therefs'])
+                try{
+                    let theRefs = []
+                    theRefs = JSON.parse(request.all()['therefs'])
+                    console.log('which is ', theRefs)
+                    mainArticle.refs = request.all()['therefs']
+                    await mainArticle.save()
+                    mainArticle.refs = theRefs
+                    article = mainArticle.toJSON()
+                    open_refs = true
+                }catch(e) {}
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -584,6 +605,7 @@ class ArticalController {
             selected_editor: selected_editor,
             preeditors: PreEditors,
             userEmails: JSON.stringify(userEmails),
+            open_refs: open_refs,
         })
     }
 
@@ -631,6 +653,7 @@ class ArticalController {
 
         theArticle.views++
         await theArticle.save()
+
 
         let articles = await Artical.query().with('journal').where('journal_id', theArticle.journal_id).where('status', 'published').where('id', '!=', theArticle.id).orderBy('citiations', 'desc').limit(3).fetch()
         articles = articles.toJSON()
