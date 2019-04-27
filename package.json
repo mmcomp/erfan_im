@@ -23,7 +23,7 @@
     "@adonisjs/bodyparser": "^2.0.3",
     "@adonisjs/cors": "^1.0.6",
     "@adonisjs/fold": "^4.0.8",
-    "@adonisjs/framework": "^5.0.7",
+    "@adonisjs/framework": "^5.0.13",
     "@adonisjs/ignitor": "^2.0.6",
     "@adonisjs/lucid": "^5.0.4",
     "@adonisjs/mail": "^3.0.9",
@@ -33,15 +33,21 @@
     "dns": "^0.2.2",
     "docx-extractor": "^1.1.4",
     "docxtemplater": "^3.10.1",
+    "docxtemplater-image-module-free": "^1.1.1",
     "google-scholar": "^1.5.1",
+    "html-entities": "^1.2.1",
     "jszip": "^2.6.1",
+    "match-all": "^1.2.5",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
+    "node-html-parser": "^1.1.15",
     "node-stream-zip": "^1.8.0",
     "nodemailer": "^5.1.1",
+    "open-docxtemplater-image-module": "^1.0.3",
     "phantom": "^6.0.3",
     "randomatic": "^3.1.1",
     "sqlite3": "^4.0.2",
+    "striptags": "^3.1.1",
     "word2pdf": "^1.0.7"
   },
   "devDependencies": {},
@@ -49,8 +55,13 @@
     "App": "./app"
   },
   "bin": "server.js",
-  "pkg": { 
-    "assets": [ "package.json", "node_modules/**/*.*" ], 
-    "targets": [ "node8" ] 
+  "pkg": {
+    "assets": [
+      "package.json",
+      "node_modules/**/*.*"
+    ],
+    "targets": [
+      "node8"
+    ]
   }
 }

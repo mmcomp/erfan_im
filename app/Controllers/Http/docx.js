@@ -5,6 +5,7 @@ const dns = require('dns')
 const nodemailer = require("nodemailer")
 var JSZip = require('jszip')
 var Docxtemplater = require('docxtemplater')
+const ImageModule = require('open-docxtemplater-image-module')
 var path = require('path')
 const word2pdf = require('word2pdf')
 let addressIndex = 0
@@ -199,21 +200,42 @@ module.exports = {
         try {
           var content = fs.readFileSync(path.resolve(baseDir, 'template.docx'), 'binary')
           var zip = new JSZip(content)
-    
+          zip.folder('word').folder('media').file('j_0.png', fs.readFileSync(path.resolve(baseDir, 'public/static/img/journal/j_0.png')))
+
+          console.log('zip rels')
+          let theRels = zip.folder('word').folder('_rels').file('document.xml.rels')
+          console.log(theRels.async("string"))
+
+          var opts = {}
+          opts.centered = false
+          opts.fileType = "docx"
+          
+          opts.getImage = function(tagValue, tagName) {
+              return fs.readFileSync(tagValue)
+          }
+          
+          opts.getSize = function(img, tagValue, tagName) {
+              return [70, 70]
+          }
+          
+          var imageModule = new ImageModule(opts)
+
           var doc = new Docxtemplater()
-          doc.setOptions({linebreaks:true});
+
+          doc.attachModule(imageModule)
+
+          doc.setOptions({linebreaks:true})
 
           doc.loadZip(zip)
     
-          
           doc.setData(data)
   
-        
           doc.render()
           
           var buf = doc.getZip().generate({type: 'nodebuffer'})
 
           fs.writeFileSync(path.resolve(baseDir + '/public/pdf', outputname + '.docx'), buf)
+
           resolve(baseDir + '/public/pdf/' + outputname + '.docx')
         }catch (error) {
           var e = {
