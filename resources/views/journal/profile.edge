@@ -113,13 +113,14 @@
                                     @endif
                                     >
                                     @if(user.group_id==1 || user.group_id==2)
-                                    <a href="#" style="float: right;z-index: 9999999;" onclick="return deleteTab({{ ($loop.index + 1) }});" >
-                                        <i class="fa fa-times-circle" style="color: red;"></i>
-                                    </a>
+                                        <a href="#" style="float: right;z-index: 9999999;margin: 0px !important;" onclick="return deleteTab({{ ($loop.index + 1) }});" >
+                                            <i class="fa fa-times-circle" style="color: red;"></i>
+                                        </a>
                                     @endif
                                         <a class="tbs" id="tb{{ ($loop.index + 1) }}" href="#tab_{{ ($loop.index + 1) }}" data-toggle="tab">{{{ extr.tbname }}}</a>
                                     </li>
                                     @endeach
+                                    
                                     <!--
                                     <li class="active">
                                             <a class="editor tbs" id="tb1" href="#tab_1" data-toggle="tab">Abstractions</a>
@@ -612,8 +613,9 @@
             var tbcontent = $("#tb-content").html();
             var id = lastid;
             @if(user.group_id==1 || user.group_id==2)
-            var extr = '<a href="#" style="float: right;z-index: 9999999;" onclick="return deleteTab(' + id + ');" >';
-            extr += '<i class="fa fa-times-circle" style="color: red;"></i></a>';
+            // var extr = '<a href="#" style="float: right;z-index: 9999999;" onclick="return deleteTab(' + id + ');" >';
+            // extr += '<i class="fa fa-times-circle" style="color: red;"></i></a>';
+            var extr = '';
             @else
             var extr = '';
             @endif

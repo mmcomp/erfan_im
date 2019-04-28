@@ -189,8 +189,9 @@ module.exports = {
       );
     },
     // PDF
-    fillTemplateWord: function(data, outputname) {
+    fillTemplateWord: function(data, outputname, images) {
       let baseDirAr = __dirname.split('/'), baseDir = ''
+      let theImages = images
       for(var i = baseDirAr.length - 4;i>=0;i--) {
         baseDir = '/' + baseDirAr[i] + baseDir
       }
@@ -200,12 +201,28 @@ module.exports = {
         try {
           var content = fs.readFileSync(path.resolve(baseDir, 'template.docx'), 'binary')
           var zip = new JSZip(content)
-          zip.folder('word').folder('media').file('j_0.png', fs.readFileSync(path.resolve(baseDir, 'public/static/img/journal/j_0.png')))
+          // zip.folder('word').folder('media').file('j_0.png', fs.readFileSync(path.resolve(baseDir, 'public/static/img/journal/j_0.png')))
 
-          console.log('zip rels')
-          let theRels = zip.folder('word').folder('_rels').file('document.xml.rels')
-          console.log(theRels.async("string"))
-
+          if(theImages.length>0) {
+            console.log('zip rels')
+            let theRels = zip.folder('word').folder('_rels').file('document.xml.rels')
+            let fileBuffer = new Buffer(theRels._data.getContent())
+            fileBuffer = fileBuffer.toString('utf8')
+            let tmpRef = `<Relationship Id="#id#" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/#name#">`
+            let newRefs = '', imageName = ''
+            for(let refI = 0;refI < theImages.length;refI++) {
+              imageName = theImages[refI].split('/')[theImages[refI].split('/').length-1]
+              newRefs += tmpRef.replace('#id#', `rId${ refI }`).replace('#name#', imageName)
+              console.log('Add Image to Media')
+              console.log('Image Name', imageName)
+              console.log('Image Path', path.resolve(baseDir, 'public/' + theImages[refI]))
+              zip.folder('word').folder('media').file(imageName, fs.readFileSync(path.resolve(baseDir, 'public/' + theImages[refI])))
+            }
+            newRefs += '</Relationships>'
+            fileBuffer =  fileBuffer.replace('</Relationships>', newRefs)
+            zip.folder('word').folder('_rels').file('document.xml.rels', fileBuffer)
+            fs.writeFileSync(path.resolve(baseDir, 'document.xml.rels'), fileBuffer.toString('utf8'))
+          }
           var opts = {}
           opts.centered = false
           opts.fileType = "docx"

@@ -222,12 +222,6 @@ class ArticalController {
         }
         await mainArticle.getScholar()
 
-        try{
-            mainArticle.refs = JSON.parse(mainArticle.refs)
-        }catch(e) {
-            mainArticle.refs = []
-        }
-
         console.log('the article refs', mainArticle.refs)
 
         let article = mainArticle.toJSON()
@@ -506,6 +500,15 @@ class ArticalController {
             }
         }
 
+
+        try{
+            mainArticle.refs = JSON.parse(mainArticle.refs)
+        }catch(e) {
+            mainArticle.refs = []
+        }
+
+        article.refs = mainArticle.refs
+
         let whereClause = "'" + mainArticle.running_title + "' like concat('%', keyword, '%')"
         let preEditors = await UserKeyword.query().whereRaw(whereClause).with('user').fetch()
         // console.log('Pre Editors', whereClause, preEditors.toJSON())
@@ -719,36 +722,11 @@ class ArticalController {
     }
 
     static html2xml (inp) {
-        String.prototype.replaceAt=function(index, replacement) {
-            return this.substr(0, index) + replacement+ this.substr(index + replacement.length);
-        }
         const entities = new Entities()
-        let out = striptags(inp, ['p', 'table', 'tr', 'td', 'a', 'strong'], '')
+        let out = striptags(inp, ['p', 'table', 'tr', 'td', 'a', 'strong', 'img'], '')
         out = entities.decode(out)
-        // links
-        let re = /<\s*a[^>]*>/g
         
-        let m, tmp, href, retmp
-
-        do {
-            m = re.exec(out)
-            if (m) {
-                // console.log(m)
-                tmp = out.substring(m.index+1).toLowerCase().split('href="')
-                if(tmp.length>1) {
-                    tmp = tmp[1].split('"')[0]
-                    if(tmp.indexOf('#')==0) {
-                        href= tmp
-                        // console.log('replace ', m[0])
-                        retmp = new RegExp(m[0], 'g')
-                        out = out.replace(retmp, `</w:t></w:r><w:hyperlink w:anchor="${ href }"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t>`)
-                    }
-                }
-            }
-        } while (m)
-        out = out.replace(/<\/a>/g, `</w:t></w:r></w:hyperlink><w:r><w:t>`)
-
-        //\links
+                
         out = out.replace(/<\s*p[^>]*>/g,`<w:p><w:r><w:t>`)
         out = out.replace(/<\/p>/g, `</w:t></w:r></w:p>`)
         
@@ -762,17 +740,142 @@ class ArticalController {
         out = out.replace(/<\s*tr[^>]*>/g, `<w:tr>`)
         out = out.replace(/<\/tr>/g, `</w:tr>`)
         out = out.replace(/&nbsp;/g, ' ')
+
+        let m, tmp, href, retmp, re
+        // links
+        re = /<\s*a[^>]*>/g
+
+        do {
+            m = re.exec(out)
+            if (m) {
+                tmp = out.substring(m.index+1).toLowerCase().split('href="')
+                if(tmp.length>1) {
+                    tmp = tmp[1].split('"')[0]
+                    if(tmp.indexOf('#')==0) {
+                        href= tmp
+                        retmp = new RegExp(m[0], 'g')
+                        out = out.replace(retmp, `</w:t></w:r><w:hyperlink w:anchor="${ href }"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t>`)
+                    }
+                }
+            }
+        } while (m)
+        out = out.replace(/<\/a>/g, `</w:t></w:r></w:hyperlink><w:r><w:t>`)
+        //\links
+        // images
+        re = /<\s*img[^>]*>/g
+        let images = []
+    
+
+        let index = 0, imageTmp = '', imageTemp = `<w:drawing>
+            <wp:inline distT="0" distB="0" distL="0" distR="0">
+            <wp:extent cx="666750" cy="666750" />
+            <wp:effectExtent l="0" t="0" r="0" b="0" />
+            <wp:docPr id="2" name="Image 2" descr="image" />
+            <wp:cNvGraphicFramePr>
+                <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1" />
+            </wp:cNvGraphicFramePr>
+            <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                    <pic:nvPicPr>
+                    <pic:cNvPr id="0" name="Picture 1" descr="image" />
+                    <pic:cNvPicPr>
+                        <a:picLocks noChangeAspect="1" noChangeArrowheads="1" />
+                    </pic:cNvPicPr>
+                    </pic:nvPicPr>
+                    <pic:blipFill>
+                    <a:blip r:embed="rId#index#">
+                        <a:extLst>
+                        <a:ext uri="{28A0092B-C50C-407E-A947-70E740481C1C}">
+                            <a14:useLocalDpi xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" val="0" />
+                        </a:ext>
+                        </a:extLst>
+                    </a:blip>
+                    <a:srcRect />
+                    <a:stretch>
+                        <a:fillRect />
+                    </a:stretch>
+                    </pic:blipFill>
+                    <pic:spPr bwMode="auto">
+                    <a:xfrm>
+                        <a:off x="0" y="0" />
+                        <a:ext cx="666750" cy="666750" />
+                    </a:xfrm>
+                    <a:prstGeom prst="rect">
+                        <a:avLst />
+                    </a:prstGeom>
+                    <a:noFill />
+                    <a:ln>
+                        <a:noFill />
+                    </a:ln>
+                    </pic:spPr>
+                </pic:pic>
+                </a:graphicData>
+            </a:graphic>
+            </wp:inline>
+        </w:drawing>`
+        // console.log('Images : ')
+        do {
+            m = re.exec(out)
+            // console.log(m)
+            if (m) {
+                tmp = out.substring(m.index+1).toLowerCase().split('src="')
+                // console.log('try src', tmp)
+                if(tmp.length>1) {
+                    tmp = tmp[1].split('"')[0]
+                    href= tmp
+                    retmp = new RegExp(m[0], 'g')
+                    imageTmp = imageTemp.replace(/#index#/g, index)
+                    out = out.replace(retmp, `${ imageTmp}`)
+                    index++
+                    images.push(href)
+                }
+            }
+        } while (m)
+        //\images
+
+        return {
+            xml: out,
+            images: images,
+        }
+    }
+
+    static ref2xml (refs) {
+        let out = '<w:p>', refName = ''
+        for(let i = 0;i < refs.length;i++) {
+            refName = '#_ENREF_' + (i+1)
+            out += `<w:bookmarkStart w:id="0" w:name="${ refName }"/><w:r><w:t>${ refs[i] }</w:t></w:r><w:bookmarkEnd w:id="0"/><w:br/>`
+        }
+        out += '</w:p>'
         return out
     }
 
     async pdf ({ view, response, session, request, params }) {
         try{
-            let theHtml = fs.readFileSync('/Users/machouse/Desktop/intro.html')
-            theHtml = theHtml.toString()
-            // theHtml = `<p><strong>abbas</strong> <a href="#_ENREF_10">Hengasdsdsd</a></p>`
-            let theXML = ArticalController.html2xml(theHtml)
-            // console.log('XML', theXML)
-            fs.writeFileSync('thexml.xml', theXML)
+            let allImages = []
+
+            let Intro = fs.readFileSync('/Volumes/projects/erfan/erfan/intro.html')
+            Intro = Intro.toString()
+            // Intro = `<p><img src="http://192.168.1.165:3334/static/img/journal/j_0.png" ></p>`
+            let theXML = ArticalController.html2xml(Intro)
+            allImages = allImages.concat(theXML.images)
+            console.log('All Images', allImages)
+            // console.log('XML', theXML.images)
+            // fs.writeFileSync('thexml.xml', theXML.xml)
+            let article_introduction = theXML.xml
+
+            theXML = ArticalController.html2xml(`<p><strong>Objectives :</strong> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells.</p>`)            
+            let article_abstract = theXML.xml
+            allImages = allImages.concat(theXML.images)
+
+            theXML = ArticalController.html2xml(`<p><strong>Keywords:</strong> abbas, ali</p>`)
+            let article_keywords = theXML.xml
+            allImages = allImages.concat(theXML.images)
+
+            let article_references = ArticalController.ref2xml([
+                "1.  Kumar V. Identification of the sequence motif of glycoside hydrolase 13 family members. Bioinformation. 2011;6(2):61-3",
+                "2.  Blesák K, Janeček Š. Two potentially novel amylolytic enzyme specificities in the prokaryotic glycoside hydrolase α-amylase family GH57. Microbiology. 2013;159(12):2584-93"
+            ])
 
             let docxfile = await docx.fillTemplateWord({
                 //---global
@@ -792,29 +895,10 @@ class ArticalController {
                 article_full_title: `Toxicity of Five Local Anesthesia Drugs on Cells and Multipotent Stem Cells`,
                 article_submision_date: '24 November 2016',
                 article_acceptance_date: '25 April 2017',
-                article_abstract: ``,//`<b>Objectives:</b> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells. `,
-                keywords: theXML,
-                // sample_image: `<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
-                // <pic:nvPicPr>
-                // <pic:cNvPr id="0" name="Blue hills.jpg"/>
-                // <pic:cNvPicPr/>
-                // </pic:nvPicPr>
-                // <pic:blipFill>
-                // <a:blip r:embed="rId4" cstate="print"/>
-                // <a:stretch>
-                // <a:fillRect/>
-                // </a:stretch/>
-                // </pic:blipFill>
-                // <pic:spPr>
-                // <a:xfrm>
-                // <a:off x="0" y="0"/>
-                // <a:ext cx="2438400" cy="1828800"/>
-                // </a:xfrm>
-                // <a:prstGeom rst="rect>
-                // <a:avLst/>
-                // </a:prstGeom>
-                // </pic:spPr>
-                // </pic:pic>`,
+                article_abstract: article_abstract,
+                article_keywords: article_keywords,
+                article_introduction: article_introduction,
+                article_references: article_references,
                 //---author
                 authors: [
                     {
@@ -868,7 +952,7 @@ class ArticalController {
                         name: 'Department of Anesthesia, Cardiac Anesthesia Research Center, Imam-Reza Hospital, Mashhad Iran.\n',
                     },
                 ],
-            }, 'hh')
+            }, 'hh', allImages)
             console.log('Docx file Result', docxfile)
             // await docx.docxToPdf(docxfile, 'hh')
         }catch(e) {
