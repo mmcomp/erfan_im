@@ -722,6 +722,12 @@ class ArticalController {
     }
 
     static html2xml (inp) {
+        if(inp==null || inp=='') {
+            return { 
+                xml:'<w:p><w:r><w:t></w:t></w:r></w:p>', 
+                images: [],
+            }
+        }
         const entities = new Entities()
         let out = striptags(inp, ['p', 'table', 'tr', 'td', 'a', 'strong', 'img'], '')
         out = entities.decode(out)
@@ -852,32 +858,7 @@ class ArticalController {
 
     async pdf ({ view, response, session, request, params }) {
         try{
-            let allImages = []
-
-            let Intro = fs.readFileSync('/Volumes/projects/erfan/erfan/intro.html')
-            Intro = Intro.toString()
-            // Intro = `<p><img src="http://192.168.1.165:3334/static/img/journal/j_0.png" ></p>`
-            let theXML = ArticalController.html2xml(Intro)
-            allImages = allImages.concat(theXML.images)
-            console.log('All Images', allImages)
-            // console.log('XML', theXML.images)
-            // fs.writeFileSync('thexml.xml', theXML.xml)
-            let article_introduction = theXML.xml
-
-            theXML = ArticalController.html2xml(`<p><strong>Objectives :</strong> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells.</p>`)            
-            let article_abstract = theXML.xml
-            allImages = allImages.concat(theXML.images)
-
-            theXML = ArticalController.html2xml(`<p><strong>Keywords:</strong> abbas, ali</p>`)
-            let article_keywords = theXML.xml
-            allImages = allImages.concat(theXML.images)
-
-            let article_references = ArticalController.ref2xml([
-                "1.  Kumar V. Identification of the sequence motif of glycoside hydrolase 13 family members. Bioinformation. 2011;6(2):61-3",
-                "2.  Blesák K, Janeček Š. Two potentially novel amylolytic enzyme specificities in the prokaryotic glycoside hydrolase α-amylase family GH57. Microbiology. 2013;159(12):2584-93"
-            ])
-
-            let docxfile = await docx.fillTemplateWord({
+            let theData = {
                 //---global
                 global_doi: '10.15562',
                 //---journal
@@ -895,10 +876,12 @@ class ArticalController {
                 article_full_title: `Toxicity of Five Local Anesthesia Drugs on Cells and Multipotent Stem Cells`,
                 article_submision_date: '24 November 2016',
                 article_acceptance_date: '25 April 2017',
-                article_abstract: article_abstract,
-                article_keywords: article_keywords,
-                article_introduction: article_introduction,
-                article_references: article_references,
+                article_abstract: '',
+                article_keywords: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_introduction: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_material: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_results: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_references: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 //---author
                 authors: [
                     {
@@ -952,7 +935,121 @@ class ArticalController {
                         name: 'Department of Anesthesia, Cardiac Anesthesia Research Center, Imam-Reza Hospital, Mashhad Iran.\n',
                     },
                 ],
-            }, 'hh', allImages)
+            }
+            let article_id = 13
+            let theTypes = {
+                "research": "Research",
+                "non-research": "Non-Research"
+            }
+            let articleKeywordsHtml = '<p><strong>Keywords :</strong> '
+            let allImages = [], theXML
+            let theArticle = await Artical.query().where('id', article_id).with('journal').with('keyword.keyword').with('author').first()
+            theArticle = theArticle.toJSON()
+            try{
+                theArticle.refs = JSON.parse(theArticle.refs)
+            }catch(e){
+                theArticle.refs = []
+            }
+            let theAuthors = await UserArticle.query().where('article_id', article_id).with('user').fetch()
+            theAuthors = theAuthors.toJSON()
+            // console.log('the article')
+            // console.log(theAuthors)
+            //---journal
+            theData.journal_name = theArticle.journal.name
+            theData.journal_vol = theArticle.publish_vol
+            theData.jounral_n = ''
+            theData.journal_doi = theArticle.journal.doi_code
+            theData.image = '/Volumes/projects/erfan/erfan/public/static/img/journal/j_0.png'
+            //---article
+            theData.header_author = theArticle.author.lname
+            let authorCount = 1
+            let authorsClassified = {
+                first: [
+                    theArticle.author,
+                ],
+            }
+            for(let userArticle of theAuthors) {
+                if(userArticle.users_id!=theArticle.author.id) {
+                    authorCount++
+                    if(!authorsClassified[userArticle.position]) {
+                        authorsClassified[userArticle.position] = []
+                    }
+                    authorsClassified[userArticle.position].push(userArticle.user)
+                }
+            }
+            if(authorCount==2) {
+                if(authorsClassified.first.length>1) {
+                    theData.header_author += ' and ' +  authorsClassified.first[1].lname
+                }else if(authorsClassified['co']) {
+                    theData.header_author += ' and ' +  authorsClassified.co[0].lname
+                }else if(authorsClassified['corresponding']) {
+                    theData.header_author += ' and ' +  authorsClassified.corresponding[0].lname
+                }
+            }else if(authorCount>2) {
+                theData.header_author += ' et al.'
+            }
+            theData.article_publish_month_year = moment(theArticle.publish_date).format('MMMM, YYYY')
+            theData.article_pages = theArticle.publish_startpage + '-' + theArticle.publish_endpage
+            theData.article_doi = theArticle.doi
+            theData.article_type = theTypes[theArticle.type]
+            theData.article_full_title = theArticle.full_title
+            theData.article_submision_date = moment(theArticle.created_at).format('D MMMM YYYY')
+            theData.article_acceptance_date = moment(theArticle.publish_date).format('D MMMM YYYY')
+            
+            theData.article_abstract = theArticle.abstract 
+            console.log('Keywords', theArticle.keyword)     
+                 
+            if(theArticle.keyword && theArticle.keyword.length>0) {
+                for(let keyW of theArticle.keyword) {
+                    articleKeywordsHtml += keyW.keyword.theword + ' , '
+                }
+                articleKeywordsHtml += '</p>'
+                theXML = ArticalController.html2xml(articleKeywordsHtml)
+                theData.article_keywords = theXML.xml
+            }else {
+                theData.article_keywords = '<w:p><w:r><w:t></w:t></w:r></w:p>'
+            }
+            
+            theXML = ArticalController.html2xml(theArticle.introduction)
+            allImages = allImages.concat(theXML.images)
+            theData.article_introduction = theXML.xml
+            
+            theXML = ArticalController.html2xml(theArticle.material)
+            allImages = allImages.concat(theXML.images)
+            theData.article_material = theXML.xml
+            theXML = ArticalController.html2xml(theArticle.results)
+            allImages = allImages.concat(theXML.images)
+            theData.article_results = theXML.xml
+            
+
+            if(theArticle.refs.length>0) {
+                theData.article_references = ArticalController.ref2xml(theArticle.refs)
+            }
+            
+
+            // let Intro = fs.readFileSync('/Volumes/projects/erfan/erfan/intro.html')
+
+            // let theXML = ArticalController.html2xml(Intro)
+            // allImages = allImages.concat(theXML.images)
+
+            // let article_introduction = theXML.xml
+
+            // theXML = ArticalController.html2xml(`<p><strong>Objectives :</strong> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells.</p>`)            
+            // let article_abstract = theXML.xml
+            // allImages = allImages.concat(theXML.images)
+
+            // theXML = ArticalController.html2xml(`<p><strong>Keywords:</strong> abbas, ali</p>`)
+            // let article_keywords = theXML.xml
+            // allImages = allImages.concat(theXML.images)
+
+            // let article_references = ArticalController.ref2xml([
+            //     "1.  Kumar V. Identification of the sequence motif of glycoside hydrolase 13 family members. Bioinformation. 2011;6(2):61-3",
+            //     "2.  Blesák K, Janeček Š. Two potentially novel amylolytic enzyme specificities in the prokaryotic glycoside hydrolase α-amylase family GH57. Microbiology. 2013;159(12):2584-93"
+            // ])
+
+            console.log('The Data')
+            console.log(theData)
+            let docxfile = await docx.fillTemplateWord(theData, 'hh', allImages)
             console.log('Docx file Result', docxfile)
             // await docx.docxToPdf(docxfile, 'hh')
         }catch(e) {
