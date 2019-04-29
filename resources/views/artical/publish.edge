@@ -198,17 +198,24 @@
           </div>
           <div class="c-content-ver-nav">
             <ul class="c-menu c-arrow-dot1 c-theme">
+              @if(hasPDF)
               <li>
-                <a href="javascript:requestPDF()">Full Text PDF</a>
+                <a href="/pdf/{{ article.id }}">Full Text PDF</a>
+                <!-- <a href="javascript:requestPDF()">Full Text PDF</a> -->
               </li>
+              @endif
+              @if(hasEPUB)
               <li>
-                <a href="http://imaqpress.com/articles/immortalized-cell-lines.epub">Full Text ePUB</a>
+                <a href="/epub/{{ article.id }}">Full Text ePUB</a>
               </li>
+              @endif
+              @if(hasXML)
               <li>
-                <a href="http://imaqpress.com/articles/immortalized-cell-lines.xml">Full Text XML</a>
+                <a href="/xml/{{ article.id }}">Full Text XML</a>
               </li>
+              @endif
               <li>
-                <a href="http://imaqpress.com/articles/immortalized-cell-lines/cite" data-toggle="modal" data-target="#howtocite" data-whatever="bootstrap">How to Cite?</a>
+                <a href="#" data-toggle="modal" data-target="#howtocite" data-whatever="bootstrap">How to Cite?</a>
                 <div class="modal fade" id="howtocite" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                   aria-hidden="true">
                   <div class="modal-dialog">

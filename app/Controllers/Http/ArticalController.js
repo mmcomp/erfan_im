@@ -9,7 +9,7 @@ const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
 const UserKeyword = use('App/Models/UserKeyword')
 const Helpers = use('Helpers')
-const Mail = use('Mail')
+const path = require('path')
 const phantom = require('phantom')
 const Env = use('Env')
 const fs = require('fs')
@@ -203,6 +203,10 @@ class ArticalController {
         if(session.get('user')) {
             isLogged = true
             user = session.get('user')
+        }else {
+            session.put('msg', 'You need to Login or Signup first')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
         }
 
         // console.log('Params', params)
@@ -220,7 +224,13 @@ class ArticalController {
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
         }
+
         await mainArticle.getScholar()
+        if(user.group_id!=1 && user.journal_id!=mainArticle.journal_id) {
+            session.put('msg', 'You do not have permission to this article')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
+        }
 
         console.log('the article refs', mainArticle.refs)
 
@@ -479,8 +489,8 @@ class ArticalController {
                     console.log('which is ', theRefs)
                     mainArticle.refs = request.all()['therefs']
                     await mainArticle.save()
-                    mainArticle.refs = theRefs
-                    article = mainArticle.toJSON()
+                    // mainArticle.refs = theRefs
+                    // article = mainArticle.toJSON()
                     open_refs = true
                 }catch(e) {}
             }else {
@@ -498,6 +508,7 @@ class ArticalController {
                 }
                 await mainArticle.save()
             }
+            ArticalController.genPdf(mainArticle.id)
         }
 
 
@@ -640,6 +651,17 @@ class ArticalController {
             return response.redirect('/')
         }
         
+        let baseDirAr = __dirname.split('/'), baseDir = ''
+        for(var i = baseDirAr.length - 4;i>=0;i--) {
+          baseDir = '/' + baseDirAr[i] + baseDir
+        }
+        baseDir = baseDir.substring(1)
+        let hasPDF = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.pdf')
+        let hasEPUB = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.epub')
+        let hasXML = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.xml')
+
+
+        /*
         if(request.all()['pdf']) {
             theArticle.downloads++
             await theArticle.save()
@@ -657,6 +679,7 @@ class ArticalController {
             return response.send(content)
 
         }
+        */
 
         theArticle.views++
         await theArticle.save()
@@ -707,6 +730,9 @@ class ArticalController {
             msg: msg, 
             msg_type: msg_type,
             articles: articles,
+            hasPDF: hasPDF,
+            hasEPUB: hasEPUB,
+            hasXML: hasXML,
         })
     }
 
@@ -856,7 +882,7 @@ class ArticalController {
         return out
     }
 
-    async pdf ({ view, response, session, request, params }) {
+    static async genPdf(article_id) {
         try{
             let theData = {
                 //---global
@@ -936,7 +962,12 @@ class ArticalController {
                     },
                 ],
             }
-            let article_id = 13
+            let baseDirAr = __dirname.split('/'), baseDir = ''
+            for(var i = baseDirAr.length - 4;i>=0;i--) {
+              baseDir = '/' + baseDirAr[i] + baseDir
+            }
+            baseDir = baseDir.substring(1)
+
             let theTypes = {
                 "research": "Research",
                 "non-research": "Non-Research"
@@ -952,14 +983,16 @@ class ArticalController {
             }
             let theAuthors = await UserArticle.query().where('article_id', article_id).with('user').fetch()
             theAuthors = theAuthors.toJSON()
-            // console.log('the article')
-            // console.log(theAuthors)
             //---journal
             theData.journal_name = theArticle.journal.name
             theData.journal_vol = theArticle.publish_vol
             theData.jounral_n = ''
             theData.journal_doi = theArticle.journal.doi_code
-            theData.image = '/Volumes/projects/erfan/erfan/public/static/img/journal/j_0.png'
+            theData.image = baseDir + '/public/static/img/journal/j_0.png'
+            if(theArticle.journal.pdf_image_path && theArticle.journal.pdf_image_path!='') {
+                theData.image = baseDir + '/public/' + theArticle.journal.pdf_image_path
+            }
+
             //---article
             theData.header_author = theArticle.author.lname
             let authorCount = 1
@@ -968,13 +1001,62 @@ class ArticalController {
                     theArticle.author,
                 ],
             }
+            let authorAffs = [], affs = [], affIndex
             for(let userArticle of theAuthors) {
+                affIndex = affs.indexOf(userArticle.user.department)
+                if(affIndex<0) {
+                    affIndex = affs.length
+                    affs.push(userArticle.user.department)
+                    authorAffs.push({
+                        index: affIndex+1,
+                        name: userArticle.user.department,
+                    })
+                }
+                affIndex++
                 if(userArticle.users_id!=theArticle.author.id) {
                     authorCount++
                     if(!authorsClassified[userArticle.position]) {
                         authorsClassified[userArticle.position] = []
                     }
+                    userArticle.user['aff_index'] = affIndex
                     authorsClassified[userArticle.position].push(userArticle.user)
+                }
+            }
+            affIndex = affs.indexOf(authorsClassified.first[0].department)
+            if(affIndex<0) {
+                affIndex = affs.length
+                affs.push(authorsClassified.first[0].department)
+                authorAffs.push({
+                    index: affIndex+1,
+                    name: authorsClassified.first[0].department,
+                })
+            }
+            affIndex++
+            authorsClassified.first[0]['aff_index'] = affIndex
+            theData.author_affs = authorAffs
+            theData.authors = []
+            let firstAuthor = true
+            for(let theAuth of authorsClassified.first) {
+                theData.authors.push({
+                    index: theAuth.aff_index,
+                    name: ((firstAuthor)?'':' , ') + theAuth.fname + ' ' + theAuth.lname,
+                })
+                firstAuthor = false
+            }
+            if(authorsClassified.co) {
+                for(let theAuth of authorsClassified.co) {
+                    theData.authors.push({
+                        index: theAuth.aff_index,
+                        name: ' , ' + theAuth.fname + ' ' + theAuth.lname,
+                    })
+                }
+            }
+            if(authorsClassified.corresponding) {
+                for(let theAuth of authorsClassified.corresponding) {
+                    theData.authors.push({
+                        index: theAuth.aff_index + '*',
+                        name: ' , ' + theAuth.fname + ' ' + theAuth.lname,
+                    })
                 }
             }
             if(authorCount==2) {
@@ -1025,38 +1107,59 @@ class ArticalController {
             if(theArticle.refs.length>0) {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }
-            
-
-            // let Intro = fs.readFileSync('/Volumes/projects/erfan/erfan/intro.html')
-
-            // let theXML = ArticalController.html2xml(Intro)
-            // allImages = allImages.concat(theXML.images)
-
-            // let article_introduction = theXML.xml
-
-            // theXML = ArticalController.html2xml(`<p><strong>Objectives :</strong> Mesenchymal stem cells (MSCs) play an important role in treating damaged tissues, growing and developing body tissues. Nowadays, the injection of stem cells has been considered for therapeutic purposes. Some substances which can be effective in the success rate of treatment are injected with the stem cells in the stem cell therapy. Anesthetics are a group of them. Local anesthetics toxicity on tissues such as nerve, cartilage, muscle and tendon are well described in many studies. Studies show local anesthesia can be toxic for stem cells too, and induce MSCs apoptosis and necrosis As a result, repairing of tissue by stem cells can be in trouble in damaged tissue which exposure to LAs. According to this, it is important to find the appropriate LA which has the least toxic effect on stem cells. In this study, we have considered the effects of LA such as lidocaine, bupivacaine, ropivacaine and mepivacaine on MSCs. Literature review: Local anesthetics toxicity has been described on chondrocytes by several studies. In this study, we have tried to find the effects of these drugs on mesenchymal stem cells. We have arranged local anesthetics for toxic effects to MSCs from high to low. According to this arrangement bupivacaine is the first drug, after that there are mepivacaine, lidocaine and ropivacaine, respectively. This sequence can be true for increasing the cellular metabolism, adhesive cells adhesion and also cellular appendages. Conclusion: The studies have indicated that MSCs is more sensitive to local anesthetics in comparison with chondrocytes. In addition to type of LAs, exposure time and drug dose play an important role in damaging to the MSCs. In other word, LAs effects are dose-dependent and time-dependent. however, The studies consider lesser neurotoxicity and longer local anesthesia effect for bupivacaine in comparison with other LAs such as lidocaine but it is recommended to use drugs which are safer (such as ropivacaine) in procedures including stem cell therapy, prolonged anesthesia and tissues are repairing. Because bupivacaine has high toxicity effect on mesenchymal stem cells.</p>`)            
-            // let article_abstract = theXML.xml
-            // allImages = allImages.concat(theXML.images)
-
-            // theXML = ArticalController.html2xml(`<p><strong>Keywords:</strong> abbas, ali</p>`)
-            // let article_keywords = theXML.xml
-            // allImages = allImages.concat(theXML.images)
-
-            // let article_references = ArticalController.ref2xml([
-            //     "1.  Kumar V. Identification of the sequence motif of glycoside hydrolase 13 family members. Bioinformation. 2011;6(2):61-3",
-            //     "2.  Blesák K, Janeček Š. Two potentially novel amylolytic enzyme specificities in the prokaryotic glycoside hydrolase α-amylase family GH57. Microbiology. 2013;159(12):2584-93"
-            // ])
 
             console.log('The Data')
             console.log(theData)
-            let docxfile = await docx.fillTemplateWord(theData, 'hh', allImages)
+            let docxfile = await docx.fillTemplateWord(theData, 'gen_' + article_id, allImages)
             console.log('Docx file Result', docxfile)
-            // await docx.docxToPdf(docxfile, 'hh')
+            docx.docxToPdf(docxfile, 'gen_' + article_id)
+            docx.docxToEpub(docxfile, 'gen_' + article_id)
+            return true
         }catch(e) {
             console.log('Pdf Error')
             console.log(e)
+            return false
         }
-        return 'ok';
+    }
+
+    async pdf ({ view, response, session, request, params }) {
+        if(params && params.article_id) {
+            let article_id = params.article_id
+            let article = await Artical.query().where('id', article_id).first()
+            if(article) {
+                let baseDirAr = __dirname.split('/'), baseDir = ''
+                for(var i = baseDirAr.length - 4;i>=0;i--) {
+                  baseDir = '/' + baseDirAr[i] + baseDir
+                }
+                baseDir = baseDir.substring(1)
+                if(fs.existsSync(baseDir + '/public/pdf/gen_' + article_id + '.pdf')) {
+                    article.downloads++
+                    article.save()
+                    return response.download(baseDir + '/public/pdf/gen_' + article_id + '.pdf')
+                }
+            }
+        }
+        return 'File Not found!'
+    }
+
+    async epub ({ view, response, session, request, params }) {
+        if(params && params.article_id) {
+            let article_id = params.article_id
+            let article = await Artical.query().where('id', article_id).first()
+            if(article) {
+                let baseDirAr = __dirname.split('/'), baseDir = ''
+                for(var i = baseDirAr.length - 4;i>=0;i--) {
+                  baseDir = '/' + baseDirAr[i] + baseDir
+                }
+                baseDir = baseDir.substring(1)
+                if(fs.existsSync(baseDir + '/public/pdf/gen_' + article_id + '.epub')) {
+                    article.downloads++
+                    article.save()
+                    return response.download(baseDir + '/public/pdf/gen_' + article_id + '.epub')
+                }
+            }
+        }
+        return 'File Not found!'
     }
 }
 

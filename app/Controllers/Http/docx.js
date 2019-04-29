@@ -3,11 +3,12 @@ const fs = require('fs')
 const dxe = require('docx-extractor')
 const dns = require('dns')
 const nodemailer = require("nodemailer")
-var JSZip = require('jszip')
-var Docxtemplater = require('docxtemplater')
+const JSZip = require('jszip')
+const Docxtemplater = require('docxtemplater')
 const ImageModule = require('open-docxtemplater-image-module')
-var path = require('path')
+const path = require('path')
 const word2pdf = require('word2pdf')
+const pandoc = require('node-pandoc')
 let addressIndex = 0
 
 module.exports = {
@@ -276,7 +277,29 @@ module.exports = {
       baseDir = baseDir.substring(1)
       const data = await word2pdf(docxfile)
       fs.writeFileSync(baseDir + '/public/pdf/' + outputname + '.pdf', data);
-    } 
+    },
+
+    docxToEpub: function(docxfile, outputname) {
+      let baseDirAr = __dirname.split('/'), baseDir = ''
+      for(var i = baseDirAr.length - 4;i>=0;i--) {
+        baseDir = '/' + baseDirAr[i] + baseDir
+      }
+      baseDir = baseDir.substring(1)
+      return new Promise(function( resolve, reject) {
+        try{
+          pandoc(docxfile, '-f docx -t epub -o ' + baseDir + '/public/pdf/' + outputname + '.epub', function(err, result) {
+            if(err) {
+              reject(err)
+            }
+
+            console.log('Epub Convertion Result', result)
+            resolve(result)
+          })
+        }catch(e){
+          reject(e)
+        }
+      })
+    }
 }
 
 return module.exports
