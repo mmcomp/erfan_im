@@ -225,6 +225,13 @@ class ArticalController {
             return response.redirect('/admin')
         }
 
+        if(mainArticle.author_id<=0) {
+            let theFirstAuthor = await UserArticle.query().where('article_id', mainArticle.id).where('position', 'first').first()
+            if(theFirstAuthor) {
+                mainArticle.author_id = theFirstAuthor.users_id
+                await mainArticle.save()
+            }
+        }
         await mainArticle.getScholar()
         if(user.group_id!=1 && user.journal_id!=mainArticle.journal_id) {
             session.put('msg', 'You do not have permission to this article')
@@ -286,6 +293,11 @@ class ArticalController {
                     }
                     userArticle.position = request.all()['position']
                     await userArticle.save()
+                    if(mainArticle.author_id<=0) {
+                        mainArticle.author_id = theAuthor.id
+                        await mainArticle.save()
+                        article = mainArticle.toJSON()
+                    }
                 }else if(request.all()['position']=='co'){
                     let theAuthor = await User.query().where('fname', request.all()['fname']).where('lname', request.all()['lname']).first()
                     if(!theAuthor) {
