@@ -685,6 +685,8 @@ class ArticalController {
         await theArticle.save()
 
 
+
+
         let articles = await Artical.query().with('journal').where('journal_id', theArticle.journal_id).where('status', 'published').where('id', '!=', theArticle.id).orderBy('citiations', 'desc').limit(3).fetch()
         articles = articles.toJSON()
         for(let i = 0;i < articles.length;i++) {
@@ -695,6 +697,11 @@ class ArticalController {
 
         // console.log('!!!!!')
         let article = theArticle.toJSON() , otherAuthors = [], corAuthors = []
+        try{
+            article.refs = JSON.parse(article.refs)
+        }catch(e) {
+            article.refs = []
+        }
         if(article.author) {
             otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id).whereNot('users_id', article.author.id).whereNot('position', 'corresponding').fetch()
             otherAuthors = otherAuthors.toJSON()

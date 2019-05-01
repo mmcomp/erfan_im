@@ -159,7 +159,10 @@
                     </div>
                     <div class="tab-pane fade" id="tab_16_6">
                         <p>
-                            {{{ (article.ref)?article.ref:'' }}}
+                            {{--{{{ (article.ref)?article.ref:'' }}}--}}
+                            @each(ref in article.refs)
+                            {{ ref }}<br/>
+                            @endeach
                         </p>
                     </div>
                   </div>

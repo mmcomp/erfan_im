@@ -206,6 +206,22 @@
                     Replace Cover Image
                 </button>
             </form>
+            <br/>
+            <br/>
+            <br/>
+            <h4>
+                In order to replace Journal Pdf Image , you can upload it here.
+                @if(journal.pdf_image_path && journal.pdf_image_path!='')
+                    <a target="_blank" href="/{{ journal.pdf_image_path }}">View</a>
+                @endif
+            </h4>
+            <form method="post"  enctype="multipart/form-data">
+                {{ csrfField() }}
+                <input type="file" name="pdf_image_path" />
+                <button class="btn btn-success pull-left">
+                    Replace Pdf Image
+                </button>
+            </form>
             <form method="post" id="tabdata-form">
                 {{ csrfField() }}
                 <div class="container">

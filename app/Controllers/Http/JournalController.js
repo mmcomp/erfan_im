@@ -390,6 +390,22 @@ class JournalController {
                     theJournal.cover_image_path = 'static/img/cover/' + filename
                     await theJournal.save()
                 }
+            }else if(request.file('pdf_image_path')) {
+                const imageUpload = request.file('pdf_image_path', {
+                    types: ['image'],
+                    size: '2mb'
+                })
+                let filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                await imageUpload.move(Helpers.publicPath('static/img/cover'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!imageUpload.moved()) {
+                    console.log(imageUpload.error())
+                }else {
+                    theJournal.pdf_image_path = 'static/img/cover/' + filename
+                    await theJournal.save()
+                }
             }
         }
 
