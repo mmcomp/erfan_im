@@ -32,6 +32,20 @@
                 <div class="c-body">
                   <button type="button" class="btn btn-md btn-{{ status_color }} c-btn-square c-btn-border-2x c-btn-sentence c-btn-bold  c-btn-uppercase"><i
                       class="icon-direction"></i>{{ article.status }}</button>
+                  <div style="color: #fff;">
+                    <h4 style="color: #ef65cf !important;">
+                      KeyWords
+                    </h4>
+                    <div>
+                      Full Title <span style="color: #50b0ec;">{{ keyword.full_title }} %</span>
+                    </div>
+                    <div>
+                      Running Title <span style="color: #50b0ec;">{{ keyword.running_title }} %</span>
+                    </div>
+                    <div>
+                      Summary <span style="color: #50b0ec;">{{ keyword.summery }} %</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

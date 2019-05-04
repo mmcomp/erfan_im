@@ -50,21 +50,22 @@ class ArticalController {
             data: null,
         }
         if(params && params.journal_id) {
-            let journalKeywords = await JournalKeyword.query().where('journal_id', params.journal_id).fetch()
-            journalKeywords = journalKeywords.toJSON()
-            out.error = null
-            // out.data = journalKeywords
-            let inp = String(request.all()['data']).toLowerCase()
-            let result = {
-                c1: 0,
-                c2: 0,
-                c3: 0,
-            }
-            for(let jK of journalKeywords) {
-                if(inp.indexOf(jK.theword.toLowerCase())>=0) {
-                    result[jK.category]++
-                }
-            }
+            // let journalKeywords = await JournalKeyword.query().where('journal_id', params.journal_id).fetch()
+            // journalKeywords = journalKeywords.toJSON()
+            // out.error = null
+            // // out.data = journalKeywords
+            // let inp = String(request.all()['data']).toLowerCase()
+            // let result = {
+            //     c1: 0,
+            //     c2: 0,
+            //     c3: 0,
+            // }
+            // for(let jK of journalKeywords) {
+            //     if(inp.indexOf(jK.theword.toLowerCase())>=0) {
+            //         result[jK.category]++
+            //     }
+            // }
+            let result = await JournalKeyword.keywordCheck(params.journal_id, request.all()['data'])
             out.data = result
         }
         return out
@@ -223,6 +224,33 @@ class ArticalController {
             session.put('msg', 'Article Not Found')
             session.put('msg_type', 'danger')
             return response.redirect('/admin')
+        }
+
+        let keyword = {
+            full_title: 25,
+            running_title: 25,
+            summery: 25,
+        }
+
+        let keywordResult = await JournalKeyword.keywordCheck(mainArticle.journal_id, mainArticle.full_title)
+        if(keywordResult.c1>0) {
+            keyword.full_title = 100
+        }else if(keywordResult.c2>0) {
+            keyword.full_title = 75
+        }
+
+        keywordResult = await JournalKeyword.keywordCheck(mainArticle.journal_id, mainArticle.running_title)
+        if(keywordResult.c1>0) {
+            keyword.running_title = 100
+        }else if(keywordResult.c2>0) {
+            keyword.running_title = 75
+        }
+
+        keywordResult = await JournalKeyword.keywordCheck(mainArticle.journal_id, mainArticle.summery)
+        if(keywordResult.c1>0) {
+            keyword.summery = 100
+        }else if(keywordResult.c2>0) {
+            keyword.summery = 75
         }
 
         if(mainArticle.author_id<=0) {
@@ -636,6 +664,7 @@ class ArticalController {
             preeditors: PreEditors,
             userEmails: JSON.stringify(userEmails),
             open_refs: open_refs,
+            keyword: keyword,
         })
     }
 
@@ -1005,7 +1034,7 @@ class ArticalController {
             //---journal
             theData.journal_name = theArticle.journal.name
             theData.journal_vol = theArticle.publish_vol
-            theData.jounral_n = ''
+            theData.jounral_n = theArticle.publish_no
             theData.journal_doi = theArticle.journal.doi_code
             theData.image = baseDir + '/public/static/img/journal/j_0.png'
             if(theArticle.journal.pdf_image_path && theArticle.journal.pdf_image_path!='') {
