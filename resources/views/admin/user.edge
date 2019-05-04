@@ -93,7 +93,7 @@
                           <select class="form-control c-square c-theme" name="journal_id">
                             <option value="0" disabled>Select Journal</option>
                             @each(theJounal in allJournals)
-                            <option value="{{theJounal.id}}" {{ (theJounal.id==user.journal_id)?'selected':'' }}>{{ theJounal.name }}</option>
+                            <option value="{{theJounal.id}}" {{ (theJounal.id==selected_user.journal_id)?'selected':'' }}>{{ theJounal.name }}</option>
                             @endeach
                           </select>
                         </div>
