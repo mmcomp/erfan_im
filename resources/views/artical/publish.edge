@@ -161,7 +161,7 @@
                         <p>
                             {{--{{{ (article.ref)?article.ref:'' }}}--}}
                             @each(ref in article.refs)
-                            {{ ref }}<br/>
+                            {{ ($loop.index + 1) }} - {{ ref }}<br/>
                             @endeach
                         </p>
                     </div>
@@ -489,12 +489,7 @@
 </form>
 <script>
   var theArticle = {{{ toJSON(article) }}};
-  var articleRefs = [];
-  if(theArticle.refs) {
-    try{
-      articleRefs = JSON.parse(theArticle.refs);
-    }catch(e){}
-  }
+  var articleRefs = theArticle.refs;
   var docReady = false;
   function requestPDF() {
     $("#pdf-form").submit();
