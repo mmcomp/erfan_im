@@ -267,7 +267,7 @@ class ArticalController {
             return response.route('home', {isLogged: isLogged})
         }
 
-        console.log('the article refs', mainArticle.refs)
+        // console.log('the article refs', mainArticle.refs)
 
         let article = mainArticle.toJSON()
         if(article.publish_date) {
@@ -1127,7 +1127,7 @@ class ArticalController {
             theData.article_acceptance_date = moment(theArticle.publish_date).format('D MMMM YYYY')
             
             theData.article_abstract = theArticle.abstract 
-            console.log('Keywords', theArticle.keyword)     
+            // console.log('Keywords', theArticle.keyword)     
                  
             if(theArticle.keyword && theArticle.keyword.length>0) {
                 for(let keyW of theArticle.keyword) {
@@ -1156,12 +1156,14 @@ class ArticalController {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }
 
-            console.log('The Data')
-            console.log(theData)
+            // console.log('The Data')
+            // console.log(theData)
             let docxfile = await docx.fillTemplateWord(theData, 'gen_' + article_id, allImages)
             console.log('Docx file Result', docxfile)
-            docx.docxToPdf(docxfile, 'gen_' + article_id)
-            docx.docxToEpub(docxfile, 'gen_' + article_id)
+            let pdfResult = await docx.docxToPdf(docxfile, 'gen_' + article_id)
+            console.log('Pdf Result', pdfResult)
+            let epubResult = await docx.docxToEpub(docxfile, 'gen_' + article_id)
+            console.log('Epub Result', epubResult)
             return true
         }catch(e) {
             console.log('Pdf Error')

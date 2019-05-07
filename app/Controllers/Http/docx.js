@@ -197,7 +197,9 @@ module.exports = {
         baseDir = '/' + baseDirAr[i] + baseDir
       }
       baseDir = baseDir.substring(1)
-      
+      if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.docx')) {
+        fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.docx')
+      }
       return new Promise(function (resolve, reject) {
         try {
           var content = fs.readFileSync(path.resolve(baseDir, 'template.docx'), 'binary')
@@ -205,7 +207,7 @@ module.exports = {
           // zip.folder('word').folder('media').file('j_0.png', fs.readFileSync(path.resolve(baseDir, 'public/static/img/journal/j_0.png')))
 
           if(theImages.length>0) {
-            console.log('zip rels')
+            // console.log('zip rels')
             let theRels = zip.folder('word').folder('_rels').file('document.xml.rels')
             let fileBuffer = new Buffer(theRels._data.getContent())
             fileBuffer = fileBuffer.toString('utf8')
@@ -214,9 +216,9 @@ module.exports = {
             for(let refI = 0;refI < theImages.length;refI++) {
               imageName = theImages[refI].split('/')[theImages[refI].split('/').length-1]
               newRefs += tmpRef.replace('#id#', `rId${ refI }`).replace('#name#', imageName)
-              console.log('Add Image to Media')
-              console.log('Image Name', imageName)
-              console.log('Image Path', path.resolve(baseDir, 'public/' + theImages[refI]))
+              // console.log('Add Image to Media')
+              // console.log('Image Name', imageName)
+              // console.log('Image Path', path.resolve(baseDir, 'public/' + theImages[refI]))
               zip.folder('word').folder('media').file(imageName, fs.readFileSync(path.resolve(baseDir, 'public/' + theImages[refI])))
             }
             newRefs += '</Relationships>'
@@ -275,8 +277,32 @@ module.exports = {
         baseDir = '/' + baseDirAr[i] + baseDir
       }
       baseDir = baseDir.substring(1)
+      if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
+        fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
+      }
+      
       const data = await word2pdf(docxfile)
+      // console.log('PDF Data', data)
       fs.writeFileSync(baseDir + '/public/pdf/' + outputname + '.pdf', data);
+      
+      return true
+      /*
+      return new Promise(function( resolve, reject) {
+        console.log('pandoc ' + docxfile + ' -f docx -t pdf -o ' + baseDir + '/public/pdf/' + outputname + '.pdf')
+        try{
+          pandoc(docxfile, '-f docx -t pdf -o ' + baseDir + '/public/pdf/' + outputname + '.pdf', function(err, result) {
+            if(err) {
+              reject(err)
+            }
+
+            console.log('Pdf Convertion Result', result)
+            resolve(result)
+          })
+        }catch(e){
+          reject(e)
+        }
+      })
+      */
     },
 
     docxToEpub: function(docxfile, outputname) {
@@ -285,6 +311,9 @@ module.exports = {
         baseDir = '/' + baseDirAr[i] + baseDir
       }
       baseDir = baseDir.substring(1)
+      if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.epub')) {
+        fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.epub')
+      }
       return new Promise(function( resolve, reject) {
         try{
           pandoc(docxfile, '-f docx -t epub -o ' + baseDir + '/public/pdf/' + outputname + '.epub', function(err, result) {
@@ -292,7 +321,7 @@ module.exports = {
               reject(err)
             }
 
-            console.log('Epub Convertion Result', result)
+            // console.log('Epub Convertion Result', result)
             resolve(result)
           })
         }catch(e){
