@@ -89,6 +89,8 @@ Route.get('pdf/:article_id', 'ArticalController.pdf')
 
 Route.get('epub/:article_id', 'ArticalController.epub')
 
+Route.get('endnote/:article_id', 'ArticalController.endnote')
+
 Route.get('google', async ({ ally }) => {
     await ally.driver('google').redirect()
 })

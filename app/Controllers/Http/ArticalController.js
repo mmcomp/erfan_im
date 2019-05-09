@@ -700,6 +700,7 @@ class ArticalController {
         let hasPDF = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.pdf')
         let hasEPUB = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.epub')
         let hasXML = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.xml')
+        let hasENDNOTE = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.enw')
 
 
         /*
@@ -781,6 +782,7 @@ class ArticalController {
             hasPDF: hasPDF,
             hasEPUB: hasEPUB,
             hasXML: hasXML,
+            hasENDNOTE: hasENDNOTE,
         })
     }
 
@@ -932,6 +934,7 @@ class ArticalController {
 
     static async genPdf(article_id) {
         try{
+            await ArticalController.genEndNote(article_id)
             let theData = {
                 //---global
                 global_doi: '10.15562',
@@ -1172,6 +1175,54 @@ class ArticalController {
         }
     }
 
+    static async genEndNote(article_id) {
+        console.log('Genarting EndNote')
+        let thisArticle = await Artical.find(article_id)
+        if(!thisArticle) {
+            console.log('article not found')
+            return false
+        }
+        let theJournal = await Journal.find(thisArticle.journal_id)
+        let userArticles = await UserArticle.query().where('article_id', article_id).with('user').fetch()
+        userArticles = userArticles.toJSON()
+
+        let journal_title = 'No Journal'
+        if(theJournal) {
+            journal_title = theJournal.name
+        }
+        let baseDirAr = __dirname.split('/'), baseDir = ''
+        for(var i = baseDirAr.length - 4;i>=0;i--) {
+          baseDir = '/' + baseDirAr[i] + baseDir
+        }
+        baseDir = baseDir.substring(1)
+        if(fs.existsSync(baseDir + '/public/pdf/gen_' + article_id + '.enw')) {
+          fs.unlinkSync(baseDir + '/public/pdf/gen_' + article_id + '.enw')
+        }
+        let endNoteTemplate = fs.readFileSync(baseDir + '/themplate.enw')
+        let authors = ''
+        if(thisArticle.author_id>0) {
+            let author = await User.find(thisArticle.author_id)
+            authors += '%A ' + author.lname + ', ' + author.fname
+        }
+        for(let userArticle of userArticles) {
+            if(userArticle.users_id!=thisArticle.author_id) {
+                authors +=  "\n" + '%A ' + userArticle.user.lname + ', ' + userArticle.user.fname
+            }
+        }
+
+        let endNoteData = String(endNoteTemplate).replace(/#article_running_title#/g, thisArticle.running_title)
+        endNoteData = endNoteData.replace(/#authors#/g, authors)
+        endNoteData = endNoteData.replace(/#journal_title#/g, journal_title)
+        endNoteData = endNoteData.replace(/#publish_volume#/g, thisArticle.publish_vol)
+        endNoteData = endNoteData.replace(/#publish_number#/g, thisArticle.publish_no)
+        endNoteData = endNoteData.replace(/#publish_pages#/g, thisArticle.publish_startpage + '-' + thisArticle.publish_endpage)
+        endNoteData = endNoteData.replace(/#publish_year#/g, moment(thisArticle.publish_date).format('YYYY'))
+
+        fs.writeFileSync(baseDir + '/public/pdf/gen_' + article_id + '.enw', endNoteData)
+        console.log('EndNote Generated')
+        return true
+    }
+
     async pdf ({ view, response, session, request, params }) {
         if(params && params.article_id) {
             let article_id = params.article_id
@@ -1206,6 +1257,27 @@ class ArticalController {
                     article.downloads++
                     article.save()
                     return response.download(baseDir + '/public/pdf/gen_' + article_id + '.epub')
+                }
+            }
+        }
+        return 'File Not found!'
+    }
+
+    async endnote ({ view, response, session, request, params }) {
+        if(params && params.article_id) {
+            let article_id = params.article_id
+            let article = await Artical.query().where('id', article_id).first()
+            if(article) {
+                let baseDirAr = __dirname.split('/'), baseDir = ''
+                for(var i = baseDirAr.length - 4;i>=0;i--) {
+                  baseDir = '/' + baseDirAr[i] + baseDir
+                }
+                baseDir = baseDir.substring(1)
+                if(fs.existsSync(baseDir + '/public/pdf/gen_' + article_id + '.enw')) {
+                    article.citiations++
+                    // article.downloads++
+                    article.save()
+                    return response.redirect('/pdf/gen_' + article_id + '.enw')
                 }
             }
         }

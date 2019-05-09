@@ -235,11 +235,23 @@
                           Irfan Maqsood, M., Matin, M.M., Bahrami, A.R. and Ghasroldasht, M.M., 2013. Immortality of cell lines: challenges and advantages of establishment. Cell biology international, 37(10), pp.1038-1045.
                         </p>
                         <br/>
+                        @if(hasENDNOTE)
+                        <p style="text-align: right;">
+                        <a class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" href="/endnote/{{ article.id }}">EndNote</a>
+                        </p>
+                        <br/>
+                        @endif
                         <b>Vancouver Style</b>
                         <br/>
                         <p style="padding: 10px;border: 1px solid #eaeaea;margin-top: 10px;">
                           Irfan Maqsood M, Matin MM, Bahrami AR, Ghasroldasht MM. Immortality of cell lines: challenges and advantages of establishment. Cell biology international. 2013 Oct;37(10):1038-45.
                         </p>
+                        @if(hasENDNOTE)
+                        <br/>
+                        <p style="text-align: right;">
+                        <a class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase" href="/endnote/{{ article.id }}">EndNote</a>
+                        </p>
+                        @endif
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn c-theme-btn c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"

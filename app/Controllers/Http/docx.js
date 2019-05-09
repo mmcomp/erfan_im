@@ -328,7 +328,7 @@ module.exports = {
           reject(e)
         }
       })
-    }
+    },
 }
 
 return module.exports
