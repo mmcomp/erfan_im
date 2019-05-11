@@ -684,7 +684,6 @@ class ArticalController {
         params.article_name = params.article_name.replace(/-/g, ' ')
 
         let theArticle = await Artical.query().with('journal').with('author').with('keyword.keyword').where('running_title', params.article_name).where('status', 'published').first()
-        // console.log('theArticle', theArticle.toJSON())
         if(!theArticle) {
             // console.log('Not Found!', theArticle)
             session.put('msg', 'Article Not Found')
@@ -702,27 +701,6 @@ class ArticalController {
         let hasXML = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.xml')
         let hasENDNOTE = fs.existsSync(baseDir + '/public/pdf/gen_' + theArticle.id + '.enw')
 
-
-        /*
-        if(request.all()['pdf']) {
-            theArticle.downloads++
-            await theArticle.save()
-            const ph = await phantom.create()
-            const page = await ph.createPage()
-            await page.property('viewportSize', { width: 2000, height: 768 });
-            const status = await page.open(Env.get('APP_URL') + "/article/" + params.article_name.replace(/ /g, '-'))
-            // const content = await page.property('content')
-            await page.render(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
-            const content = fs.readFileSync(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
-            // console.log(content)
-            fs.unlinkSync(Helpers.tmpPath(params.article_name.replace(/ /g, '-') + '.pdf'))
-            ph.exit()
-            response.header('Content-type', 'application/pdf')
-            return response.send(content)
-
-        }
-        */
-
         theArticle.views++
         await theArticle.save()
 
@@ -737,7 +715,6 @@ class ArticalController {
             }
         }
 
-        // console.log('!!!!!')
         let article = theArticle.toJSON() , otherAuthors = [], corAuthors = []
         try{
             article.refs = JSON.parse(article.refs)
@@ -752,7 +729,6 @@ class ArticalController {
             corAuthors = corAuthors.toJSON()
     
         }
-        // console.log('CorAuthors', corAuthors)
         
         let star = '*', stars = ''
         for(let i = 1;i <= corAuthors.length;i++) {
@@ -762,9 +738,6 @@ class ArticalController {
             }
             corAuthors[i-1].stars = stars
         }
-
-        // console.log('Article')
-        // console.log(article)
         
         let msg = session.get('msg')
         let msg_type = session.get('msg_type')
@@ -783,6 +756,7 @@ class ArticalController {
             hasEPUB: hasEPUB,
             hasXML: hasXML,
             hasENDNOTE: hasENDNOTE,
+            global_doi: Env.get('DOI'),
         })
     }
 
@@ -937,7 +911,7 @@ class ArticalController {
             await ArticalController.genEndNote(article_id)
             let theData = {
                 //---global
-                global_doi: '10.15562',
+                global_doi: Env.get('DOI'),
                 //---journal
                 journal_name: 'Journal of Genes and Cells',
                 journal_vol: '3',
@@ -1223,11 +1197,262 @@ class ArticalController {
         return true
     }
 
+    static async genXml(article_id) {
+        console.log('Genarting XML')
+        let thisArticle = await Artical.find(article_id)
+        if(!thisArticle) {
+            console.log('article not found')
+            return false
+        }
+        let theJournal = await Journal.find(thisArticle.journal_id)
+        let journal_title = 'No Journal'
+        if(theJournal) {
+            journal_title = theJournal.name
+        }
+
+        let baseDirAr = __dirname.split('/'), baseDir = ''
+        for(var i = baseDirAr.length - 4;i>=0;i--) {
+          baseDir = '/' + baseDirAr[i] + baseDir
+        }
+        baseDir = baseDir.substring(1)
+        if(fs.existsSync(baseDir + '/public/pdf/gen_' + article_id + '.xml')) {
+          fs.unlinkSync(baseDir + '/public/pdf/gen_' + article_id + '.xml')
+        }
+        let xmlTemplate = fs.readFileSync(baseDir + '/themplate.xml')
+        //----------AUTHOR----------------
+        let userArticles = await UserArticle.query().where('article_id', article_id).with('user.country').fetch()
+        userArticles = userArticles.toJSON()
+        let authors = ''
+        let authors_head = ''
+        let authorTemplate = `
+        <contrib id="author-#id#" contrib-type="#fname# #lname#">
+            <name name-style="western">
+                <surname>#lname#</surname>
+                <given-names>#fname#</given-names>
+            </name>
+            <author-profile name-style="western">
+            <contrib-profile-id contrib-id-type="iMaQPress Authors">
+                #imaq_profile#
+            </contrib-id>
+            <contrib-profile-id-1 contrib-id-type="google scholar">
+                #author_scholar_profile#
+            </contrib-id>
+            </author-profile>
+            <xref ref-type="affiliation" rid="affiliation-1">#aff#</xref>
+            #email#
+        </contrib>`
+        let affTemplate = `
+        <affiliation id="affiliation-#indx#"><label>#indx#</label>
+            <institution>
+                #department#
+            </institution>,  
+            <country>
+                #country#
+            </country>
+        </affiliation>
+        `
+        let authorsClassified = {}, articleAuthor
+        
+        if(thisArticle.author_id>0) {
+            articleAuthor = await User.find(thisArticle.author_id)
+            await articleAuthor.loadMany(['country'])
+            if(articleAuthor) {
+                authorsClassified = {
+                    first: [
+                        articleAuthor.toJSON(),
+                    ],
+                }
+            }
+        }
+        let authorAffs = [], affs = [], affIndex
+        for(let userArticle of userArticles) {
+            affIndex = affs.indexOf(userArticle.user.department)
+            if(affIndex<0) {
+                affIndex = affs.length
+                affs.push(userArticle.user.department)
+                authorAffs.push({
+                    index: affIndex+1,
+                    name: userArticle.user.department,
+                    country: userArticle.user.country.COUNTRY_NAME,
+                })
+            }
+            affIndex++
+            if(articleAuthor && userArticle.users_id!=articleAuthor.id) {
+                authorCount++
+                if(!authorsClassified[userArticle.position]) {
+                    authorsClassified[userArticle.position] = []
+                }
+                userArticle.user['aff_index'] = affIndex
+                authorsClassified[userArticle.position].push(userArticle.user.toJSON())
+            }
+        }
+
+        if(authorsClassified.first) {
+            affIndex = affs.indexOf(authorsClassified.first[0].department)
+            if(affIndex<0) {
+                affIndex = affs.length
+                affs.push(authorsClassified.first[0].department)
+                authorAffs.push({
+                    index: affIndex+1,
+                    name: authorsClassified.first[0].department,
+                    country: authorsClassified.first[0].country.COUNTRY_NAME,
+                })
+            }
+            affIndex++
+            authorsClassified.first[0]['aff_index'] = affIndex
+        }
+
+        let author_affs_xml = ''
+        for(let af of authorAffs) {
+            author_affs_xml += affTemplate.replace(/#indx#/g, af.index).replace(/#department#/g, af.name)
+            .replace(/#country#/g, af.country)
+        }
+
+        let firstAuthorFound = false
+        let moreThanTwo = false
+        let secondAuther = false
+        if(authorsClassified.first) {
+            for(let author of authorsClassified.first) {
+                let maq_profile = `${Env.get('APP_URL')}/author/${ author.fname }-${ author.lname }`
+                if(author.name_index!=0){
+                    maq_profile += '-' + author.name_index
+                }
+                authors += authorTemplate.replace(/#id#/g, author.id).replace(/#fname#/g, author.fname)
+                .replace(/#lname#/g, author.lname).replace(/#imaq_profile#/g, maq_profile)
+                .replace(/#author_scholar_profile#/g, author.academic_page).replace(/#aff#/g, author.aff_index)
+                .replace(/#email#/g, '')
+                if(!firstAuthorFound) {
+                    authors_head = author.lname
+                    firstAuthorFound = true
+                }else if(!moreThanTwo && secondAuther===false){
+                    secondAuther = author.lname
+                }else if(!moreThanTwo && secondAuther!==false){
+                    moreThanTwo = true
+                }
+            }
+        }
+        if(authorsClassified.co) {
+            for(let author of authorsClassified.co) {
+                let maq_profile = `${Env.get('APP_URL')}/author/${ author.fname }-${ author.lname }`
+                if(author.name_index!=0){
+                    maq_profile += '-' + author.name_index
+                }
+                authors += authorTemplate.replace(/#id#/g, author.id).replace(/#fname#/g, author.fname)
+                .replace(/#lname#/g, author.lname).replace(/#imaq_profile#/g, maq_profile)
+                .replace(/#author_scholar_profile#/g, author.academic_page).replace(/#aff#/g, author.aff_index)
+                .replace(/#email#/g, '')
+                if(!firstAuthorFound) {
+                    authors_head = author.lname
+                    firstAuthorFound = true
+                }else if(!moreThanTwo && secondAuther===false){
+                    secondAuther = author.lname
+                }else if(!moreThanTwo && secondAuther!==false){
+                    moreThanTwo = true
+                }
+            }
+        }
+        if(authorsClassified.corresponding) {
+            for(let author of authorsClassified.corresponding) {
+                let maq_profile = `${Env.get('APP_URL')}/author/${ author.fname }-${ author.lname }`
+                if(author.name_index!=0){
+                    maq_profile += '-' + author.name_index
+                }
+                authors += authorTemplate.replace(/#id#/g, author.id).replace(/#fname#/g, author.fname)
+                .replace(/#lname#/g, author.lname).replace(/#imaq_profile#/g, maq_profile)
+                .replace(/#author_scholar_profile#/g, author.academic_page).replace(/#aff#/g, author.aff_index)
+                .replace(/#email#/g, `<email>${author.email}</email>`)
+                if(!firstAuthorFound) {
+                    authors_head = author.lname
+                    firstAuthorFound = true
+                }else if(!moreThanTwo && secondAuther===false){
+                    secondAuther = author.lname
+                }else if(!moreThanTwo && secondAuther!==false){
+                    moreThanTwo = true
+                }
+            }
+        }
+        if(moreThanTwo) {
+            authors_head += ' et al.'
+        }else if(secondAuther!==false) {
+            authors_head += ' and ' + secondAuther
+        }
+        //\---------AUTHOR----------------
+        //----------KEYWORD---------------
+        let articleKeywords = await ArticleKeyword.query().where('article_id', article_id).with('keyword').fetch()
+        articleKeywords = articleKeywords.toJSON()
+
+        let keywords = ''
+        let keyWordCatagory = {
+            'c1': [],
+            'c2': [],
+            'c3': [],
+        }
+        for(let articleKeyword of articleKeywords) {
+            keyWordCatagory[articleKeyword.keyword.category].push(articleKeyword.keyword.theword)
+        }
+        for(let keyword of keyWordCatagory.c1) {
+            keywords += `<subject>Catecgory 1 ${ keyword }</subject>`
+        }
+        for(let keyword of keyWordCatagory.c2) {
+            keywords += `<subject>Catecgory 2 ${ keyword }</subject>`
+        }
+        for(let keyword of keyWordCatagory.c3) {
+            keywords += `<subject>Catecgory 3 ${ keyword }</subject>`
+        }
+        //\---------KEYWORD---------------
+        //----------EDITORS---------------
+        let articleEditors = await UserArticleEditor.query().where('article_id', thisArticle.id).with('user').fetch()
+        articleEditors = articleEditors.toJSON()
+        // console.log('Article Editors where article_id = ', thisArticle.id, articleEditors)
+        let editorTemplate = `
+        <contrib contrib-type="editor">
+          <name name-style="western">
+            <surname>#lname#</surname>
+            <given-names>#fname#</given-names>
+          </name>
+        </contrib>
+        `
+        let editors = ''
+        for(let theEditor of articleEditors) {
+            editors += editorTemplate.replace(/#fname#/g, theEditor.user.fname)
+            .replace(/#lname#/g, theEditor.user.lname)
+        }
+        //\---------EDITORS---------------
+        let xmlData = String(xmlTemplate).replace(/#article_running_title#/g, thisArticle.running_title)
+        xmlData = xmlData.replace(/#article_type#/g, thisArticle.type + '-article')
+        xmlData = xmlData.replace(/#journal_title#/g, journal_title)
+        xmlData = xmlData.replace(/#journal_issn#/g, theJournal.issn)
+        xmlData = xmlData.replace(/#publish_number#/g, thisArticle.publish_no)
+        xmlData = xmlData.replace(/#doi#/g, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi)
+        xmlData = xmlData.replace(/#keywords#/g, keywords)
+        xmlData = xmlData.replace(/#article_full_title#/g, thisArticle.full_title)
+        xmlData = xmlData.replace(/#authors#/g, authors)
+        xmlData = xmlData.replace(/#author_affs#/g, author_affs_xml)
+        xmlData = xmlData.replace(/#editors#/g, editors)
+        xmlData = xmlData.replace(/#article_publish_vol#/g, thisArticle.publish_vol)
+        xmlData = xmlData.replace(/#article_id#/g, thisArticle.id)
+        xmlData = xmlData.replace(/#article_created_at#/g, moment(thisArticle.created_at).format('YYYY-MM-DD'))
+        xmlData = xmlData.replace(/#article_created_at_day#/g, moment(thisArticle.created_at).format('D'))
+        xmlData = xmlData.replace(/#article_created_at_month#/g, moment(thisArticle.created_at).format('M'))
+        xmlData = xmlData.replace(/#article_created_at_year#/g, moment(thisArticle.created_at).format('YYYY'))
+        xmlData = xmlData.replace(/#article_publish_date#/g, moment(thisArticle.publish_date).format('YYYY-MM-DD'))
+        xmlData = xmlData.replace(/#article_publish_date_day#/g, moment(thisArticle.publish_date).format('D'))
+        xmlData = xmlData.replace(/#article_publish_date_month#/g, moment(thisArticle.publish_date).format('M'))
+        xmlData = xmlData.replace(/#article_publish_date_year#/g, moment(thisArticle.publish_date).format('YYYY'))
+        xmlData = xmlData.replace(/#authors_head#/g, authors_head)
+        xmlData = xmlData.replace(/#article_publish_link#/g, `${Env.get('APP_URL')}/article/${ thisArticle.running_title.replace(/ /g, '-') }`)
+
+        fs.writeFileSync(baseDir + '/public/pdf/gen_' + article_id + '.xml', xmlData)
+        console.log('XML Generated')
+        return true
+    }
+
     async pdf ({ view, response, session, request, params }) {
         if(params && params.article_id) {
             let article_id = params.article_id
             let article = await Artical.query().where('id', article_id).first()
             if(article) {
+                ArticalController.genXml(article.id)
                 let baseDirAr = __dirname.split('/'), baseDir = ''
                 for(var i = baseDirAr.length - 4;i>=0;i--) {
                   baseDir = '/' + baseDirAr[i] + baseDir

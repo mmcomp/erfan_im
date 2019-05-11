@@ -9,6 +9,7 @@ const UserKeyword = use('App/Models/UserKeyword')
 const Database = use('Database')
 const docx = require('./docx')
 const Randomatic = require('randomatic')
+const Env = use('Env')
 
 class UserController {
     async logout ({ auth, response, session }) {
@@ -242,7 +243,8 @@ class UserController {
             editorCount: editorCount,
             articleCount: articleCount,
             citationCount: citationCount,
-            authorCount: authorCount
+            authorCount: authorCount,
+            global_doi: Env.get('DOI'),
         })
     }
 

@@ -189,7 +189,7 @@
                                     </div>
                                     <div class="c-body">
                                             <div class="c-panel">
-                                                    DOI <a href="https://doi.org/10.15562/{{ art.journal.doi_code }}.{{ art.doi }}"><span class="c-font-uppercase">10.15562/{{ art.journal.doi_code }}.{{ art.doi }}</span>
+                                                    DOI <a href="https://doi.org/{{ global_doi }}/{{ art.journal.doi_code }}.{{ art.doi }}"><span class="c-font-uppercase">{{ global_doi }}/{{ art.journal.doi_code }}.{{ art.doi }}</span>
                                             </div>
                                         <div class="c-title c-font-uppercase c-font-bold">
                                             <a href="/article/{{ art.running_title.replace(/ /g,'-') }}">{{ art.full_title }}</a>

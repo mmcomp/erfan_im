@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article
+  PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.1 20151215//EN" "http://jats.nlm.nih.gov/publishing/1.1/JATS-journalpublishing1.dtd">
+<article xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ali="http://www.niso.org/schemas/ali/1.0/"
+  article-type="#article_type#" dtd-version="1.1">
+  <front>
+
+    <journal-meta>
+      <journal-id journal-id-type="pmc">#journal_title#</journal-id>
+      <journal-id journal-id-type="nlm-ta">#journal_title#</journal-id>
+      <journal-id journal-id-type="publisher-id">#journal_title#</journal-id>
+      <journal-title-group>
+        <journal-title>#journal_title#</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">#journal_issn#</issn>
+      <publisher>
+        <publisher-name>iMaQPress</publisher-name>
+        <publisher-loc>Tbilisi, Georgia</publisher-loc>
+      </publisher>
+    </journal-meta>
+
+    <article-meta>
+      <article-id pub-id-type="publisher-id">#publish_number#</article-id>
+      <article-id pub-id-type="doi">#doi#</article-id>
+      <article-categories>
+        <subj-group subj-group-type="categories">
+          #keywords#
+        </subj-group>
+      </article-categories>
+      <title-group>
+        <article-title>#article_full_title#</article-title>
+      </title-group>
+      <contrib-group content-type="authors">
+        #authors#
+        #author_affs#
+      </contrib-group>
+
+      <contrib-group content-type="editors">
+        #editors#
+      </contrib-group>
+
+      <volume>#article_publish_vol#</volume>
+      <elocation-id>#article_id#</elocation-id>
+
+      <history>
+        <date date-type="received" iso-8601-date="#article_created_at#">
+          <day>#article_created_at_day#</day>
+          <month>#article_created_at_month#</month>
+          <year iso-8601-date="#article_created_at_year#">#article_created_at_year#</year>
+        </date>
+        <date date-type="accepted" iso-8601-date="#article_publish_date#">
+          <day>#article_publish_date_day#</day>
+          <month>#article_publish_date_month#</month>
+          <year iso-8601-date="#article_publish_date_year#">#article_publish_date_year#</year>
+        </date>
+      </history>
+
+      <permissions>
+        <copyright-statement>
+        © #article_publish_date_year# #authors_head#
+        </copyright-statement>
+        <copyright-year>#article_publish_date_year#</copyright-year>
+        <copyright-holder>#authors_head#</copyright-holder>
+        <license xlink:href="http://creativecommons.org/licenses/by/4.0/">
+          <license-p>This is an open access article distributed under the terms of the <ext-link ext-link-type="uri"
+              xlink:type="simple" xlink:href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution
+              License</ext-link>, which permits unrestricted use, distribution, reproduction and adaptation in any
+            medium and for any purpose provided that it is properly attributed. For attribution, the original author(s),
+            title, publication source (PeerJ) and either DOI or URL of the article must be cited.</license-p>
+        </license>
+      </permissions>
+
+      <self-url xlink:href="#article_publish_link#" />
+
+      <abstract>
+        <sec>
+          <title>Abstract</title>
+          <p>Full abstract of article</p>
+        </sec>
+      </abstract>
+
+      <kwd-group kwd-group-type="Keywords">
+        <kwd>Abstract Keyword 1</kwd>
+        <kwd>Abstract Keyword 2</kwd>
+        <kwd>Abstract Keyword 3</kwd>
+        <kwd>Abstract Keyword 4</kwd>
+        <kwd>Abstract Keyword 5</kwd>
+      </kwd-group>
+
+      <funding-group>
+        <funding-statement> Acknowledgement Statement.</funding-statement>
+      </funding-group>
+
+    </article-meta>
+
+  </front>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="One sentence summary should come here">
+    <meta name="focus keyword" content="running title should come here">
+    <meta name="editor" content="Chief Editor name of journal should come here">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+  <body>
+
+    <sec sec-type="intro">
+      <title>Introduction</title>
+      <p>Hepatocellular carcinoma (HCC) is one of the most common malignancies in the world (<xref ref-type="bibr"
+          rid="ref-23">Omata et al., 2017</xref>). In 1996, <xref ref-type="bibr" rid="ref-21">Mazzaferro et al. (1996)
+        </xref> reported that liver transplantation (LT) was considered an optimal radical therapy for selected patients
+        with HCC. By removing HCC tumors with the greatest possible margin and replacing cirrhotic liver tissue with a
+        tumor-free graft, LT has a better curative effect for liver cancer than hepatectomy (<xref ref-type="bibr"
+          rid="ref-17">Lee et al., 2010</xref>).</p>
+      <p>However, a significant proportion of HCC patients who undergo LT still suffer from unfavorable outcomes due to
+        the chance of tumor recurrence (<xref ref-type="bibr" rid="ref-26">Trojan, Zangos &amp; Schnitzbauer, 2016
+        </xref>). One reason for the poor prognosis of liver cancer is that cancer cells can easily enter and spread
+        through the bloodstream. Before surgical resection, these circulating tumor cells (CTCs) may be present in the
+        patient’s blood. Surgical operations also carry the risk of causing CTCs to enter the bloodstream (<xref
+          ref-type="bibr" rid="ref-2">Alix-Panabières &amp; Pantel, 2014</xref>). Thus, CTCs are currently a major focus
+        of liver cancer research because of the key roles they play in HCC recurrence and metastasis (<xref
+          ref-type="bibr" rid="ref-20">Masuda et al., 2016</xref>; <xref ref-type="bibr" rid="ref-16">Kelley et al.,
+          2015</xref>; <xref ref-type="bibr" rid="ref-3">Choi et al., 2015</xref>).</p>
+      <p>Several strategies have been used to separate blood for the analysis of CTCs. The most common enrichment
+        approach, called immunoaffinity enrichment technology, such as applied by the CellSearch system, uses antibodies
+        targeting epithelial cell adhesion molecule (EpCAM). This system is the only CTC isolation method currently
+        approved by the US Food and Drug Administration for prognostic use. More recently, a number of approaches have
+        been proposed for the isolation of CTCs using immunoaffinity selection, such as the CTC-chip (<xref
+          ref-type="bibr" rid="ref-22">Nagrath et al., 2007</xref>), GEDI (<xref ref-type="bibr" rid="ref-9">Galletti et
+          al., 2014</xref>), GEM (<xref ref-type="bibr" rid="ref-25">Sheng et al., 2014</xref>), and Abnova CytoQuest™
+        CR (<xref ref-type="bibr" rid="ref-29">Zhao et al., 2013</xref>; <xref ref-type="bibr" rid="ref-12">Hou et al.,
+          2013</xref>; <xref ref-type="bibr" rid="ref-27">Wang et al., 2011</xref>), which still use EpCAM and other
+        surface antigens as target moieties. However, CTCs may also undergo changes during disease states, such as
+        epithelial–mesenchymal transition (EMT), accompanied by changes in CTC surface markers, leading to mesenchymal
+        tumor cells with an increased stem-like phenotype and reduced epithelial phenotype (<xref ref-type="bibr"
+          rid="ref-10">Giannelli et al., 2016</xref>). This may be why CTC detection rates and counts achieved using
+        this enrichment technology are generally low and the entire population of CTCs cannot be collected (<xref
+          ref-type="bibr" rid="ref-5">De Boer et al., 1999</xref>).</p>
+      <p>In this research, we attempted to combine emerging microfluidic technologies with magnetic-based cell sorting
+        to generate a miniaturized, low-cost and antigen-independent tool for efficient CTC separation (<xref
+          ref-type="fig" rid="fig-1">Figs. 1A</xref> and <xref ref-type="fig" rid="fig-1">1B</xref>). Microfluidics,
+        which integrates physical, chemical, and biological technologies at the microscale level, has been used to
+        create devices known as labs-on-a-chip or micro total analysis systems. A new type of microfluidic structure
+        using deterministic lateral displacement (DLD) was designed for the continuous high-throughput separating of
+        whole blood from HCC patients to isolate nucleated cells, including CTCs and white blood cells (WBCs),
+        efficiently with minimal damage and independent of antigens. Then, StraightFrom® Whole Blood CD45 MicroBeads and
+        a magnetic-activated cell sorting (MACS) separator are used to remove bead-labeled WBCs from the DLD structure
+        and ultimately concentrate unlabeled CTCs.</p>
+      <fig id="fig-1">
+        <object-id pub-id-type="doi">10.7717/peerj.6681/fig-1</object-id>
+        <label>Figure 1</label>
+        <caption>
+          <title>Platform schematic and structural design.</title>
+          <p>(A) This capture platform integrates a DLD structure with a MACS separator for inline operation. Step 1:
+            The DLD removes nucleated cells from whole blood by size-based deflection using a specially designed array
+            of microposts. Step 2: The MACS separator serves to sensitively separate bead-labeled WBCs and unlabeled
+            CTCs. (B) The overall system integrates syringe pumps, the DLD chip and the MACS separator into an operating
+            platform. Before the sample enters the chip, a micro-oscillator mixes the blood to avoid stratification of
+            the blood in the tube. (C) DLD device design. (i) Two inlets inject blood and buffer separately, the filter
+            array ensures that blood flows along a certain direction; (ii) The device consists of two mirrored arrays of
+            egg-shaped microposts with a pillar size and array offset designed to deflect particles larger than a
+            certain size, thereby separating them from the main suspension; (iii) Two outlets are designed for the
+            deflected product and undeflected waste. Photo credit: Xuebin Wang.</p>
+        </caption>
+        <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-1.png" />
+      </fig>
+      <p>We also compared our platform with the Abnova CytoQuest™ CR system (Taipei, Taiwan) in separating and
+        characterizing CTCs from HCC patients undergoing LT and performed follow-up analyses of HCC patients with early
+        postoperative metastases. As CTCs from these samples underwent EMT, the detection sensitivity of the Abnova
+        CytoQuest™ CR system was reduced, whereas our capture platform was not affected and yielded high CTC counts.</p>
+      <p>The results demonstrate that our capture platform is highly efficient independent from antigens and is thus
+        clinically valuable.</p>
+    </sec>
+
+    <sec sec-type="materials|methods">
+      <title>Materials and methods</title>
+      <sec>
+        <title>Deterministic lateral displacement microfluidic device design and function</title>
+        <p>The overall microfluidic DLD isolation platform is shown in <xref ref-type="fig" rid="fig-1">Fig. 1C</xref>.
+          This device is a size-based continuous-flow system because CTCs are generally larger in size than other blood
+          cells (<xref ref-type="bibr" rid="ref-11">Harouaka, Nisic &amp; Zheng, 2013</xref>). The system consists of an
+          array of microposts with a pillar size and array offset designed to deflect particles above a certain size,
+          thereby separating them from the main suspension (<xref ref-type="bibr" rid="ref-15">Karabacak et al., 2014
+          </xref>). The design is based on the DLD theory proposed by <xref ref-type="bibr" rid="ref-13">Huang et al.
+            (2004)</xref>.</p>
+        <p>The flow chamber is 33 mm long, two mm wide, and 30 µm high. The microarray consists of two mirrored arrays
+          of egg-shaped microposts, as shown in <xref ref-type="fig" rid="fig-1">Fig. 1C</xref>, with the arrays at an
+          angle of 1.7 ° with respect to the fluid flow direction. Based on the theoretical principle of DLD (<xref
+            ref-type="bibr" rid="ref-14">Inglis et al., 2006</xref>), the critical particle diameter is approximately
+          four to five µm. With this design, most of the red blood cells (RBCs) and platelets (PLTs) pass through the
+          gaps and are removed through the outlet, while CTCs and some leukocytes are collected once they are
+          concentrated.</p>
+      </sec>
+      <sec>
+        <title>Deterministic lateral displacement microfluidic device fabrication</title>
+        <p>Microfluidic devices were fabricated using standard photolithography and soft lithography (<xref
+            ref-type="bibr" rid="ref-7">Faustino et al., 2016</xref>). The negative photoresist SU-8 3025 (MicroChem,
+          Naton, MA, USA) was used to fabricate the master on a silicon wafer with a photomask. Next,
+          polydimethylsiloxane (PDMS) prepolymer mixed with a curing agent (8:1 w/w ratio) was poured onto the silicon
+          wafer and baked at 80 °C for 1 h; subsequently, holes were punched for the inlet and outlets. Finally, the
+          PDMS microfluidic channels and glass substrate were exposed to oxygen plasma (PDC-M; Chengdu Mingheng Science
+          &amp; Technology Co., Ltd., P. R. China) for 1 min and then brought into contact to bond together. The devices
+          were left overnight in a 65 °C oven to complete the irreversible bonding process between the PDMS and glass.
+        </p>
+      </sec>
+      <sec>
+        <title>Magnetic-activated cell sorting separator and preparation</title>
+        <p>We used StraightFrom Whole Blood CD45 MicroBeads and a MACS separator (Miltenyi Biotec, Bergisch Gladbach,
+          Germany) developed for the rapid selection of CD45<sup>+</sup> cells directly from whole peripheral blood to
+          remove bead-labeled WBCs and concentrate unlabeled CTCs. Unlike standard magnetic beads, Whole Blood CD45
+          MicroBeads have the advantage of not requiring sample preparation, such as density gradient centrifugation or
+          erythrocyte lysis. MicroBeads (50 µl) were added to every one ml of anticoagulated whole blood. The samples
+          were mixed well and incubated for 15 min in a refrigerator (2–8 °C).</p>
+      </sec>
+      <sec>
+        <title>Platform module integration</title>
+        <p>The overall system is shown in <xref ref-type="fig" rid="fig-1">Fig. 1B</xref>. The platform is driven by
+          four syringe pumps. Two of the pumps are loaded with a 50-ml syringe containing 40 ml of prepared blood
+          suspensions, and the remaining two pumps are loaded with a 50-ml syringe containing 50 ml of
+          phosphate-buffered saline (PBS). Teflon tubes (one mm) connect the syringe pumps to the microfluidic device,
+          and two small vibrators are located in front of the inlets. Some leukocytes and most cancer cells are
+          deflected to the product outlet once they are concentrated, while the remaining blood, which is diluted with
+          buffer, is collected via waste tubing. Collected cells drop down from the product outlet of the DLD device,
+          which contains highly bead-labeled WBCs and CTCs, and enter the MACS column. Then, magnetically labeled
+          CD45<sup>+</sup> WBCs are retained within the column, while unlabeled cells (mostly CTCs) pass through the
+          column and are collected at the final product outlet.</p>
+      </sec>
+      <sec>
+        <title>Hepatocellular carcinoma cells</title>
+        <p>To characterize the efficacy of the DLD device, we established HepG2 human liver cancer cells overexpressing
+          green fluorescent protein (GFP) by lentiviral transfection (<xref ref-type="fig" rid="fig-2">Fig. 2A</xref>),
+          allowing the observation of these cells using a fluorescence microscope. Cells were cultured in low-glucose
+          Dulbecco’s modified Eagle’s medium supplemented with 10% fetal bovine serum and 1% penicillin-streptomycin at
+          37 °C with 5% (v/v) CO<sub>2</sub>. The culture medium was changed every 2 days. Cells were harvested by
+          incubation in 0.05% trypsin with 0.53 mM ethylenediaminetetraacetic acid (EDTA) at 37 °C for 3 min and were
+          then diluted to the desired concentration.</p>
+        <fig id="fig-2">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/fig-2</object-id>
+          <label>Figure 2</label>
+          <caption>
+            <title>HepG2-GFP cells and isolation efficiency ratio with different flow rates.</title>
+            <p>(A) Modeling the presence of cancer cells in human peripheral blood using HepG2-GFP cells. (B) Isolation
+              efficiency ratio for different flow rates. A specimen flow rate of 60 μl/min and a buffer flow rate of 100
+              μl/min yielded an isolation efficiency ratio of 85.1 ± 3.2%.</p>
+          </caption>
+          <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-2.png" />
+        </fig>
+      </sec>
+      <sec>
+        <title>Blood samples and follow-up</title>
+        <p>Fresh whole blood samples were collected from 10 healthy volunteers and 12 HCC patients undergoing LT (<xref
+            ref-type="table" rid="table-1">Table 1</xref>) in the Transplant Section of the Beijing Friendship Hospital
+          in China between September 2017 and May 2018. Blood was obtained prior to transplantation for HCC patients
+          (baseline) and then at follow-up visits 1 and 3 months after the surgery. Recurrence was diagnosed based on
+          typical imaging findings on computed tomography (CT), magnetic resonance imaging or bone scans. At each time
+          point, 7.5 ml of fresh whole blood was collected into EDTA-containing tubes from each subject for analysis by
+          our DLD platform and the CytoQuest™ CR system within 6 h. Clinical information was also collected, including
+          the alpha-fetoprotein level, size, and number of tumors, Milan criteria (<xref ref-type="bibr" rid="ref-21">
+            Mazzaferro et al., 1996</xref>), presence of hepatitis virus and vascular invasion.</p>
+        <table-wrap id="table-1">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/table-1</object-id>
+          <label>Table 1</label>
+          <caption>
+            <title>Patient characteristics.</title>
+          </caption>
+          <alternatives>
+            <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/table-1.png" />
+            <table content-type="text">
+              <colgroup>
+                <col />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Variables</th>
+                  <th>Liver transplantation (<italic>n</italic> = 12) (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="2">Sex</td>
+                </tr>
+                <tr>
+                  <td> Male</td>
+                  <td>8(66.7)</td>
+                </tr>
+                <tr>
+                  <td> Female</td>
+                  <td>4(33.3)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Age, years</td>
+                </tr>
+                <tr>
+                  <td> ≤50</td>
+                  <td>7(58.3)</td>
+                </tr>
+                <tr>
+                  <td> &gt;50</td>
+                  <td>5(41.7)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Etiology</td>
+                </tr>
+                <tr>
+                  <td> Hepatitis B</td>
+                  <td>9(75)</td>
+                </tr>
+                <tr>
+                  <td> Other</td>
+                  <td>3(25)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Tumor number</td>
+                </tr>
+                <tr>
+                  <td> Single</td>
+                  <td>5(41.7)</td>
+                </tr>
+                <tr>
+                  <td> Multiple</td>
+                  <td>7(58.3)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Tumor size, cm</td>
+                </tr>
+                <tr>
+                  <td> ≤5</td>
+                  <td>3(25)</td>
+                </tr>
+                <tr>
+                  <td> &gt;50</td>
+                  <td>9(75)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Vascular invasion</td>
+                </tr>
+                <tr>
+                  <td> No</td>
+                  <td>6(50)</td>
+                </tr>
+                <tr>
+                  <td> Yes</td>
+                  <td>6(50)</td>
+                </tr>
+                <tr>
+                  <td colspan="2">Milan criteria</td>
+                </tr>
+                <tr>
+                  <td> Within</td>
+                  <td>4(33.3)</td>
+                </tr>
+                <tr>
+                  <td> Beyond</td>
+                  <td>8(66.7)</td>
+                </tr>
+              </tbody>
+            </table>
+          </alternatives>
+        </table-wrap>
+        <p>Written informed consent was obtained from all patients. Approval from the Beijing Friendship Hospital Human
+          Research Ethics Committee (code: 2018-P2-114-01) was obtained for the use of all samples using a protocol that
+          conforms to the provisions of the Declaration of Helsinki.</p>
+      </sec>
+      <sec>
+        <title>Isolation efficiency of the platform integrating DLD with MACS separation</title>
+        <p>To determine the best flow rates and obtain the best isolation efficiency ratio from the device, we spiked a
+          small number of HepG2-GFP cells into blood samples to model the presence of cancer cells in human peripheral
+          blood. Blood samples provided by healthy volunteers were collected into EDTA-containing tubes and diluted 10
+          times with PBS to prevent channel blocking. HepG2-GFP cells were then spiked into the diluted blood specimens
+          at 1 × 10<sup>2</sup> cells/ml.</p>
+        <p>The sample and buffer were injected into the specimen and buffer inlets, respectively, at different flow
+          rates, following the principle that the sample liquid level and the buffer liquid level would meet at the
+          center of the chip. We counted the HepG2-GFP cells using a fluorescence microscope to select the best flow
+          rates, and we then obtained the isolation efficiency ratio, <italic>R</italic>, using the equation
+          <inline-formula>
+            <alternatives>
+              <inline-graphic xlink:href="https://peerj.com/articles/6681/ieqn-1.png" />
+              <tex-math id="tex-ieqn-1">
+                <![CDATA[$R = {C_1}{V_1}/\left( {{C_1}{V_1} + {C_2}{V_2}} \right)$]]>
+              </tex-math>
+              <mml:math id="mml-ieqn-1">
+                <mml:mi>R</mml:mi>
+                <mml:mo>=</mml:mo>
+                <mml:msub>
+                  <mml:mi>C</mml:mi>
+                  <mml:mn>1</mml:mn>
+                </mml:msub>
+                <mml:msub>
+                  <mml:mi>V</mml:mi>
+                  <mml:mn>1</mml:mn>
+                </mml:msub>
+                <mml:mo>/</mml:mo>
+                <mml:mrow>
+                  <mml:mo>(</mml:mo>
+                  <mml:mrow>
+                    <mml:msub>
+                      <mml:mi>C</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:msub>
+                      <mml:mi>V</mml:mi>
+                      <mml:mn>1</mml:mn>
+                    </mml:msub>
+                    <mml:mo>+</mml:mo>
+                    <mml:msub>
+                      <mml:mi>C</mml:mi>
+                      <mml:mn>2</mml:mn>
+                    </mml:msub>
+                    <mml:msub>
+                      <mml:mi>V</mml:mi>
+                      <mml:mn>2</mml:mn>
+                    </mml:msub>
+                  </mml:mrow>
+                  <mml:mo>)</mml:mo>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </inline-formula>, where <italic>C</italic><sub>1</sub> and <italic>V</italic><sub>1</sub> denote the
+          concentration and solution volume of the final product outlet, respectively, while <italic>C</italic>
+          <sub>2</sub> and <italic>V</italic><sub>2</sub> denote the respective concentration and solution volume of the
+          waste outlet. The experiment was repeated 10 times.</p>
+      </sec>
+      <sec>
+        <title>HepG2-GFP cell sorting experiments</title>
+        <p>To examine whether there were differences in the enrichment effects of different concentrations of HCC cells,
+          we spiked HepG2-GFP cells into 10-fold diluted whole blood at 50, 1 × 10<sup>2</sup>, 2 × 10<sup>2</sup>, 4 ×
+          10<sup>2</sup>, and 8 × 10<sup>2</sup> cells/ml. At the best flow rates, we recalculated the isolation
+          efficiency as described above. Each concentration was tested 10 times.</p>
+      </sec>
+      <sec>
+        <title>Debulking efficiency</title>
+        <p>To characterize the performance of the platform in removing blood cells (mainly RBCs, PLTs, WBCs), we spiked
+          HepG2-GFP cells into 10-fold diluted whole blood at 1 × 10<sup>2</sup> cells/ml and injected them into the
+          device under the best flow rates. After the device was running stably, we calculated the removal ratio
+          <italic>R<sub>r</sub></italic> using the equation <inline-formula>
+            <alternatives>
+              <inline-graphic xlink:href="https://peerj.com/articles/6681/ieqn-2.png" />
+              <tex-math id="tex-ieqn-2">
+                <![CDATA[${R_r} = \left( {{C_2}{V_2} - {C_1}{V_1}} \right)/{C_2}{V_2}$]]>
+              </tex-math>
+              <mml:math id="mml-ieqn-2">
+                <mml:mrow>
+                  <mml:msub>
+                    <mml:mi>R</mml:mi>
+                    <mml:mi>r</mml:mi>
+                  </mml:msub>
+                  <mml:mo>=</mml:mo>
+                  <mml:mrow>
+                    <mml:mo>(</mml:mo>
+                    <mml:mrow>
+                      <mml:msub>
+                        <mml:mi>C</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                      <mml:msub>
+                        <mml:mi>V</mml:mi>
+                        <mml:mn>2</mml:mn>
+                      </mml:msub>
+                      <mml:mo>−</mml:mo>
+                      <mml:msub>
+                        <mml:mi>C</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                      <mml:msub>
+                        <mml:mi>V</mml:mi>
+                        <mml:mn>1</mml:mn>
+                      </mml:msub>
+                    </mml:mrow>
+                    <mml:mo>)</mml:mo>
+                  </mml:mrow>
+                  <mml:mo>/</mml:mo>
+                  <mml:msub>
+                    <mml:mi>C</mml:mi>
+                    <mml:mn>2</mml:mn>
+                  </mml:msub>
+                  <mml:msub>
+                    <mml:mi>V</mml:mi>
+                    <mml:mn>2</mml:mn>
+                  </mml:msub>
+                </mml:mrow>
+              </mml:math>
+            </alternatives>
+          </inline-formula>, where <italic>C</italic><sub>1</sub> and <italic>V</italic><sub>1</sub> denote the
+          concentration and solution volume of the final product outlet, respectively, while <italic>C</italic>
+          <sub>2</sub> and <italic>V</italic><sub>2</sub> denote the respective concentration and solution volume of the
+          starting sample. A hemocytometer was used to count blood cells, and the experiment was repeated 10 times.</p>
+      </sec>
+      <sec>
+        <title>Abnova CytoQuest™ CR system</title>
+        <p>The CytoQuest™ CR system is a rare cell sorting system developed by Abnova and the UCLA (University of
+          California Los Angeles) Nano Research Institute. The system is a modified NanoVelcro Chip that is capable of
+          efficiently capturing CTCs in patient blood samples using anti-EpCAM-coated silicon nanowire substrates.
+          Circulating tumor cell enumeration by CytoQuest™ CR was carried out according to the manufacturer’s protocol (
+          <xref ref-type="bibr" rid="ref-27">Wang et al., 2011</xref>; <xref ref-type="bibr" rid="ref-29">Zhao et al.,
+            2013</xref>; <xref ref-type="bibr" rid="ref-12">Hou et al., 2013</xref>). First, 7.5 ml of blood was drawn
+          into an EDTA-containing collection tube. Next, the buffy coat containing CTCs was separated by gradient cell
+          separation. After washing with PBS, the prepared buffy coat was injected into an EpCAM-coated microfluidic
+          slide to capture CTCs.</p>
+      </sec>
+      <sec>
+        <title>Immunostaining and identification of captured cells</title>
+        <p>Circulating tumor cells were identified and counted manually. After the produced sample was transferred to a
+          50-ml centrifuge tube and centrifuged at 600<italic>×g</italic> for 5 min, the supernatant was aspirated.
+          Then, the cell pellet was diluted to five ml by PBS and divided equally on 10 glass slides (Thermo Fisher
+          Scientific, Waltham, MA, USA).</p>
+        <p>Cells on the glass slides were fixed with 4% formaldehyde for 15 min at room temperature and then
+          permeabilized with 0.1% Triton X-100 in PBS. To identify CTCs, double immunofluorescence staining was
+          performed with anti-cytokeratin-fluorescein isothiocyanate (anti-CK-FITC; Miltenyi Biotec, Bergisch Gladbach,
+          Germany) and anti-CD45- allophycocyanin (anti-CD45-APC; Miltenyi Biotec, Bergisch Gladbach, Germany).
+          4′,6-Diamidino-2-phenylindole (DAPI; Sigma Aldrich, St. Louis, MO, USA) was used to stain nuclei. To identify
+          CTCs undergoing EMT, cells were stained with anti-vimentin- phycoerythrin (anti-vimentin-PE; Miltenyi Biotec,
+          Bergisch Gladbach, Germany). Cells were counted using confocal laser scanning microscopy (Lecia, Wetzlar,
+          Germany).</p>
+        <p>The criteria for WBCs were as follows: round/ovoid, DAPI<sup>+</sup>/CD45<sup>+</sup>/CK<sup>−</sup> cells ≤6
+          µm in size. Circulating tumor cells were defined as round/ovoid
+          DAPI<sup>+</sup>/CD45<sup>−</sup>/CK<sup>+</sup> cells ≥6 µm in size. Circulating tumor cells undergoing EMT
+          were defined as round/ovoid, DAPI<sup>+</sup>/CD45<sup>−</sup>/CK<sup>+</sup>/vimentin<sup>+</sup> cells ≥6 µm
+          in size (<xref ref-type="bibr" rid="ref-4">Court et al., 2018</xref>; <xref ref-type="bibr" rid="ref-28">Yu et
+            al., 2016</xref>).</p>
+      </sec>
+      <sec>
+        <title>Statistical analysis</title>
+        <p>All statistical analyses were performed using SPSS (version 22.0; IBM Corp., Armonk, NY, USA). Variance
+          analysis was used to examine whether the isolation efficiency varied with cell concentration. A pairwise
+          comparison between CTCs counted at different time points after detection by our integrated DLD platform and
+          the CytoQuest™ CR system was performed by applying the nonparametric Wilcoxon signed-rank test. Graphical
+          plots were generated using GraphPad Prism 6.0 (GraphPad Software, La Jolla, CA, USA). All <italic>P</italic>
+          -values were two-sided, and <italic>P-</italic>values of less than 0.05 were considered statistically
+          significant.</p>
+      </sec>
+    </sec>
+    <sec sec-type="results">
+      <title>Results</title>
+      <sec>
+        <title>Isolation efficiency and optimal flow rates for the platform integrating DLD with MACS separation</title>
+        <p>HepG2-GFP cells were spiked into 10-fold diluted whole blood at a concentration of 1 × 10<sup>2</sup>
+          cells/ml. At different sample flow rates of 20, 60, 120, 200, 300, 500, 800, and 1,200 μl/min, buffer was
+          injected into the device at flow rates of 30, 100, 170, 280, 400, 630, 950, and 1,500 μl/min. The
+          corresponding isolation efficiency ratios were 86.4% ± 3.7% (mean ± SD), 85.1% ± 3.2%, 73.7% ± 3.5%, 69.0% ±
+          3.3%, 62.5% ± 3.8%, 52.2% ± 3.5%, 24.3% ± 3.9%, and 12.6% ± 3.2%, respectively.</p>
+        <p>The cell isolation efficiency decreased significantly with increasing flow rate. To maintain a balance
+          between isolation efficiency and time, we selected a specimen flow rate of 60 μl/min and a buffer flow rate of
+          100 μl/min, which yielded an isolation efficiency ratio of approximately 85.1% ± 3.2%, as shown in <xref
+            ref-type="fig" rid="fig-2">Fig. 2B</xref>.</p>
+        <p>The flow of blood in the chip observed continuously through an optical microscope, as shown in <xref
+            ref-type="fig" rid="fig-3">Fig. 3A</xref>.</p>
+        <fig id="fig-3">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/fig-3</object-id>
+          <label>Figure 3</label>
+          <caption>
+            <title>DLD platform enrichment experiment using blood samples.</title>
+            <p>(A) The flow of blood in the chip observed through an optical microscope. Small cells, mainly composed of
+              RBCs, flowed in a straight line, while large cells flowed at an angle and separated from the main
+              suspension. (B) Samples obtained at different stages. Almost all RBCs were removed by the DLD chip. Photo
+              credit: Xuebin Wang.</p>
+          </caption>
+          <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-3.png" />
+        </fig>
+      </sec>
+      <sec>
+        <title>Isolation efficiency with different concentrations of cultured HCC cells</title>
+        <p>We spiked HepG2-GFP cells into 10-fold diluted whole blood at 50, 1 × 10<sup>2</sup>, 2 × 10<sup>2</sup>, 4 ×
+          10<sup>2</sup>, and 8 × 10<sup>2</sup> cells/ml. At a specimen flow rate of 60 μl/min and a buffer flow rate
+          of 100 μl/min, the isolation efficiency ratio was 85.2% ± 3.6%, 85.6% ± 3.3%, 84.8% ± 3.3%, 85.0% ± 3.1%, and
+          85.1% ± 3.5%, respectively. Analysis of variance suggested no significant differences between the different
+          groups (<italic>P</italic> = 0.972 &gt; 0.05).</p>
+      </sec>
+      <sec>
+        <title>Debulking efficiency and enrichment performance</title>
+        <p>The calculated results show that the RBC, WBC, and PLT removal rates were 99.90% ± 0.03%, 98.50% ± 0.13%, and
+          99.95% ± 0.05%, respectively. Significant changes in the appearance of the samples as shown in <xref
+            ref-type="fig" rid="fig-3">Fig. 3B</xref>. HepG2-GFP cells had 852 × enrichment over RBCs, 57 × enrichment
+          over WBCs and 1,715 × enrichment over PLTs as illustrated in <xref ref-type="table" rid="table-2">Table 2
+          </xref>.</p>
+        <table-wrap id="table-2">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/table-2</object-id>
+          <label>Table 2</label>
+          <caption>
+            <title>Relative concentrations of erythrocytes, leukocytes, platelets, and HepG2-GFP recovered from the
+              collected solution at a specimen flow rate of 60 μl/min and a buffer flow rate of 100 μl/min.</title>
+          </caption>
+          <alternatives>
+            <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/table-2.png" />
+            <table content-type="text">
+              <colgroup>
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th rowspan="2" />
+                  <th colspan="4">Concentration (%)</th>
+                </tr>
+                <tr>
+                  <th>Erythrocytes</th>
+                  <th>Leukocytes</th>
+                  <th>Platelets</th>
+                  <th>HepG2-GFP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sample</td>
+                  <td>100</td>
+                  <td>100</td>
+                  <td>100</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <td>Collected solution</td>
+                  <td>0.100 ± 0.015</td>
+                  <td>1.500 ± 0.017</td>
+                  <td>0.050 ± 0.003</td>
+                  <td>85.100 ± 3.213</td>
+                </tr>
+              </tbody>
+            </table>
+          </alternatives>
+        </table-wrap>
+      </sec>
+      <sec>
+        <title>Patient characteristics and follow-up</title>
+        <p>Among the 12 enrolled patients with HCC, 7/12 (58.3%) had multiple tumors, 9/12 (75%) had a tumor size
+          greater than five cm, 8/12 (66.7%) extended the Milan criteria, and 6/12 (50%) had vascular invasion.
+          Hepatocellular carcinoma recurrence after LT was observed in two patients (16.7%) during follow-up. One
+          example of metastasis is illustrated in <xref ref-type="fig" rid="fig-4">Fig. 4A</xref>. The patient was a
+          65-year-old male with diagnoses of hepatitis B cirrhosis and HCC. He underwent LT, which revealed a 20-cm
+          dominant lesion with multiple satellite lesions and microvascular invasion. However, he was found to have
+          multifocal lung nodules on his 3-month follow-up CT scan and then died from respiratory failure. Another
+          example of metastasis is illustrated in <xref ref-type="fig" rid="fig-4">Fig. 4B</xref>. The patient was a
+          49-year-old male with a history of hepatitis B cirrhosis and HCC who had undergone radical hepatectomy 1 year
+          prior. Due to the recurrence of HCC, he underwent LT, which revealed a three-cm dominant lesion. At 2 months
+          after LT, bone scans indicated bone metastasis.</p>
+        <fig id="fig-4">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/fig-4</object-id>
+          <label>Figure 4</label>
+          <caption>
+            <title>Preoperative CT and MRI scans, intraoperative tumor images and evidence of postoperative metastasis
+              for two patients with tumor metastases.</title>
+            <p>(A), (B), and (C) showed HCC patient no. 1. (A) Axial portal venous phase CT showed multiple, ill-defined
+              lesions in liver (red line). The multiple lesions were presented hypodense, relative to the surrounding
+              liver, in portal venous phase; (B) HCC nodules removed during surgery (white line); (C) Axial chest CT
+              showed multiple, ill-defined, oval nodules in lungs (red line). The nodules were distributed at random.
+              Combined with the clinical history, the lesions were considered as metastasis. (D), (E), and (F) showed
+              HCC patient no. 2. (D) Axial arterial phase TIWI C<sup>+</sup> showed well-defined, focal lesion in liver
+              (arrow). The lesion was presented heterogeneous hypointense enhancement in later arterial phase; (E) HCC
+              nodules removed during surgery (arrow); (F) Bone scans showed a focal lesion with hypermetabolism in right
+              femoral cavity (arrow). There was no obvious bone destruction around the lesion. Based on the clinical
+              history, the lesion was considered as metastasis. Photo credit: Xuebin Wang.</p>
+          </caption>
+          <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-4.png" />
+        </fig>
+        <p>Ten healthy volunteers were followed for an equivalent amount of time. None of the healthy control patients
+          involved in the study developed HCC during follow-up.</p>
+      </sec>
+      <sec>
+        <title>Follow-up detection of CTCs using our DLD platform and the CytoQuest™ CR system</title>
+        <p>We tested the clinical feasibility of using our device to isolate CTCs from preoperative HCC patients and
+          healthy volunteers. We successfully collected CTCs from all HCC patients (100%), while a single CTC was found
+          in 2/10 (20%) healthy control volunteers, representing a false positive.</p>
+        <p>The number of CTCs detected in patients by our integrated platform and the CytoQuest™ CR system is shown in
+          <xref ref-type="table" rid="table-3">Table 3</xref>. Among patients with no metastasis, no significant
+          differences in the CTC detection results were found at the three-time points by the Wilcoxon signed-rank test
+          (preoperation: <italic>P</italic> = 0.472 &gt; 0.05; 1 month postoperation: <italic>P</italic> = 0.145 &gt;
+          0.05; 3 months postoperation: <italic>P</italic> = 0.395 &gt; 0.05). However, among patients with metastasis,
+          significantly different CTC counts were detected by our DLD platform and the CytoQuest™ CR system.</p>
+        <table-wrap id="table-3">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/table-3</object-id>
+          <label>Table 3</label>
+          <caption>
+            <title>The number of CTCs in every 7.5 ml of whole blood from patients detected by the DLD integrated
+              platform and CytoQuest™ CR system.</title>
+          </caption>
+          <alternatives>
+            <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/table-3.png" />
+            <table content-type="text">
+              <colgroup>
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th rowspan="2">No. of patients</th>
+                  <th colspan="10">No metastasis</th>
+                  <th colspan="2">Metastasis</th>
+                </tr>
+                <tr>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>7</th>
+                  <th>8</th>
+                  <th>9</th>
+                  <th>10</th>
+                  <th>1</th>
+                  <th>2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="13">Preoperation</td>
+                </tr>
+                <tr>
+                  <td> DLD platform
+                    <break />CTC counts</td>
+                  <td>30</td>
+                  <td>11</td>
+                  <td>9</td>
+                  <td>12</td>
+                  <td>28</td>
+                  <td>14</td>
+                  <td>22</td>
+                  <td>26</td>
+                  <td>10</td>
+                  <td>36</td>
+                  <td>35</td>
+                  <td>25</td>
+                </tr>
+                <tr>
+                  <td> CytoQuest™ CR
+                    <break />CTC counts</td>
+                  <td>36</td>
+                  <td>9</td>
+                  <td>4</td>
+                  <td>13</td>
+                  <td>25</td>
+                  <td>16</td>
+                  <td>20</td>
+                  <td>25</td>
+                  <td>7</td>
+                  <td>38</td>
+                  <td>1</td>
+                  <td>5</td>
+                </tr>
+                <tr>
+                  <td colspan="13">1 month postoperation</td>
+                </tr>
+                <tr>
+                  <td> DLD platform
+                    <break />CTC counts</td>
+                  <td>7</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>9</td>
+                  <td>7</td>
+                  <td>3</td>
+                  <td>11</td>
+                  <td>10</td>
+                  <td>4</td>
+                  <td>10</td>
+                  <td>15</td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td> CytoQuest™ CR
+                    <break />CTC counts</td>
+                  <td>5</td>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>5</td>
+                  <td>12</td>
+                  <td>13</td>
+                  <td>2</td>
+                  <td>8</td>
+                  <td>5</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td colspan="13">3 months postoperation</td>
+                </tr>
+                <tr>
+                  <td> DLD platform
+                    <break />CTC counts</td>
+                  <td>40</td>
+                  <td>5</td>
+                  <td>3</td>
+                  <td>11</td>
+                  <td>10</td>
+                  <td>7</td>
+                  <td>12</td>
+                  <td>9</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>30</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td> CytoQuest™ CR
+                    <break />CTC counts</td>
+                  <td>34</td>
+                  <td>5</td>
+                  <td>2</td>
+                  <td>9</td>
+                  <td>11</td>
+                  <td>4</td>
+                  <td>20</td>
+                  <td>9</td>
+                  <td>6</td>
+                  <td>4</td>
+                  <td>19</td>
+                  <td>15</td>
+                </tr>
+              </tbody>
+            </table>
+          </alternatives>
+        </table-wrap>
+        <p>Examination of the two metastatic patients using the CytoQuest™ CR system before and after LT revealed
+          relatively low numbers of CTCs (preoperation: 1 and 5; 1 month postoperation: 5 and 6; 3 months postoperation:
+          19 and 15), whereas our DLD integrated platform collected significantly more cells (preoperation: 35 and 25; 1
+          month postoperation: 15 and 10; 3 months postoperation: 30 and 20).</p>
+      </sec>
+      <sec>
+        <title>Detection of vimentin<sup>+</sup> CTCs</title>
+        <p>We further analyzed the CTCs extracted by our DLD integrated platform and the CytoQuest™ CR system before
+          surgery by examining the expression of vimentin (<xref ref-type="fig" rid="fig-5">Fig. 5</xref>), an EMT
+          marker (<xref ref-type="bibr" rid="ref-24">Satelli &amp; Li, 2011</xref>). As shown in <xref ref-type="table"
+            rid="table-4">Table 4</xref> and <xref ref-type="fig" rid="fig-6">Fig. 6</xref>, immunostaining showed that
+          vimentin<sup>+</sup> CTCs were found in 4/10 (40%) and 2/10 (20%) patients without metastasis by our DLD
+          integrated platform and the CytoQuest™ CR system, respectively, and the counts were low.</p>
+        <fig id="fig-5">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/fig-5</object-id>
+          <label>Figure 5</label>
+          <caption>
+            <title>Fluorescence images of CTCs and WBCs.</title>
+            <p>Immunofluorescence images of cells stained with antibodies against CK (green, CTC marker), CD45 (red,
+              leukocyte marker), and DAPI (nuclear stain, blue). Anti-vimentin antibody (orange) was used to identify
+              CTCs undergoing EMT.</p>
+          </caption>
+          <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-5.png" />
+        </fig>
+        <fig id="fig-6">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/fig-6</object-id>
+          <label>Figure 6</label>
+          <caption>
+            <title>Numbers of CTCs that were enriched by the DLD integrated platform and CytoQuest™ CR system in HCC
+              patients before surgery, including different subpopulations of vimentin<sup>+</sup> and vimentin-cells.
+            </title>
+            <p>(A) Numbers of CTCs that were enriched by CytoQuest™ CR system. (B) Numbers of CTCs that were enriched by
+              the DLD integrated platform.</p>
+          </caption>
+          <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/fig-6.png" />
+        </fig>
+        <table-wrap id="table-4">
+          <object-id pub-id-type="doi">10.7717/peerj.6681/table-4</object-id>
+          <label>Table 4</label>
+          <caption>
+            <title>The number of vimentin<sup>−</sup> and vimentin<sup>+</sup> CTCs in every 7.5 ml of whole blood from
+              patients before surgery detected by the DLD integrated platform and CytoQuest™ CR system.</title>
+          </caption>
+          <alternatives>
+            <graphic mimetype="image" mime-subtype="png" xlink:href="https://peerj.com/articles/6681/table-4.png" />
+            <table content-type="text">
+              <colgroup>
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th rowspan="2">No. of patients</th>
+                  <th colspan="10">No metastasis</th>
+                  <th colspan="2">Metastasis</th>
+                </tr>
+                <tr>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>7</th>
+                  <th>8</th>
+                  <th>9</th>
+                  <th>10</th>
+                  <th>1</th>
+                  <th>2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="13">DLD platform</td>
+                </tr>
+                <tr>
+                  <td> Vimentin<sup>−</sup> CTCs</td>
+                  <td>27</td>
+                  <td>11</td>
+                  <td>9</td>
+                  <td>9</td>
+                  <td>28</td>
+                  <td>14</td>
+                  <td>20</td>
+                  <td>25</td>
+                  <td>10</td>
+                  <td>36</td>
+                  <td>7</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td> Vimentin<sup>+</sup> CTCs</td>
+                  <td>3</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>3</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>28</td>
+                  <td>13</td>
+                </tr>
+                <tr>
+                  <td> Total</td>
+                  <td>30</td>
+                  <td>11</td>
+                  <td>9</td>
+                  <td>12</td>
+                  <td>28</td>
+                  <td>14</td>
+                  <td>21</td>
+                  <td>26</td>
+                  <td>10</td>
+                  <td>36</td>
+                  <td>35</td>
+                  <td>25</td>
+                </tr>
+                <tr>
+                  <td colspan="13">CytoQuest™ CR system</td>
+                </tr>
+                <tr>
+                  <td> Vimentin<sup>−</sup> CTCs</td>
+                  <td>36</td>
+                  <td>9</td>
+                  <td>4</td>
+                  <td>12</td>
+                  <td>25</td>
+                  <td>16</td>
+                  <td>20</td>
+                  <td>25</td>
+                  <td>7</td>
+                  <td>36</td>
+                  <td>1</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td> Vimentin<sup>+</sup> CTCs</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>2</td>
+                  <td>0</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td> Total</td>
+                  <td>36</td>
+                  <td>9</td>
+                  <td>4</td>
+                  <td>13</td>
+                  <td>25</td>
+                  <td>16</td>
+                  <td>20</td>
+                  <td>25</td>
+                  <td>7</td>
+                  <td>38</td>
+                  <td>1</td>
+                  <td>5</td>
+                </tr>
+              </tbody>
+            </table>
+          </alternatives>
+        </table-wrap>
+      </sec>
+    </sec>
+
+    <sec sec-type="discussion">
+      <title>Discussion</title>
+      <p>Liver transplantation is used for the complete removal of tumor lesions, and the tumor recurrence and
+        metastasis observed in HCC patients is likely related to CTCs. Therefore, the determination of CTCs by “liquid
+        biopsies” is currently a major focus of investigation in monitoring patients with HCC undergoing LT.</p>
+      <p>In the current study, we describe a platform that integrates microfluidic DLD arrays with a MACS separator and
+        demonstrates its great potential for tumor antigen-independent CTC separation. At the optimal specimen flow rate
+        of 60 μl/min and buffer flow rate of 100 μl/min, a CTC isolation efficiency ratio of 85.1 ± 3.2% and a high
+        blood cell debulking efficiency (RBC, PLT, and WBC removal rates of 99.90% ± 0.03%, 99.95% ± 0.05%, and 98.50% ±
+        0.13%, respectively) were achieved. In addition, there were no significant difference in the isolation
+        performance of different tumor cell concentrations ranging from 50 to 8 × 10<sup>2</sup> cells/ml.</p>
+      <p>Furthermore, the DLD device can provide continuous CTC separation. StraightFrom Whole Blood CD45 MicroBeads
+        have the advantage of not requiring sample preparation for the rapid selection of CD45<sup>+</sup> cells
+        directly from whole peripheral blood; thus, the cells produced from the DLD device can enter the MACS separator
+        directly without centrifugation. Therefore, compared with other currently widely used methods for the negative
+        selection of CTCs, such as RBC lysis or density gradient centrifugation, our capture platform has the advantage
+        of simple operation.</p>
+      <p>At the 3-month follow-up of the 12 HCC patients undergoing LT, CTCs were found in 12 (100%) patients. Ten of
+        the 12 patients (83.3%) did not exhibit tumor metastasis or recurrence. Two of the 12 patients (16.7%) were
+        diagnosed with metastasis, with recurrence in the lungs (<italic>n</italic> = 1) and bone (<italic>n</italic> =
+        1).</p>
+      <p>Compared with the Abnova CytoQuest™ CR system, our platform yielded similar results among patients with no
+        metastasis, as determined by the Wilcoxon signed-rank test. However, examination of the two metastatic patients
+        using the CytoQuest™ CR system before and LT revealed relatively fewer CTCs than examination by our platform.
+      </p>
+      <p>Our results suggest the identification of patients with tumor metastases and subpopulations of EMT-transformed
+        CTCs. Previous studies have shown that CTCs undergo dynamic evolution under the strong selective pressure of
+        chemotherapy, radiation therapy and any other therapeutic intervention (<xref ref-type="bibr" rid="ref-1">
+          Aktipis et al., 2011</xref>). These CTCs have lower EpCAM expression (<xref ref-type="bibr" rid="ref-10">
+          Giannelli et al., 2016</xref>) and increased metastatic potential (<xref ref-type="bibr" rid="ref-19">Mani et
+          al., 2008</xref>). Therefore, they are difficult to detect, isolate, and characterize using immunoaffinity
+        enrichment strategies (<xref ref-type="bibr" rid="ref-5">De Boer et al., 1999</xref>), and EpCAM<sup>low</sup>
+        CTCs can be missed by the CytoQuest™ CR bulk sorting approach. In contrast, our antigen-independent platform
+        maintained a high detection sensitivity while achieving higher CTC counts consistent with clinical observations.
+        However, given that the sample size is relatively small, larger studies to confirm the present results are
+        needed.</p>
+      <p>We also observed limitations of the experiments. The DLD device uses a size-based particle separation approach,
+        but tumor cells have different diameters. Although most CTCs are larger than RBCs, there are still a small
+        number of CTCs that are similar in diameter to RBCs (<xref ref-type="bibr" rid="ref-6">Fachin et al., 2017
+        </xref>). These cells would not be separated by the device and would eventually be lost. In addition, although
+        CTCs were highly enriched by our platform (HepG2-GFP cells had 852 × enrichment over RBCs, 57 × enrichment over
+        WBCs, and 1,715 × enrichment over PLTs), the remaining cells still affect the CTC extraction purity. Finally,
+        there is a delicate relationship between the flow rate and the separation efficiency. If researchers want to
+        separate large volumes of blood samples at a high rate, cells under a high shear stress (<xref ref-type="bibr"
+          rid="ref-18">Liu et al., 2013</xref>) can deform because of the high fluid velocities in our device, which may
+        influence the cell isolation efficiency.</p>
+      <p>In future studies, we will continue to improve the CTC extraction purity. In addition, using our platform, we
+        will collect CTCs for further cell culture, drug screening, and molecular analyses.</p>
+    </sec>
+
+    <sec sec-type="conclusions">
+      <title>Conclusions</title>
+      <p>Here, we demonstrate the successful use of a platform that integrates a DLD structure with a MACS separator for
+        isolating CTC isolation with high-efficiency regardless of surface epitopes. Compared with the CytoQuest™ CR
+        system, which is based on an immunoaffinity method, our platform successfully identified a distinct
+        subpopulation of EMT-transformed, vimentin<sup>+</sup> CTCs.</p>
+      <p>However, the device still has several limitations, as described above. Our future studies will focus on
+        continuing to improve the device.</p>
+    </sec>
+
+  </body>
+  <back>
+
+    <acknowledgement>
+      <p>We thank American Journal Experts (AJE) for editing a draft of this manuscript.</p>
+    </acknowledgement>
+
+    <sec sec-type="additional-information">
+      <title>Additional Information and Declarations</title>
+      <fn-group content-type="competing-interests">
+        <title>Competing Interests</title>
+        <fn fn-type="conflict" id="conflict-1">
+          <p>The authors declare that they have no competing interests.</p>
+        </fn>
+      </fn-group>
+
+      <fn-group content-type="author-contributions">
+        <title>Author Contributions</title>
+        <fn fn-type="con" id="contribution-1">
+          <p>
+            <xref ref-type="contrib" rid="author-1">Xuebin Wang</xref> conceived and designed the experiments, performed
+            the experiments, analyzed the data, prepared figures and/or tables.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-2">
+          <p>
+            <xref ref-type="contrib" rid="author-2">Liying Sun</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-3">
+          <p>
+            <xref ref-type="contrib" rid="author-3">Haiming Zhang</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-4">
+          <p>
+            <xref ref-type="contrib" rid="author-4">Lin Wei</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-5">
+          <p>
+            <xref ref-type="contrib" rid="author-5">Wei Qu</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-6">
+          <p>
+            <xref ref-type="contrib" rid="author-6">Zhigui Zeng</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-7">
+          <p>
+            <xref ref-type="contrib" rid="author-7">Ying Liu</xref> provided blood samples.
+          </p>
+        </fn>
+        <fn fn-type="con" id="contribution-8">
+          <p>
+            <xref ref-type="contrib" rid="author-8">Zhijun Zhu</xref> contributed reagents/materials/analysis tools,
+            authored or reviewed drafts of the paper, approved the final draft, provided blood samples.
+          </p>
+        </fn>
+      </fn-group>
+
+      <fn-group content-type="other">
+        <title>Human Ethics</title>
+        <fn id="addinfo-1">
+          <p>The following information was supplied relating to ethical approvals (i.e., approving body and any
+            reference numbers):</p>
+          <p>Approval from the Beijing Friendship Hospital Human Research Ethics Committee (code: 2018-P2-114-01) was
+            obtained for the use of all samples using a protocol that conforms to the provisions of the Declaration of
+            Helsinki.</p>
+        </fn>
+      </fn-group>
+
+      <fn-group content-type="other">
+        <title>Data Availability</title>
+        <fn id="addinfo-2">
+          <p>The following information was supplied regarding data availability:</p>
+          <p>The raw data are available in the figures and tables in the article.</p>
+        </fn>
+      </fn-group>
+
+    </sec>
+
+    <ref-list content-type="authoryear">
+
+      <title>References</title>
+
+      <ref id="ref-1">
+        <label>Aktipis et al. (2011) Reference mentioned in the article text format- </label>
+        <element-citation publication-type="journal">
+          <person-group person-group-type="author">
+            <name>
+              <surname>Aktipis</surname>
+              <given-names>CA</given-names>
+            </name>
+            <name>
+              <surname>Kwan</surname>
+              <given-names>VSY</given-names>
+            </name>
+            <name>
+              <surname>Johnson</surname>
+              <given-names>KA</given-names>
+            </name>
+            <name>
+              <surname>Neuberg</surname>
+              <given-names>SL</given-names>
+            </name>
+            <name>
+              <surname>Maley</surname>
+              <given-names>CC</given-names>
+            </name>
+            <name>
+              <surname>Jacobs</surname>
+              <given-names>DS</given-names>
+            </name>
+          </person-group>
+          <article-title>Overlooking evolution: a systematic analysis of cancer relapse and therapeutic resistance
+            research</article-title>
+          <source>PLOS ONE - Journal name where reference is published</source>
+          <year iso-8601-date="2011">2011</year>
+          <volume>6</volume>
+          <issue>11</issue>
+          <elocation-id>e26100 - article number of journal</elocation-id>
+          <pub-id pub-id-type="doi">10.1371/journal.pone.0026100</pub-id>
+        </element-citation>
+      </ref>
+
+    </ref-list>
+  </back>
+</article>
