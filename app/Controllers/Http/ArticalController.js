@@ -44,6 +44,18 @@ class ArticalController {
         }
     }
 
+    static async getKeywordsOf(journal_id, inp) {
+        let out = []
+        let articleKeyword, journalKeywords = await JournalKeyword.query().where('journal_id', journal_id).fetch()
+        journalKeywords = journalKeywords.toJSON()
+        for(let journalKeyword of journalKeywords) {
+            if(inp.toLowerCase().indexOf(journalKeyword.theword.toLowerCase())>=0){
+                out.push(journalKeyword.theword)
+            }
+        }
+        return out
+    }
+
     async keywordCheck({ view, response, session, request, params }) {
         let out = {
             error: "Journal Id not defined!",
@@ -1197,6 +1209,84 @@ class ArticalController {
         return true
     }
 
+    static html2realxml (inp, doi, baseDir) {
+        if(inp==null || inp=='') {
+            return '<p></p>'
+        }
+        const entities = new Entities()
+        let out = striptags(inp, ['p', 'table', 'tr', 'td', 'a', 'img', 'section', 'title'], '')
+        out = entities.decode(out)
+      
+        out = out.replace(/<strong>/g, `<sup>`)
+        out = out.replace(/<\/strong>/g, `</sup>`)
+
+        out = out.replace(/<section>/g, `<sec>`)
+        out = out.replace(/<\/section>/g, `</sec>`)
+
+        out = out.replace(/&nbsp;/g, ' ')
+
+        let m, tmp, href, retmp, re, alt, extension
+        // links
+        re = /<\s*a[^>]*>/g
+      
+        do {
+            m = re.exec(out)
+            if (m) {
+                tmp = out.substring(m.index+1).toLowerCase().split('href="')
+                if(tmp.length>1) {
+                    tmp = tmp[1].split('"')[0]
+                    if(tmp.indexOf('#')==0) {
+                        href= tmp.replace(/#_enref/g, 'ref-')
+                        retmp = new RegExp(m[0], 'g')
+                        out = out.replace(retmp, `<xref ref-type="bibr" rid="${ href }">`)
+                    }
+                }
+            }
+        } while (m)
+        out = out.replace(/<\/a>/g, `</xref>`)
+        //\links
+        // images
+        re = /<\s*img[^>]*>/g
+        let images = []
+      
+      
+        let index = 1, imageTmp = '', imageTemp = `      
+        <fig id="fig-#index#">
+            <object-id pub-id-type="doi">${ doi }/fig-#index#</object-id>
+            <label>Figure #index#</label>
+            <caption>
+            <title>#title#</title>
+            </caption>
+            <graphic mimetype="image" mime-subtype="#extension#" xlink:href="#src#" />
+        </fig>`
+        do {
+            m = re.exec(out)
+            if (m) {
+                href = ''
+                tmp = out.substring(m.index+1).toLowerCase().split('src="')
+                if(tmp.length>1) {
+                    tmp = tmp[1].split('"')[0]
+                    href= tmp
+                }
+                extension = (href.split('.')[1])?href.split('.')[1]:'png'
+                alt = ''
+                tmp = out.substring(m.index+1).toLowerCase().split('alt="')
+                if(tmp.length>1) {
+                    tmp = tmp[1].split('"')[0]
+                    alt= tmp
+                }
+                retmp = new RegExp(m[0], 'g')
+                imageTmp = imageTemp.replace(/#index#/g, index).replace(/#src#/g, baseDir + href)
+                .replace(/#title#/g, alt).replace(/#extension#/g, extension)
+                out = out.replace(retmp, `${ imageTmp}`)
+                index++
+            }
+        } while (m)
+        //\images
+      
+        return out
+    }
+
     static async genXml(article_id) {
         console.log('Genarting XML')
         let thisArticle = await Artical.find(article_id)
@@ -1417,7 +1507,20 @@ class ArticalController {
             editors += editorTemplate.replace(/#fname#/g, theEditor.user.fname)
             .replace(/#lname#/g, theEditor.user.lname)
         }
+
+        let chiefEditor = ''
+        let chiefEditorUser = await User.query().where('group_id', 2).where('journal_id', thisArticle.journal_id).first()
+        if(chiefEditorUser) {
+            chiefEditor = chiefEditorUser.fname + ' ' + chiefEditorUser.lname
+        }
         //\---------EDITORS---------------
+        //----------ABSTRACT--------------
+        let abstractKeywords = ''
+        let abstractKeywordsArr = await Artical.getKeywordsOf(thisArticle.abstract)
+        for(let keyW of abstractKeywordsArr) {
+            abstractKeywords += `<kwd>${ keyW }</kwd>`
+        }
+        //\---------ABSTRACT--------------
         let xmlData = String(xmlTemplate).replace(/#article_running_title#/g, thisArticle.running_title)
         xmlData = xmlData.replace(/#article_type#/g, thisArticle.type + '-article')
         xmlData = xmlData.replace(/#journal_title#/g, journal_title)
@@ -1441,6 +1544,16 @@ class ArticalController {
         xmlData = xmlData.replace(/#article_publish_date_year#/g, moment(thisArticle.publish_date).format('YYYY'))
         xmlData = xmlData.replace(/#authors_head#/g, authors_head)
         xmlData = xmlData.replace(/#article_publish_link#/g, `${Env.get('APP_URL')}/article/${ thisArticle.running_title.replace(/ /g, '-') }`)
+        xmlData = xmlData.replace(/#article_abstract#/g, (thisArticle.abstract)?thisArticle.abstract:'')
+        xmlData = xmlData.replace(/#article_abstract_keywords#/g, abstractKeywords)
+        xmlData = xmlData.replace(/#article_ack#/g, thisArticle.ack)
+        xmlData = xmlData.replace(/#article_summery#/g, thisArticle.summery)
+        xmlData = xmlData.replace(/#article_running_title#/g, thisArticle.running_title)
+        xmlData = xmlData.replace(/#chief_editor#/g, chiefEditor)
+        xmlData = xmlData.replace(/#article_introduction#/g, ArticalController.html2realxml(thisArticle.abstract, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
+        xmlData = xmlData.replace(/#article_disc#/g, ArticalController.html2realxml(thisArticle.disc, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
+        xmlData = xmlData.replace(/#article_material#/g, ArticalController.html2realxml(thisArticle.material, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
+        xmlData = xmlData.replace(/#article_results#/g, ArticalController.html2realxml(thisArticle.results, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
 
         fs.writeFileSync(baseDir + '/public/pdf/gen_' + article_id + '.xml', xmlData)
         console.log('XML Generated')
