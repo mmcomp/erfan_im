@@ -921,6 +921,7 @@ class ArticalController {
     static async genPdf(article_id) {
         try{
             await ArticalController.genEndNote(article_id)
+            await ArticalController.genXml(article_id)
             let theData = {
                 //---global
                 global_doi: Env.get('DOI'),
@@ -1287,6 +1288,53 @@ class ArticalController {
         return out
     }
 
+    static ref2json(inp) {
+        inp = String(inp)
+        
+        let publish_year = '', article_title = '', journal_name_tmp = [], publish_vol = '', publish_issue = '', journal_name = '', pages = ''
+        let tmp, firstNames = []
+        try{
+            // Authors
+            tmp = inp.split('(')[0]
+            firstNames = tmp.split('&')[0].split('.,')
+            let i = 0
+            for(i = 0;i < firstNames.length-1;i++) {
+                firstNames[i] = {
+                    fname : firstNames[i].split(',')[0].trim(),
+                    lname : firstNames[i].split(',')[1].trim() + '.'
+                }
+            }
+            firstNames[i] = {
+                fname : firstNames[i].split(',')[0].trim(),
+                lname : firstNames[i].split(',')[1].trim()
+            }
+            if(tmp.split('&')[1]) {
+                firstNames.push({
+                    fname : tmp.split('&')[1].split(',')[0].trim(),
+                    lname : tmp.split('&')[1].split(',')[1].trim()
+                })
+            }
+            // article
+            publish_year = inp.split('(')[1].split(')')[0]
+            article_title = inp.split(').')[1].split('.')[0]
+            journal_name_tmp = inp.split(').')[1].split('.')[1].split(':')[0].split(' ')
+            publish_vol = journal_name_tmp[journal_name_tmp.length-1].split('(')[0]
+            publish_issue = (journal_name_tmp[journal_name_tmp.length-1].split('(')[1])?journal_name_tmp[journal_name_tmp.length-1].split('(')[1].split(')')[0]:''
+            journal_name = journal_name_tmp.slice(0, journal_name_tmp.length-1).join(' ')
+            pages = inp.split(':')[1].trim()
+        }catch(e){}
+      
+        return {
+          authors: firstNames,
+          publish_year: publish_year,
+          article_title: article_title,
+          journal_name: journal_name,
+          publish_vol: publish_vol,
+          publish_issue: publish_issue,
+          pages: pages,
+        }
+    }
+
     static async genXml(article_id) {
         console.log('Genarting XML')
         let thisArticle = await Artical.find(article_id)
@@ -1516,11 +1564,56 @@ class ArticalController {
         //\---------EDITORS---------------
         //----------ABSTRACT--------------
         let abstractKeywords = ''
-        let abstractKeywordsArr = await Artical.getKeywordsOf(thisArticle.abstract)
+        let abstractKeywordsArr = await ArticalController.getKeywordsOf(thisArticle.abstract)
         for(let keyW of abstractKeywordsArr) {
             abstractKeywords += `<kwd>${ keyW }</kwd>`
         }
         //\---------ABSTRACT--------------
+        //----------REFERENCE--------------
+        let articleRefs = ''
+        const articleRefNameTemplate = `
+        <name>
+            <surname>#lname#</surname>
+            <given-names>#fname#</given-names>
+        </name>
+        `
+        const articleRefTemplate = `
+        <ref id="ref-#index#">
+            <label>Aktipis et al. (2011) Reference mentioned in the article text format- </label>
+            <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+            #names#
+            </person-group>
+            <article-title>
+            #ref_article_title#
+            </article-title>
+            <source>#journal_name#</source>
+            <year iso-8601-date="#publish_year#">#publish_year#</year>
+            <volume>#publish_vol#</volume>
+            <issue>#publish_issue#</issue>
+            <elocation-id>#article_id#</elocation-id>
+            <pub-id pub-id-type="doi">#doi#</pub-id>
+            </element-citation>
+        </ref>
+        `
+        let refsArray = []
+        try{
+            refsArray = JSON.parse(thisArticle.refs)
+        }catch(e) {}
+        let indx = 1
+        for(let theRef of refsArray) {
+            let refData = ArticalController.ref2json(theRef)
+            let names = ''
+            for(let theName of refData.authors) {
+                names += articleRefNameTemplate.replace(/#fname#/g, theName.fname).replace(/#lname#/g, theName.lname)
+            }
+            articleRefs += articleRefTemplate.replace(/#names#/g, names).replace(/#ref_article_title#/g, refData.article_title)
+            .replace(/#journal_name#/g, refData.journal_name).replace(/#publish_vol#/g, refData.publish_vol)
+            .replace(/#publish_issue#/g, refData.publish_issue).replace(/#article_id#/g, '').replace(/#doi#/g, '')
+            .replace(/#index#/g, indx)
+            indx++
+        }
+        //\---------REFERENCE--------------
         let xmlData = String(xmlTemplate).replace(/#article_running_title#/g, thisArticle.running_title)
         xmlData = xmlData.replace(/#article_type#/g, thisArticle.type + '-article')
         xmlData = xmlData.replace(/#journal_title#/g, journal_title)
@@ -1554,7 +1647,7 @@ class ArticalController {
         xmlData = xmlData.replace(/#article_disc#/g, ArticalController.html2realxml(thisArticle.disc, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
         xmlData = xmlData.replace(/#article_material#/g, ArticalController.html2realxml(thisArticle.material, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
         xmlData = xmlData.replace(/#article_results#/g, ArticalController.html2realxml(thisArticle.results, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi, baseDir + '/public'))
-
+        xmlData = xmlData.replace(/#article_refs#/g, articleRefs)
         fs.writeFileSync(baseDir + '/public/pdf/gen_' + article_id + '.xml', xmlData)
         console.log('XML Generated')
         return true
@@ -1565,7 +1658,6 @@ class ArticalController {
             let article_id = params.article_id
             let article = await Artical.query().where('id', article_id).first()
             if(article) {
-                ArticalController.genXml(article.id)
                 let baseDirAr = __dirname.split('/'), baseDir = ''
                 for(var i = baseDirAr.length - 4;i>=0;i--) {
                   baseDir = '/' + baseDirAr[i] + baseDir
