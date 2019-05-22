@@ -808,6 +808,17 @@ class ArticalController {
         // console.log('-----------------')
         out = out.replace(/<\s*p[^>]*>/g,`<w:p><w:r><w:t>`)
         out = out.replace(/<\/p>/g, `</w:t></w:r></w:p>`)
+
+        out = out.replace(/<\s*h1[^>]*>/g,`<w:p><w:r><w:t>`)
+        out = out.replace(/<\/h1>/g, `</w:t></w:r></w:p>`)
+        out = out.replace(/<\s*h2[^>]*>/g,`<w:p><w:r><w:t>`)
+        out = out.replace(/<\/h2>/g, `</w:t></w:r></w:p>`)
+        out = out.replace(/<\s*h3[^>]*>/g,`<w:p><w:r><w:t>`)
+        out = out.replace(/<\/h3>/g, `</w:t></w:r></w:p>`)
+        out = out.replace(/<\s*h4[^>]*>/g,`<w:p><w:r><w:t>`)
+        out = out.replace(/<\/h4>/g, `</w:t></w:r></w:p>`)
+        out = out.replace(/<\s*h5[^>]*>/g,`<w:p><w:r><w:t>`)
+        out = out.replace(/<\/h5>/g, `</w:t></w:r></w:p>`)
         
         out = out.replace(/<strong>/g, `</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>`)
         out = out.replace(/<\/strong>/g, `</w:t></w:r><w:r><w:t>`)
@@ -915,9 +926,9 @@ class ArticalController {
 
         out = out.replace(/#ABBAS#/g, '&lt;')
         out = out.replace(/#GHOLI#/g, '&gt;')
-        console.log('XML')
-        console.log(out)
-        console.log('___________________________')
+        // console.log('XML')
+        // console.log(out)
+        // console.log('___________________________')
         return {
             xml: out,
             images: images,
