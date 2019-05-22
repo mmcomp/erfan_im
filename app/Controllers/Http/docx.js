@@ -9,6 +9,7 @@ const ImageModule = require('open-docxtemplater-image-module')
 const path = require('path')
 const word2pdf = require('word2pdf')
 const pandoc = require('node-pandoc')
+const { exec } = require('child_process');
 let addressIndex = 0
 
 module.exports = {
@@ -280,6 +281,17 @@ module.exports = {
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
       }
+      
+      exec('unoconv -f pdf ' + docxfile, (err, stdout, stderr) => {
+        if (err) {
+          // node couldn't execute the command
+          return;
+        }
+
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
       /*
       const data = await word2pdf(docxfile)
       console.log('PDF Data', data)
@@ -287,6 +299,7 @@ module.exports = {
       
       return true
       */
+      /*
       return new Promise(function( resolve, reject) {
         console.log('pandoc ' + docxfile + ' -f docx -t pdf -o ' + baseDir + '/public/pdf/' + outputname + '.pdf')
         try{
@@ -302,7 +315,7 @@ module.exports = {
           reject(e)
         }
       })
-      
+      */      
     },
 
     docxToEpub: function(docxfile, outputname) {
