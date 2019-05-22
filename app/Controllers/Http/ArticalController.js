@@ -18,6 +18,7 @@ const docx = require('./docx')
 // const HTMLParser = require('node-html-parser')
 const striptags = require('striptags')
 const Entities = require('html-entities').AllHtmlEntities
+const decode = require('unescape')
 // const matchAll = require("match-all")
 
 class ArticalController {
@@ -790,11 +791,21 @@ class ArticalController {
                 images: [],
             }
         }
+        let baseDirAr = __dirname.split('/'), baseDir = ''
+        for(var i = baseDirAr.length - 4;i>=0;i--) {
+          baseDir = '/' + baseDirAr[i] + baseDir
+        }
+        baseDir = baseDir.substring(1)
         const entities = new Entities()
         let out = striptags(inp, ['p', 'table', 'tr', 'td', 'a', 'strong', 'img'], '')
+        // out = decode(out)
+        out = out.replace(/\&lt;/g, '#ABBAS#')
+        out = out.replace(/\&gt;/g, '#GHOLI#')
         out = entities.decode(out)
-        
-                
+        // out = out.replace('<', '&lt;')
+        // console.log('HTML :')
+        // console.log(out)
+        // console.log('-----------------')
         out = out.replace(/<\s*p[^>]*>/g,`<w:p><w:r><w:t>`)
         out = out.replace(/<\/p>/g, `</w:t></w:r></w:p>`)
         
@@ -902,6 +913,11 @@ class ArticalController {
         } while (m)
         //\images
 
+        out = out.replace(/#ABBAS#/g, '&lt;')
+        out = out.replace(/#GHOLI#/g, '&gt;')
+        // console.log('XML')
+        // console.log(out)
+        // console.log('___________________________')
         return {
             xml: out,
             images: images,
@@ -1402,7 +1418,7 @@ class ArticalController {
                 }
             }
         }
-        let authorAffs = [], affs = [], affIndex
+        let authorAffs = [], affs = [], affIndex, authorCount=0
         for(let userArticle of userArticles) {
             affIndex = affs.indexOf(userArticle.user.department)
             if(affIndex<0) {
@@ -1410,8 +1426,8 @@ class ArticalController {
                 affs.push(userArticle.user.department)
                 authorAffs.push({
                     index: affIndex+1,
-                    name: userArticle.user.department,
-                    country: userArticle.user.country.COUNTRY_NAME,
+                    name: (userArticle.user)?userArticle.user.department:'',
+                    country: (userArticle.user && userArticle.user.country)?userArticle.user.country.COUNTRY_NAME:'',
                 })
             }
             affIndex++
@@ -1421,7 +1437,7 @@ class ArticalController {
                     authorsClassified[userArticle.position] = []
                 }
                 userArticle.user['aff_index'] = affIndex
-                authorsClassified[userArticle.position].push(userArticle.user.toJSON())
+                authorsClassified[userArticle.position].push(userArticle.user)
             }
         }
 

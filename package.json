@@ -34,6 +34,7 @@
     "docx-extractor": "^1.1.4",
     "docxtemplater": "^3.10.1",
     "docxtemplater-image-module-free": "^1.1.1",
+    "entities": "^1.1.2",
     "google-scholar": "^1.5.1",
     "html-entities": "^1.2.1",
     "jszip": "^2.6.1",
@@ -49,6 +50,7 @@
     "randomatic": "^3.1.1",
     "sqlite3": "^4.0.2",
     "striptags": "^3.1.1",
+    "unescape": "^1.0.1",
     "word2pdf": "^1.0.7"
   },
   "devDependencies": {},
