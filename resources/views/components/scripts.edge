@@ -33,7 +33,7 @@
 
                 if(a1.test(thePassword) && a2.test(thePassword) && a3.test(thePassword) && a4.test(thePassword)) {
                     var theEmail = $("#signup-email").val().trim();
-                    var emailValid = checkEMail(theEmail);
+                    var emailValid = emailValidate(theEmail);
                     console.log('Email', theEmail, 'Validation', emailValid);
                     if(emailValid) {
                         console.log('check Email', '/email_exists/' + theEmail);
