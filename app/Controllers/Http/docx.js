@@ -282,7 +282,7 @@ module.exports = {
       }
       
       const data = await word2pdf(docxfile)
-      // console.log('PDF Data', data)
+      console.log('PDF Data', data)
       fs.writeFileSync(baseDir + '/public/pdf/' + outputname + '.pdf', data);
       
       return true
