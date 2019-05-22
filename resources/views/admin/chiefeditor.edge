@@ -105,9 +105,9 @@
 												@each(directo in statics.registeredUsers)
 												<li>
 													@if(directo.name_index==0)
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@else
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@endif
 												</li>
 												@endeach
@@ -119,9 +119,9 @@
 												@each(directo in statics.managingEdiors)
 												<li>
 													@if(directo.name_index==0)
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@else
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@endif												
 												</li>
 												@endeach
@@ -133,9 +133,9 @@
 												@each(directo in statics.assocEditors)
 												<li>
 													@if(directo.name_index==0)
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@else
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@endif												
 												</li>
 												@endeach
@@ -147,9 +147,9 @@
 												@each(directo in statics.reviewers)
 												<li>
 													@if(directo.name_index==0)
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@else
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@endif												
 												</li>
 												@endeach
@@ -171,9 +171,9 @@
 												@each(directo in statics.authors)
 												<li>
 													@if(directo.name_index==0)
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@else
-													<a href="/author/{{ directo.fname }}-{{ directo.lname }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
+													<a href="/author/{{ directo.fname.replace(/-/g,'_') }}-{{ directo.lname.replace(/-/g,'_') }}-{{ directo.name_index }}">{{ directo.fname }} {{ directo.lname }}</a>
 													@endif												
 												</li>
 												@endeach

@@ -506,8 +506,8 @@ class UserController {
         if(params.author_name) {
             let author_name = params.author_name.split('-')
             // console.log('Author Name', author_name, author_name.length)
-            let fname = (author_name.length>=2)?author_name[0]:''
-            let lname = (author_name.length>=2)?author_name[1]:author_name[0]
+            let fname = (author_name.length>=2)?author_name[0].replace(/_/g,'-'):''
+            let lname = (author_name.length>=2)?author_name[1].replace(/_/g,'-'):author_name[0].replace(/_/g,'-')
             let name_index = (author_name.length==3)?parseInt(author_name[2], 10):0
             if(isNaN(name_index)) {
                 name_index = 0
