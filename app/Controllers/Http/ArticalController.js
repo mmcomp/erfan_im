@@ -915,9 +915,9 @@ class ArticalController {
 
         out = out.replace(/#ABBAS#/g, '&lt;')
         out = out.replace(/#GHOLI#/g, '&gt;')
-        // console.log('XML')
-        // console.log(out)
-        // console.log('___________________________')
+        console.log('XML')
+        console.log(out)
+        console.log('___________________________')
         return {
             xml: out,
             images: images,
