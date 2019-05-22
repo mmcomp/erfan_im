@@ -209,7 +209,7 @@ module.exports = {
           if(theImages.length>0) {
             // console.log('zip rels')
             let theRels = zip.folder('word').folder('_rels').file('document.xml.rels')
-            let fileBuffer = new Buffer(theRels._data.getContent())
+            let fileBuffer = new Buffer.from(theRels._data.getContent(), 'utf8')
             fileBuffer = fileBuffer.toString('utf8')
             let tmpRef = `<Relationship Id="#id#" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/#name#">`
             let newRefs = '', imageName = ''
