@@ -280,13 +280,13 @@ module.exports = {
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
       }
-      
+      /*
       const data = await word2pdf(docxfile)
       console.log('PDF Data', data)
       fs.writeFileSync(baseDir + '/public/pdf/' + outputname + '.pdf', data);
       
       return true
-      /*
+      */
       return new Promise(function( resolve, reject) {
         console.log('pandoc ' + docxfile + ' -f docx -t pdf -o ' + baseDir + '/public/pdf/' + outputname + '.pdf')
         try{
@@ -302,7 +302,7 @@ module.exports = {
           reject(e)
         }
       })
-      */
+      
     },
 
     docxToEpub: function(docxfile, outputname) {
