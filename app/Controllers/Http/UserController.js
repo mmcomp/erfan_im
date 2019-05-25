@@ -505,6 +505,8 @@ class UserController {
         let selected_user
         if(params.author_name) {
             let author_name = params.author_name.split('-')
+            author_name[0] = decodeURIComponent(author_name[0])
+            author_name[1] = decodeURIComponent(author_name[1])
             // console.log('Author Name', author_name, author_name.length)
             let fname = (author_name.length>=2)?author_name[0].replace(/_/g,'-'):''
             let lname = (author_name.length>=2)?author_name[1].replace(/_/g,'-'):author_name[0].replace(/_/g,'-')
