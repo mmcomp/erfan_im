@@ -87,6 +87,8 @@ Route.any('email', 'ArticalController.email')
 
 Route.get('pdf/:article_id', 'ArticalController.pdf')
 
+Route.get('genpdf/:article_id', 'ArticalController.test')
+
 Route.get('epub/:article_id', 'ArticalController.epub')
 
 Route.get('endnote/:article_id', 'ArticalController.endnote')

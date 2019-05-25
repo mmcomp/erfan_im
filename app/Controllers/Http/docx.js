@@ -284,6 +284,7 @@ module.exports = {
       
       exec('unoconv -f pdf ' + docxfile, (err, stdout, stderr) => {
         if (err) {
+          console.log('ERROR Unoconv', err)
           // node couldn't execute the command
           return;
         }

@@ -939,13 +939,14 @@ class ArticalController {
         let out = '<w:p>', refName = ''
         for(let i = 0;i < refs.length;i++) {
             refName = '#_ENREF_' + (i+1)
-            out += `<w:bookmarkStart w:id="0" w:name="${ refName }"/><w:r><w:t>${ refs[i] }</w:t></w:r><w:bookmarkEnd w:id="0"/><w:br/>`
+            out += `<w:bookmarkStart w:id="0" w:name="${ refName }"/><w:r><w:t>${i+1} - ${ refs[i] }</w:t></w:r><w:bookmarkEnd w:id="0"/><w:br/>`
         }
         out += '</w:p>'
         return out
     }
 
     static async genPdf(article_id) {
+        console.log('Generating DOCX')
         try{
             await ArticalController.genEndNote(article_id)
             await ArticalController.genXml(article_id)
@@ -960,6 +961,7 @@ class ArticalController {
                 image: '/Volumes/projects/erfan/erfan/public/static/img/journal/j_0.png',
                 //---article
                 header_author: 'Akhavanezayat et al.',
+                author_italic: '',
                 article_publish_month_year: 'January, 2017',
                 article_pages: '39-46',
                 article_doi: '55',
@@ -971,6 +973,8 @@ class ArticalController {
                 article_keywords: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 article_introduction: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 article_material: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_disc: '<w:p><w:r><w:t></w:t></w:r></w:p>',
+                article_ack: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 article_results: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 article_references: '<w:p><w:r><w:t></w:t></w:r></w:p>',
                 //---author
@@ -1026,6 +1030,8 @@ class ArticalController {
                         name: 'Department of Anesthesia, Cardiac Anesthesia Research Center, Imam-Reza Hospital, Mashhad Iran.\n',
                     },
                 ],
+                corr_email: "\t",
+                start_page: '1',
             }
             let baseDirAr = __dirname.split('/'), baseDir = ''
             for(var i = baseDirAr.length - 4;i>=0;i--) {
@@ -1051,7 +1057,7 @@ class ArticalController {
             //---journal
             theData.journal_name = theArticle.journal.name
             theData.journal_vol = theArticle.publish_vol
-            theData.jounral_n = theArticle.publish_no
+            theData.journal_n = theArticle.publish_no
             theData.journal_doi = theArticle.journal.doi_code
             theData.image = baseDir + '/public/static/img/journal/j_0.png'
             if(theArticle.journal.pdf_image_path && theArticle.journal.pdf_image_path!='') {
@@ -1122,6 +1128,7 @@ class ArticalController {
                         index: theAuth.aff_index + '*',
                         name: ' , ' + theAuth.fname + ' ' + theAuth.lname,
                     })
+                    theData.corr_email = theAuth.email
                 }
             }
             if(authorCount==2) {
@@ -1133,10 +1140,12 @@ class ArticalController {
                     theData.header_author += ' and ' +  authorsClassified.corresponding[0].lname
                 }
             }else if(authorCount>2) {
-                theData.header_author += ' et al.'
+                // theData.header_author += ' et al.'
+                theData.author_italic = ' et al.'
             }
             theData.article_publish_month_year = moment(theArticle.publish_date).format('MMMM, YYYY')
             theData.article_pages = theArticle.publish_startpage + '-' + theArticle.publish_endpage
+            theData.start_page = theArticle.publish_startpage
             theData.article_doi = theArticle.doi
             theData.article_type = theTypes[theArticle.type]
             theData.article_full_title = theArticle.full_title
@@ -1164,6 +1173,15 @@ class ArticalController {
             theXML = ArticalController.html2xml(theArticle.material)
             allImages = allImages.concat(theXML.images)
             theData.article_material = theXML.xml
+
+            theXML = ArticalController.html2xml(theArticle.disc)
+            allImages = allImages.concat(theXML.images)
+            theData.article_disc = theXML.xml
+
+            theXML = ArticalController.html2xml(theArticle.ack)
+            allImages = allImages.concat(theXML.images)
+            theData.article_ack = theXML.xml
+
             theXML = ArticalController.html2xml(theArticle.results)
             allImages = allImages.concat(theXML.images)
             theData.article_results = theXML.xml
@@ -1679,7 +1697,12 @@ class ArticalController {
         console.log('XML Generated')
         return true
     }
-
+    async test ({ view, response, session, request, params }) {
+        if(params && params.article_id) {
+            ArticalController.genPdf(params.article_id)
+        }
+        return 'OK'
+    }
     async pdf ({ view, response, session, request, params }) {
         if(params && params.article_id) {
             let article_id = params.article_id
