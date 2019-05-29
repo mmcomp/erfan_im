@@ -1157,7 +1157,9 @@ class ArticalController {
                  
             if(theArticle.keyword && theArticle.keyword.length>0) {
                 for(let keyW of theArticle.keyword) {
-                    articleKeywordsHtml += keyW.keyword.theword + ' , '
+                    if(keyW.keyword) {
+                        articleKeywordsHtml += keyW.keyword.theword + ' , '
+                    }
                 }
                 articleKeywordsHtml += '</p>'
                 theXML = ArticalController.html2xml(articleKeywordsHtml)
