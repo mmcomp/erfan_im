@@ -1571,7 +1571,9 @@ class ArticalController {
             'c3': [],
         }
         for(let articleKeyword of articleKeywords) {
-            keyWordCatagory[articleKeyword.keyword.category].push(articleKeyword.keyword.theword)
+            if(articleKeyword.keyword) {
+                keyWordCatagory[articleKeyword.keyword.category].push(articleKeyword.keyword.theword)
+            }
         }
         for(let keyword of keyWordCatagory.c1) {
             keywords += `<subject>Catecgory 1 ${ keyword }</subject>`
