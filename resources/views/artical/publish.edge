@@ -86,9 +86,11 @@
               <p class="c-font-sentence c-font-sbold"> <strong>Abstract: </strong><br> {{ article.abstract }}</p>
               <span class="item"><span aria-hidden="true" class="icon-tag">&nbsp;Keywords:</span> 
                 @each(keyword in article.keyword)
-                <a href="/keyword/{{ keyword.keyword.theword }}">
-                  {{ keyword.keyword.theword }}
-                </a> 
+                  @if(keyword.keyword)
+                    <a href="/keyword/{{ keyword.keyword.theword.replace(/ /g,'-') }}">
+                      {{ keyword.keyword.theword }}
+                    </a> 
+                  @endif
                 @endeach
                 <!--
                 <a href="http://imaqpress.com/keywords/"> commercialization
