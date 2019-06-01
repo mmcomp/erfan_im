@@ -1068,9 +1068,9 @@ class ArticalController {
             theData.header_author = theArticle.author.lname
             let authorCount = 1
             let authorsClassified = {
-                first: [
-                    theArticle.author,
-                ],
+                // first: [
+                //     theArticle.author,
+                // ],
             }
             let authorAffs = [], affs = [], affIndex
             for(let userArticle of theAuthors) {
@@ -1084,14 +1084,14 @@ class ArticalController {
                     })
                 }
                 affIndex++
-                if(userArticle.users_id!=theArticle.author.id) {
+                // if(userArticle.users_id!=theArticle.author.id) {
                     authorCount++
                     if(!authorsClassified[userArticle.position]) {
                         authorsClassified[userArticle.position] = []
                     }
                     userArticle.user['aff_index'] = affIndex
                     authorsClassified[userArticle.position].push(userArticle.user)
-                }
+                // }
             }
             affIndex = affs.indexOf(authorsClassified.first[0].department)
             if(affIndex<0) {
