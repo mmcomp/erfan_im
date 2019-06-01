@@ -559,7 +559,8 @@ class UserController {
             }
         }
         let articleIds = []
-        let articles = await Artical.query().where('status', 'published').where('author_id', selected_user.id).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let otherUserArticles = await UserArticle.query().where('users_id', selected_user.id).pluck('article_id')
+        let articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -570,7 +571,7 @@ class UserController {
         for(let i = 1;i <= recentPublished.lastPage;i++) {
             recentPublished.pages.push(i)
         }
-        articles = await Artical.query().where('status', 'published').where('author_id', selected_user.id).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {
