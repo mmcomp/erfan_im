@@ -39,8 +39,9 @@
           <div class="col-md-12">
             <!-- Begin: Title 1 component -->
             <div class="c-content-title-1" data-height="height">
-              <span class="c-content-label c-font-uppercase c-font-bold c-bg-green-2 c-font-slim c-font-uppercase c-font-bold">Review
-                Article</span>
+              <span class="c-content-label c-font-uppercase c-font-bold c-bg-green-2 c-font-slim c-font-uppercase c-font-bold">
+                  {{ article.type }}
+              </span>
               <p class="c-font-sentence c-font-sbold"> Published in <a href="/journal/{{ article.journal.name }}">{{ article.journal.name }}</a> on <a href="http://imaqpress.com/archive/2015/august">{{ article.publish_date }}</a> <br> Vol:
                 {{ article.publish_vol }}, No: {{ article.publish_no }}, Page: {{ article.publish_startpage }}-{{ article.publish_endpage }} <br>
               DOI: <a href="http://doi.org/{{ global_doi }}/{{ article.journal.doi_code }}.{{ article.doi }}"> {{ global_doi }}/{{ article.journal.doi_code }}.{{ article.doi }}</a> </p>
