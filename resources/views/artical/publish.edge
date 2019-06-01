@@ -45,21 +45,21 @@
                 {{ article.publish_vol }}, No: {{ article.publish_no }}, Page: {{ article.publish_startpage }}-{{ article.publish_endpage }} <br>
                 DOI: <a href="http://doi.org/00000.00/gnc.012018"> 00000.00/{{ article.journal.doi_code }}.{{ article.doi }}</a> </p>
               <h3 class="c-font-sentence c-font-bold">{{ article.full_title }}</h3>
-              <span class="item"><span aria-hidden="true" class="icon-users">&nbsp;Authors:</span> <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">
-                  {{ article.author.fname }} {{ article.author.lname }}</a>
+              <span class="item"><span aria-hidden="true" class="icon-users">&nbsp;Authors:</span> 
+                <!--
+                <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">
+                  {{ article.author.fname }} {{ article.author.lname }}
+                </a>
+                -->
                 @each(aut in otherAuthors)
-                @if(aut.users_id!=article.author.id)
                 , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
                   {{ aut.user.fname }} {{ aut.user.lname }}
                 </a>
-                @endif
                 @endeach
                 @each(aut in corAuthors)
-                @if(aut.users_id!=article.author.id)
                 , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
                   {{ aut.user.fname }} {{ aut.user.lname }} {{ aut.stars }}
                 </a>
-                @endif
                 @endeach
                 <!--
                   , <a href="http://imaqpress.com/authors/">Mahdi Mirahmadi </a>
