@@ -283,6 +283,8 @@ class ArticalController {
         // console.log('the article refs', mainArticle.refs)
 
         let article = mainArticle.toJSON()
+        console.log('The Author', article.author)
+
         if(article.publish_date) {
             article.publish_date = moment(article.publish_date).format('YYYY-MM-DD')
         }
