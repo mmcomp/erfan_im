@@ -734,14 +734,14 @@ class ArticalController {
         }catch(e) {
             article.refs = []
         }
-        if(article.author) {
+        // if(article.author) {
             otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id).whereNot('users_id', article.author.id).whereNot('position', 'corresponding').fetch()
             otherAuthors = otherAuthors.toJSON()
     
             corAuthors = await UserArticle.query().with('user.country').where('article_id', theArticle.id).whereNot('users_id', article.author.id).where('position', 'corresponding').fetch()
             corAuthors = corAuthors.toJSON()
     
-        }
+        // }
         
         let star = '*', stars = ''
         for(let i = 1;i <= corAuthors.length;i++) {
