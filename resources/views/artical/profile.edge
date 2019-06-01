@@ -128,7 +128,7 @@
                         Co-Author : <a href="/author/{{ artco.fname }}-{{ artco.lname }}">
                         {{ artco.fname }} {{ artco.lname }}</a>
                       </li>
-                      @endif
+                      @endeach
                       @if(article.corresponding.length==1)
                       <li>
                         Corresponding Author * : <a href="/author/{{ article.corresponding[0].fname }}-{{ article.corresponding[0].lname }}">
