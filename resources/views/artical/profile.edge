@@ -123,10 +123,10 @@
                         {{ article.author.fname }} {{ article.author.lname }}</a>
                       </li>
                       @endif
-                      @if(article.co.length>0)
+                      @each(artco in article.co)
                       <li>
-                        Co-Author : <a href="/author/{{ article.co[0].fname }}-{{ article.co[0].lname }}">
-                        {{ article.co[0].fname }} {{ article.co[0].lname }}</a>
+                        Co-Author : <a href="/author/{{ artco.fname }}-{{ artco.lname }}">
+                        {{ artco.fname }} {{ artco.lname }}</a>
                       </li>
                       @endif
                       @if(article.corresponding.length==1)
