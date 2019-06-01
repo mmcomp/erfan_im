@@ -120,7 +120,7 @@
                       @if(article.first.length>0)
                       <li>
                         First Author : <a href="/author/{{ article.auther.fname }}-{{ article.auther.lname }}">
-                        {{ article.first[0].fname }} {{ article.first[0].lname }}</a>
+                        {{ article.auther.fname }} {{ article.auther.lname }}</a>
                       </li>
                       @endif
                       @if(article.co.length>0)
