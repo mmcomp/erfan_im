@@ -1052,7 +1052,7 @@ class ArticalController {
             }catch(e){
                 theArticle.refs = []
             }
-            let theAuthors = await UserArticle.query().where('article_id', article_id).with('user').fetch()
+            let theAuthors = await UserArticle.query().where('article_id', article_id).with('user.country').fetch()
             theAuthors = theAuthors.toJSON()
             //---journal
             theData.journal_name = theArticle.journal.name
@@ -1077,10 +1077,10 @@ class ArticalController {
                 affIndex = affs.indexOf(userArticle.user.department)
                 if(affIndex<0) {
                     affIndex = affs.length
-                    affs.push(userArticle.user.department)
+                    affs.push(userArticle.user.department + ((userArticle.user.university_institute && userArticle.user.university_institute!='')?' ,' + userArticle.user.university_institute:'') + ((userArticle.user.country)?' ,' + userArticle.user.country.COUNTRY_NAME:''))
                     authorAffs.push({
                         index: affIndex+1,
-                        name: userArticle.user.department,
+                        name: userArticle.user.department + ((userArticle.user.university_institute && userArticle.user.university_institute!='')?' ,' + userArticle.user.university_institute:'') + ((userArticle.user.country)?' ,' + userArticle.user.country.COUNTRY_NAME:''),
                     })
                 }
                 affIndex++
@@ -1093,13 +1093,13 @@ class ArticalController {
                     authorsClassified[userArticle.position].push(userArticle.user)
                 // }
             }
-            affIndex = affs.indexOf(authorsClassified.first[0].department)
+            affIndex = affs.indexOf(authorsClassified.first[0].department + ((authorsClassified.first[0].university_institute && authorsClassified.first[0].university_institute!='')?' ,' + authorsClassified.first[0].university_institute:'') + ((authorsClassified.first[0].country)?' ,' + authorsClassified.first[0].country.COUNTRY_NAME:''))
             if(affIndex<0) {
                 affIndex = affs.length
-                affs.push(authorsClassified.first[0].department)
+                affs.push(authorsClassified.first[0].department + ((authorsClassified.first[0].university_institute && authorsClassified.first[0].university_institute!='')?' ,' + authorsClassified.first[0].university_institute:'') + ((authorsClassified.first[0].country)?' ,' + authorsClassified.first[0].country.COUNTRY_NAME:''))
                 authorAffs.push({
                     index: affIndex+1,
-                    name: authorsClassified.first[0].department,
+                    name: authorsClassified.first[0].department + ((authorsClassified.first[0].university_institute && authorsClassified.first[0].university_institute!='')?' ,' + authorsClassified.first[0].university_institute:'') + ((authorsClassified.first[0].country)?' ,' + authorsClassified.first[0].country.COUNTRY_NAME:''),
                 })
             }
             affIndex++
