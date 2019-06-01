@@ -756,6 +756,7 @@ class ArticalController {
         let msg_type = session.get('msg_type')
         session.forget('msg')
         session.forget('msg_type')
+        console.log('CorAuthors', corAuthors)
         return view.render('artical.publish', {
             isLogged: isLogged, 
             user:user, 

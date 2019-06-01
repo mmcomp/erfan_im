@@ -52,7 +52,10 @@
                 </a>
                 -->
                 @each(aut in otherAuthors)
-                , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
+                @if($index>0)
+                , 
+                @endif
+                <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
                   {{ aut.user.fname }} {{ aut.user.lname }}
                 </a>
                 @endeach
