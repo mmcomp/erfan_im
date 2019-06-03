@@ -10,6 +10,7 @@ const path = require('path')
 const word2pdf = require('word2pdf')
 const pandoc = require('node-pandoc')
 const { exec } = require('child_process');
+const pdfZam = require('./pdf')
 let addressIndex = 0
 
 module.exports = {
@@ -281,7 +282,10 @@ module.exports = {
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
       }
-      
+      // console.log('pdf zam', pdfZam)
+      const pdfConverter = new pdfZam()
+      return await pdfConverter.convertDocxToPdf(docxfile, baseDir + '/public/pdf/' + outputname + '.pdf')
+      /*
       exec('unoconv -f pdf ' + docxfile, (err, stdout, stderr) => {
         if (err) {
           console.log('ERROR Unoconv', err)
@@ -293,6 +297,7 @@ module.exports = {
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
       });
+      */
       /*
       const data = await word2pdf(docxfile)
       console.log('PDF Data', data)

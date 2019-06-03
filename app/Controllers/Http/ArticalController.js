@@ -18,7 +18,7 @@ const docx = require('./docx')
 // const HTMLParser = require('node-html-parser')
 const striptags = require('striptags')
 const Entities = require('html-entities').AllHtmlEntities
-const decode = require('unescape')
+// const decode = require('unescape')
 // const matchAll = require("match-all")
 
 class ArticalController {
