@@ -280,7 +280,7 @@ module.exports = {
       }
       baseDir = baseDir.substring(1)
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
-        fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
+        // fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
       }
       // console.log('pdf zam', pdfZam)
       const pdfConverter = new pdfZam()
