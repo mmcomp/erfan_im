@@ -132,7 +132,6 @@
   <back>
 
     <acknowledgement>
-      <p>We thank American Journal Experts (AJE) for editing a draft of this manuscript.</p>
     </acknowledgement>
 
     <sec sec-type="additional-information">
@@ -143,72 +142,6 @@
           <p>The authors declare that they have no competing interests.</p>
         </fn>
       </fn-group>
-
-      <fn-group content-type="author-contributions">
-        <title>Author Contributions</title>
-        <fn fn-type="con" id="contribution-1">
-          <p>
-            <xref ref-type="contrib" rid="author-1">Xuebin Wang</xref> conceived and designed the experiments, performed
-            the experiments, analyzed the data, prepared figures and/or tables.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-2">
-          <p>
-            <xref ref-type="contrib" rid="author-2">Liying Sun</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-3">
-          <p>
-            <xref ref-type="contrib" rid="author-3">Haiming Zhang</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-4">
-          <p>
-            <xref ref-type="contrib" rid="author-4">Lin Wei</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-5">
-          <p>
-            <xref ref-type="contrib" rid="author-5">Wei Qu</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-6">
-          <p>
-            <xref ref-type="contrib" rid="author-6">Zhigui Zeng</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-7">
-          <p>
-            <xref ref-type="contrib" rid="author-7">Ying Liu</xref> provided blood samples.
-          </p>
-        </fn>
-        <fn fn-type="con" id="contribution-8">
-          <p>
-            <xref ref-type="contrib" rid="author-8">Zhijun Zhu</xref> contributed reagents/materials/analysis tools,
-            authored or reviewed drafts of the paper, approved the final draft, provided blood samples.
-          </p>
-        </fn>
-      </fn-group>
-
-      <fn-group content-type="other">
-        <title>Human Ethics</title>
-        <fn id="addinfo-1">
-          <p>The following information was supplied relating to ethical approvals (i.e., approving body and any
-            reference numbers):</p>
-          <p>Approval from the Beijing Friendship Hospital Human Research Ethics Committee (code: 2018-P2-114-01) was
-            obtained for the use of all samples using a protocol that conforms to the provisions of the Declaration of
-            Helsinki.</p>
-        </fn>
-      </fn-group>
-
-      <fn-group content-type="other">
-        <title>Data Availability</title>
-        <fn id="addinfo-2">
-          <p>The following information was supplied regarding data availability:</p>
-          <p>The raw data are available in the figures and tables in the article.</p>
-        </fn>
-      </fn-group>
-
     </sec>
 
     <ref-list content-type="authoryear">
