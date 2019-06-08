@@ -1340,11 +1340,12 @@ class ArticalController {
     static ref2json(inp) {
         inp = String(inp)
         
-        let publish_year = '', article_title = '', journal_name_tmp = [], publish_vol = '', publish_issue = '', journal_name = '', pages = ''
+        let publish_year = '', article_title = '', journal_name_tmp = [], publish_vol = '', publish_issue = '', journal_name = '', pages = '', label = ''
         let tmp, firstNames = []
         try{
             // Authors
             tmp = inp.split('(')[0]
+            label = tmp
             firstNames = tmp.split('&')[0].split('.,')
             let i = 0
             for(i = 0;i < firstNames.length-1;i++) {
@@ -1381,6 +1382,7 @@ class ArticalController {
           publish_vol: publish_vol,
           publish_issue: publish_issue,
           pages: pages,
+          label: label,
         }
     }
 
@@ -1630,7 +1632,7 @@ class ArticalController {
         `
         const articleRefTemplate = `
         <ref id="ref-#index#">
-            <label>Aktipis et al. (2011) Reference mentioned in the article text format- </label>
+            <label>#label#</label>
             <element-citation publication-type="journal">
             <person-group person-group-type="author">
             #names#
@@ -1661,7 +1663,7 @@ class ArticalController {
             articleRefs += articleRefTemplate.replace(/#names#/g, names).replace(/#ref_article_title#/g, refData.article_title)
             .replace(/#journal_name#/g, refData.journal_name).replace(/#publish_vol#/g, refData.publish_vol)
             .replace(/#publish_issue#/g, refData.publish_issue).replace(/#article_id#/g, '').replace(/#doi#/g, '')
-            .replace(/#index#/g, indx)
+            .replace(/#index#/g, indx).replace(/#publish_year#/g, refData.publish_year).replace(/#label#/g, refData.label)
             indx++
         }
         //\---------REFERENCE--------------
