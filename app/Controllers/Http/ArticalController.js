@@ -1365,7 +1365,7 @@ class ArticalController {
                 })
             }
             // article
-            publish_year = inp.split('(')[0].split('.')[inp.split('(')[0].split('.').length-1].split(' ')[0]
+            publish_year = inp.split('(')[0].split('.')[3].split(' ')[0]
             article_title = inp.split(').')[1].split('.')[0]
             journal_name_tmp = inp.split(').')[1].split('.')[1].split(':')[0].split(' ')
             publish_vol = journal_name_tmp[journal_name_tmp.length-1].split('(')[0]
@@ -1373,7 +1373,18 @@ class ArticalController {
             journal_name = journal_name_tmp.slice(0, journal_name_tmp.length-1).join(' ')
             pages = inp.split(':')[1].trim()
         }catch(e){}
-      
+        console.log('Reference:')
+        console.log(inp)
+        console.log({
+            authors: firstNames,
+            publish_year: publish_year,
+            article_title: article_title,
+            journal_name: journal_name,
+            publish_vol: publish_vol,
+            publish_issue: publish_issue,
+            pages: pages,
+            label: label,
+          })
         return {
           authors: firstNames,
           publish_year: publish_year,
