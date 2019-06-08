@@ -16,10 +16,10 @@ module.exports =class  {
     return new Promise(function(resolve, reject) {
       request.post({url:'https://sandbox.zamzar.com/v1/jobs/', formData: formData}, function (err, response, body) {
           if (err) {
-              // console.error('Unable to start conversion job', err)
+              console.error('Unable to start conversion job', err)
               reject(err)
           } else {
-              // console.log('SUCCESS! Conversion job started:', JSON.parse(body))
+              console.log('SUCCESS! Conversion job started:', JSON.parse(body))
               resolve(JSON.parse(body))
           }
       }).auth(apiKey, '', true)
@@ -29,10 +29,10 @@ module.exports =class  {
     return new Promise(function(resolve, reject) {
       request.get ('https://sandbox.zamzar.com/v1/jobs/' + jobID, function (err, response, body) {
           if (err) {
-              // console.error('Unable to get job', err)
+              console.error('Unable to get job', err)
               reject(err)
           } else {
-              // console.log('SUCCESS! Got job:', JSON.parse(body))
+              console.log('SUCCESS! Got job:', JSON.parse(body))
               resolve(JSON.parse(body))
           }
       }).auth(apiKey, '', true)
@@ -53,7 +53,7 @@ module.exports =class  {
     return new Promise(function(resolve, reject) {
       request.get({url: 'https://sandbox.zamzar.com/v1/files/' + fileID + '/content', followRedirect: false}, function (err, response, body) {
         if (err) {
-          // console.error('Unable to download file:', err)
+          console.error('Unable to download file:', err)
           reject(err)
         } else {
           if (response.headers.location) {
@@ -62,7 +62,7 @@ module.exports =class  {
                 res.pipe(fs.createWriteStream(localFilename))
             });
             fileRequest.on('end', function () {
-                // console.log('File download complete')
+                console.log('File download complete')
                 resolve()
             });
           }
