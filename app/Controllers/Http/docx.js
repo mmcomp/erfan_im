@@ -274,6 +274,17 @@ module.exports = {
     },
 
     docxToPdf:async function(docxfile, outputname) {
+      async function checkStatus(jobId, cb) {
+        const tmp = await pdfConverter.checkStatus(jobId)
+        console.log('Check Status', tmp)
+        if(tmp.status!='successful') {
+          setTimeout(async function() {
+            await checkStatus(jobId, cb)
+          }, 10000)
+        }else {
+          cb(tmp)
+        }
+      }
       let baseDirAr = __dirname.split('/'), baseDir = ''
       for(var i = baseDirAr.length - 4;i>=0;i--) {
         baseDir = '/' + baseDirAr[i] + baseDir
@@ -284,7 +295,14 @@ module.exports = {
       }
       // console.log('pdf zam', pdfZam)
       const pdfConverter = new pdfZam()
-      return await pdfConverter.convertDocxToPdf(docxfile, baseDir + '/public/pdf/' + outputname + '.pdf')
+      let jobID = await pdfConverter.loadFile(docxfile)
+      jobID = jobID.id
+      await checkStatus(jobID, function(tmp) {
+        console.log('Downloading ', tmp)
+        let fileId = tmp.target_files[0].id
+        pdfConverter.getPdf(fileId, baseDir + '/public/pdf/' + outputname + '.pdf')
+      })
+      // return await pdfConverter.convertDocxToPdf(docxfile, baseDir + '/public/pdf/' + outputname + '.pdf')
       /*
       exec('unoconv -f pdf ' + docxfile, (err, stdout, stderr) => {
         if (err) {

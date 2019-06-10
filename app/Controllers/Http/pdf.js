@@ -74,9 +74,6 @@ module.exports =class  {
     let jobID = await this.loadFile(inputFile)
     jobID = jobID.id
     let fileId = await this.waitStatus(jobID)
-    if(fileId.errors) {
-      return false
-    }
     fileId = fileId.target_files[0].id
     await this.getPdf(fileId, localFilename)
     return true
