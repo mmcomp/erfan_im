@@ -73,14 +73,14 @@
               @if(corAuthors.length>0)
               <div class="c-content-panel">
                 <div class="c-label">
-                  Correspondance*:
+                  Correspondence*:
                 </div>
                 <div class="c-body">
                   @each(aut in corAuthors)
                   <blockquote>
                     <p>
                       <strong>{{ aut.user.salutation }}. {{ aut.user.fname }} {{ aut.user.lname }} </strong>, {{ aut.user.department }} <br> {{ aut.user.university_institute }} <br> {{ aut.user.country.COUNTRY_NAME}} <br> {{ aut.user.email }}
-                      <br> {{ aut.user.tell }}
+                      <!-- <br> {{ aut.user.tell }} -->
                     </p>
                   </blockquote>
                   @endeach
