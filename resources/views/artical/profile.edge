@@ -71,7 +71,7 @@
           <div class="c-label">
             Atricle's HTML Version
           </div>
-          <div class="c-body">
+          <div class="c-body" style="padding: 0 !important;">
             <div class="c-content-tab-1 c-theme c-margin-t-30">
               <div class="clearfix">
                 <ul class="nav nav-tabs c-font-uppercase c-font-bold">
@@ -106,6 +106,9 @@
                   @endif
                   >
                     <a href="#tab_1_8_content" data-toggle="tab">References</a>
+                  </li>
+                  <li>
+                    <a href="#tab_1_9_content" data-toggle="tab">KeyWords</a>
                   </li>
                 </ul>
               </div>
@@ -732,6 +735,28 @@
                     -->
                   </p>
                 </div>
+                <div class="tab-pane" id="tab_1_9_content">
+                  <p>
+                    @each(theKeyword in dkeywords)
+                    <div class="input-group">
+                      <span class="input-group-addon">{{ $loop.index+1 }}</span>
+                      <input id="keyword_{{ $loop.index }}" name="keyword_{{ $loop.index }}" value="{{ theKeyword }}" type="text" class="form-control keyword-data" aria-describedby="basic-addon1">
+                      <span class="input-group-addon" onclick="removeKeyword({{ $loop.index }});"><i class="fa fa-times" style="color: red;cursor: pointer;"></i></span>
+                      <span class="input-group-addon" onclick="moveUpK({{ $loop.index }});"><i class="fa fa-caret-up" style="color: green;cursor: pointer;"></i></span>
+                      <span class="input-group-addon" onclick="moveDownK({{ $loop.index }});"><i class="fa fa-caret-down" style="color: green;cursor: pointer;"></i></span>
+                    </div>
+                    @endeach
+                    <div class="input-group">
+                      <span class="input-group-addon" id="basic-addon1">+</span>
+                      <input id="keyword_new" name="keyword_new" value="" type="text" class="form-control" placeholder="New Keyword" aria-describedby="basic-addon1">
+                    </div>
+                  </p>
+                  <p>
+                    <button onclick="saveKeyword();" type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
+                      save
+                    </button>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -1075,6 +1100,10 @@
       {{ csrfField() }}
     <input type="hidden" id="therefs" name="therefs" value="" />
   </form>
+  <form id="keyword-frm" method="post" >
+    {{ csrfField() }}
+    <input type="hidden" id="thekeywords" name="thekeywords" value="" />
+  </form>
   <script>
     function submitAuthor(form_id) {
       var form_id = form_id ? form_id : 'author-info'
@@ -1094,6 +1123,7 @@
     var uploadedImage = '{{ uploadedImage }}';
     var theArticle = {{{ toJSON(article) }}};
     var articleRefs = theArticle.refs;
+    var dkeywords = {{{ toJSON(dkeywords) }}};
     // if(theArticle.refs) {
     //   try{
     //     articleRefs = JSON.parse(theArticle.refs);
@@ -1302,6 +1332,52 @@
       }
       $("#therefs").val(JSON.stringify(arr));
       $("#ref-frm").submit();
+    }
+
+    function removeKeyword(keyword_id) {
+      if(confirm('Are you sure?')) {
+        console.log('remove keyword id', keyword_id);
+        dkeywords.splice(keyword_id, 1);
+        $("#thekeywords").val(JSON.stringify(dkeywords));
+        $("#keyword-frm").submit();
+      }
+    }
+    function saveKeyword() {
+      let keywords = [];
+      $("input.keyword-data").each(function(id, field) {
+        if($(field).val().trim()!='') {
+          keywords.push($(field).val().trim());
+        }
+      });
+      if($("#keyword_new").val().trim()!='') {
+        keywords.push($("#keyword_new").val().trim());
+      }
+      $("#thekeywords").val(JSON.stringify(keywords));
+      $("#keyword-frm").submit();
+    }
+    function moveUpK(ref_id) {
+      var arr = dkeywords;
+      if(ref_id>0) {
+        [arr[ref_id-1], arr[ref_id]] = [arr[ref_id], arr[ref_id-1]];
+      }else {
+        var theKeyword = arr[ref_id];
+        arr.splice(ref_id, 1);
+        arr.push(theKeyword);
+      }
+      $("#thekeywords").val(JSON.stringify(arr));
+      $("#keyword-frm").submit();
+    }
+    function moveDownK(ref_id) {
+      var arr = dkeywords;
+      if(ref_id<arr.length-1) {
+        [arr[ref_id], arr[ref_id+1]] = [arr[ref_id+1], arr[ref_id]];
+      }else {
+        var theKeyword = arr[ref_id];
+        arr.splice(ref_id, 1);
+        arr.unshift(theKeyword);
+      }
+      $("#thekeywords").val(JSON.stringify(arr));
+      $("#keyword-frm").submit();
     }
   </script>
   </body>

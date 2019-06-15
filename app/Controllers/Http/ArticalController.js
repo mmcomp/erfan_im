@@ -8,6 +8,7 @@ const User = use('App/Models/User')
 const UserArticle = use('App/Models/UserArticle')
 const UserArticleEditor = use('App/Models/UserArticleEditor')
 const UserKeyword = use('App/Models/UserKeyword')
+const ArticleDefinedKeyword = use('App/Models/ArticleDefinedKeyword')
 const Helpers = use('Helpers')
 const path = require('path')
 const phantom = require('phantom')
@@ -280,10 +281,12 @@ class ArticalController {
             return response.route('home', {isLogged: isLogged})
         }
 
+        let dkeywords = await ArticleDefinedKeyword.query().where('article_id', mainArticle.id).pluck('theword')
+
         // console.log('the article refs', mainArticle.refs)
 
         let article = mainArticle.toJSON()
-        console.log('The Author', article.author)
+        // console.log('The Author', article.author)
 
         if(article.publish_date) {
             article.publish_date = moment(article.publish_date).format('YYYY-MM-DD')
@@ -548,6 +551,28 @@ class ArticalController {
                     // article = mainArticle.toJSON()
                     open_refs = true
                 }catch(e) {}
+            }else  if(request.all()['thekeywords']){
+                console.log('new keywords', request.all()['thekeywords'])
+                try{
+                    let theKeywords = []
+                    theKeywords = JSON.parse(request.all()['thekeywords'])
+                    console.log('which is ', theKeywords)
+                    let inserts = []
+                    for(let theKeyword of theKeywords) {
+                        inserts.push({
+                            article_id: mainArticle.id,
+                            theword: theKeyword,
+                            creator_id: user.id,
+                        })
+                    }
+                    await ArticleDefinedKeyword.query().where('article_id', mainArticle.id).delete()
+                    console.log('inserting keywords', inserts)
+                    await ArticleDefinedKeyword.createMany(inserts)
+                    dkeywords = theKeywords
+                }catch(e) {
+                    console.log('Key word insert error')
+                    console.log(e)
+                }
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -667,6 +692,7 @@ class ArticalController {
         let msg_type = session.get('msg_type')
         session.forget('msg')
         session.forget('msg_type')
+        // console.log('dkeywords', dkeywords)
         return view.render('artical.profile', {
             isLogged: isLogged, 
             user:user, 
@@ -680,6 +706,7 @@ class ArticalController {
             userEmails: JSON.stringify(userEmails),
             open_refs: open_refs,
             keyword: keyword,
+            dkeywords: dkeywords,
         })
     }
 
@@ -720,6 +747,7 @@ class ArticalController {
         await theArticle.save()
 
 
+        let dkeywords = await ArticleDefinedKeyword.query().where('article_id', theArticle.id).pluck('theword')
 
 
         let articles = await Artical.query().with('journal').where('journal_id', theArticle.journal_id).where('status', 'published').where('id', '!=', theArticle.id).orderBy('citiations', 'desc').limit(3).fetch()
@@ -772,6 +800,7 @@ class ArticalController {
             hasXML: hasXML,
             hasENDNOTE: hasENDNOTE,
             global_doi: Env.get('DOI'),
+            dkeywords: dkeywords,
         })
     }
 
@@ -1156,11 +1185,21 @@ class ArticalController {
             
             theData.article_abstract = theArticle.abstract 
             // console.log('Keywords', theArticle.keyword)     
-                 
-            if(theArticle.keyword && theArticle.keyword.length>0) {
+
+            let dkeywords = await ArticleDefinedKeyword.query().where('article_id', theArticle.id).pluck('theword')
+
+            let isstart = true
+            if((theArticle.keyword && theArticle.keyword.length>0)||(dkeywords.length>0)) {
                 for(let keyW of theArticle.keyword) {
                     if(keyW.keyword) {
-                        articleKeywordsHtml += keyW.keyword.theword + ' , '
+                        articleKeywordsHtml += keyW.keyword.theword + ((isstart)?'':' , ')
+                        isstart = false
+                    }
+                }
+                for(let keyW of dkeywords) {
+                    if(keyW) {
+                        articleKeywordsHtml += keyW + ((isstart)?'':' , ')
+                        isstart = false
                     }
                 }
                 articleKeywordsHtml += '</p>'
@@ -1170,6 +1209,8 @@ class ArticalController {
                 theData.article_keywords = '<w:p><w:r><w:t></w:t></w:r></w:p>'
             }
             
+
+
             theXML = ArticalController.html2xml(theArticle.introduction)
             allImages = allImages.concat(theXML.images)
             theData.article_introduction = theXML.xml
@@ -1205,8 +1246,8 @@ class ArticalController {
             console.log('Epub Result', epubResult)
             return true
         }catch(e) {
-            console.log('Pdf Error')
-            console.log(e)
+            // console.log('Pdf Error')
+            // console.log(e)
             return false
         }
     }
@@ -1373,18 +1414,18 @@ class ArticalController {
             journal_name = journal_name_tmp.slice(0, journal_name_tmp.length-1).join(' ')
             pages = inp.split(':')[1].trim()
         }catch(e){}
-        console.log('Reference:')
-        console.log(inp)
-        console.log({
-            authors: firstNames,
-            publish_year: publish_year,
-            article_title: article_title,
-            journal_name: journal_name,
-            publish_vol: publish_vol,
-            publish_issue: publish_issue,
-            pages: pages,
-            label: label,
-          })
+        // console.log('Reference:')
+        // console.log(inp)
+        // console.log({
+        //     authors: firstNames,
+        //     publish_year: publish_year,
+        //     article_title: article_title,
+        //     journal_name: journal_name,
+        //     publish_vol: publish_vol,
+        //     publish_issue: publish_issue,
+        //     pages: pages,
+        //     label: label,
+        //   })
         return {
           authors: firstNames,
           publish_year: publish_year,

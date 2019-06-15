@@ -96,6 +96,11 @@
                     </a> 
                   @endif
                 @endeach
+                @each(keyword in dkeywords)
+                  @if(keyword)
+                    {{ keyword }}
+                  @endif
+                @endeach
                 <!--
                 <a href="http://imaqpress.com/keywords/"> commercialization
                   of stem cells </a> <a href="http://imaqpress.com/keywords/"> cellular therapy </a> <a href="http://imaqpress.com/keywords/">
