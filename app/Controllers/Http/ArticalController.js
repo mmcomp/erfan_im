@@ -887,9 +887,10 @@ class ArticalController {
         let images = []
     
 
+        // 666750
         let index = 0, imageTmp = '', imageTemp = `<w:drawing>
             <wp:inline distT="0" distB="0" distL="0" distR="0">
-            <wp:extent cx="666750" cy="666750" />
+            <wp:extent cx="3333750" cy="3333750" />
             <wp:effectExtent l="0" t="0" r="0" b="0" />
             <wp:docPr id="2" name="Image 2" descr="image" />
             <wp:cNvGraphicFramePr>
@@ -920,7 +921,7 @@ class ArticalController {
                     <pic:spPr bwMode="auto">
                     <a:xfrm>
                         <a:off x="0" y="0" />
-                        <a:ext cx="666750" cy="666750" />
+                        <a:ext cx="3333750" cy="3333750" />
                     </a:xfrm>
                     <a:prstGeom prst="rect">
                         <a:avLst />
