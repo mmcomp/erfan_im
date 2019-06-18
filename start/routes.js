@@ -64,6 +64,7 @@ Route.any('author/:author_name', 'UserController.profile')
 
 Route.any('profile/:author_id', 'UserController.profile')
 
+Route.get('aboutus', 'UserController.aboutUs')
 
 Route.any('privacy', async ({view, session}) => {
     let loggedIn = true, user = {}

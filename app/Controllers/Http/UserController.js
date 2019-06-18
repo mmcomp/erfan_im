@@ -25,6 +25,21 @@ class UserController {
         return response.redirect('/')
     }
 
+    async aboutUs ({ view, session }) {
+        let isLogged = false, user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        
+
+        return view.render('pages.aboutus', {
+            isLogged: isLogged, 
+            user:user, 
+        }) 
+    }
+
     async login ({ request, auth, response, session }) {
         try{
             const { email, password } = request.all()
