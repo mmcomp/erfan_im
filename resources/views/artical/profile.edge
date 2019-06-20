@@ -826,6 +826,24 @@
         </form>
       </div>
       <br /><br />
+      <div>
+          <h3>
+            Set Other DOI:
+            @if(article.gdoi) 
+            [{{ article.gdoi }}]
+            @endif
+            <br/>
+            In case that Article has a Previous DOI, Set it all here:
+          </h3>
+          <form method="post" >
+              {{ csrfField() }}
+              <input type="hidden" name="the_article_id" value={{ article.id }} />
+              <input type="text" name="the_doi" placeholder="Other DOI" /><br/>
+              <button class="btn btn-success pull-left">
+                Set
+              </button><br/><br/>
+          </form>
+      </div>
       <div class="c-content-panel">
         <div class="c-label">
           Article's Review Panel

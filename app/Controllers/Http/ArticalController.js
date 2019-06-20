@@ -551,7 +551,7 @@ class ArticalController {
                     // article = mainArticle.toJSON()
                     open_refs = true
                 }catch(e) {}
-            }else  if(request.all()['thekeywords']){
+            }else if(request.all()['thekeywords']){
                 console.log('new keywords', request.all()['thekeywords'])
                 try{
                     let theKeywords = []
@@ -573,6 +573,10 @@ class ArticalController {
                     console.log('Key word insert error')
                     console.log(e)
                 }
+            }else if(request.all()['the_doi']){
+                mainArticle.gdoi = request.all()['the_doi']
+                await mainArticle.save()
+                article.gdoi = request.all()['the_doi']
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -1179,6 +1183,7 @@ class ArticalController {
             theData.article_pages = theArticle.publish_startpage + '-' + theArticle.publish_endpage
             theData.start_page = theArticle.publish_startpage
             theData.article_doi = theArticle.doi
+            theData.article_gdoi = theArticle.gdoi
             theData.article_type = theTypes[theArticle.type]
             theData.article_full_title = theArticle.full_title
             theData.article_submision_date = moment(theArticle.created_at).format('D MMMM YYYY')
@@ -1237,6 +1242,10 @@ class ArticalController {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }
 
+            theData.the_doi = theData.global_doi + '/' + theData.journal_doi + '.' + theData.article_doi
+            if(theData.gdoi) {
+                theData.the_doi = theData.gdoi
+            }
             // console.log('The Data')
             // console.log(theData)
             let docxfile = await docx.fillTemplateWord(theData, 'gen_' + article_id, allImages)
@@ -1247,8 +1256,8 @@ class ArticalController {
             console.log('Epub Result', epubResult)
             return true
         }catch(e) {
-            // console.log('Pdf Error')
-            // console.log(e)
+            console.log('Pdf Error')
+            console.log(e)
             return false
         }
     }
@@ -1725,7 +1734,11 @@ class ArticalController {
         xmlData = xmlData.replace(/#journal_title#/g, journal_title)
         xmlData = xmlData.replace(/#journal_issn#/g, theJournal.issn)
         xmlData = xmlData.replace(/#publish_number#/g, thisArticle.publish_no)
-        xmlData = xmlData.replace(/#doi#/g, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi)
+        if(thisArticle.gdoi) {
+            xmlData = xmlData.replace(/#doi#/g, thisArticle.gdoi)
+        }else {
+            xmlData = xmlData.replace(/#doi#/g, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi)
+        }
         xmlData = xmlData.replace(/#keywords#/g, keywords)
         xmlData = xmlData.replace(/#article_full_title#/g, thisArticle.full_title)
         xmlData = xmlData.replace(/#authors#/g, authors)
