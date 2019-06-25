@@ -104,7 +104,9 @@
                 @endeach
                 @each(keyword in dkeywords)
                   @if(keyword)
-                    {{ keyword }}
+                    <a href="/newkeyword/{{ keyword.replace(/ /g,'-') }}">
+                      {{ keyword }}
+                    </a>,
                   @endif
                 @endeach
                 <!--
@@ -132,15 +134,20 @@
           <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
             <h3 class="c-font-bold c-font-uppercase">Full Text</h3>
           </div>
-          </br>
+          <br/>
           <div class="c-content-panel">
             <div class="c-body ">
               <div class="row">
                 <div class="col-md-3 col-sm-3 col-xs-3">
                   <ul class="nav nav-tabs tabs-left c-font-uppercase ">
                     <li class=""> <a href="#tab_16_1" data-toggle="tab">Introduction</a></li>
+                    @if(article.type=='research')
                     <li> <a href="#tab_16_2" data-toggle="tab">Metrial/Methods</a></li>
                     <li class="active"> <a href="#tab_16_3" data-toggle="tab" aria-expanded="true"> Results </a></li>
+                    @else
+                    <li> <a href="#tab_16_2" data-toggle="tab">Literature Review-1</a></li>
+                    <li class="active"> <a href="#tab_16_3" data-toggle="tab" aria-expanded="true"> Literature Review-2 </a></li>
+                    @endif
                     <li><a href="#tab_16_5" data-toggle="tab"> Disc./Cons. </a></li>
                     <li><a href="#tab_16_4" data-toggle="tab"> Acknowledgement </a></li>
                     <li><a href="#tab_16_6" data-toggle="tab"> References </a></li>

@@ -110,11 +110,11 @@
     </sec>
 
     <sec sec-type="materials|methods">
-      <title>Materials and methods</title>
+      <title>#Materials_and_methods#</title>
       #article_material#
     </sec>
     <sec sec-type="results">
-      <title>Results</title>
+      <title>#Results#</title>
       #article_results#
     </sec>
 

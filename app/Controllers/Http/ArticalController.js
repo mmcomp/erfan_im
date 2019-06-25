@@ -996,6 +996,8 @@ class ArticalController {
                 journal_doi: 'gnc',
                 image: '/Volumes/projects/erfan/erfan/public/static/img/journal/j_0.png',
                 //---article
+                Materials_and_methods: 'Materials and methods',
+                Results: 'Results',
                 header_author: 'Akhavanezayat et al.',
                 author_italic: '',
                 article_publish_month_year: 'January, 2017',
@@ -1101,6 +1103,10 @@ class ArticalController {
             }
 
             //---article
+            if(theArticle.type!='research') {
+                theData.Materials_and_methods = ''
+                theData.Results = ''
+            }
             theData.header_author = theArticle.author.lname
             let authorCount = 1
             let authorsClassified = {
@@ -1740,6 +1746,13 @@ class ArticalController {
             xmlData = xmlData.replace(/#doi#/g, Env.get('DOI') + '/' + theJournal.doi_code + '.' + thisArticle.doi)
         }
         xmlData = xmlData.replace(/#keywords#/g, keywords)
+        if(thisArticle.type=='research') {
+            xmlData = xmlData.replace(/#Materials_and_methods#/g, 'Materials and methods')
+            xmlData = xmlData.replace(/#Results#/g, 'Results')
+        }else {
+            xmlData = xmlData.replace(/#Materials_and_methods#/g, '')
+            xmlData = xmlData.replace(/#Results#/g, '')
+        }
         xmlData = xmlData.replace(/#article_full_title#/g, thisArticle.full_title)
         xmlData = xmlData.replace(/#authors#/g, authors)
         xmlData = xmlData.replace(/#author_affs#/g, author_affs_xml)
@@ -1836,6 +1849,107 @@ class ArticalController {
             }
         }
         return 'File Not found!'
+    }
+
+    async keyword ({ request, auth, view, response, session, params }) {
+        if(!params || !params.keyword) {
+            session.put('msg', 'Wrong Usage')
+            session.put('msg_type', 'danger')
+    
+            return response.route('home')
+        }
+
+        let isLogged = false
+        let user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+        }
+
+        params.keyword = params.keyword.replace(/-/g, ' ')
+        let articleKeyword = await ArticleDefinedKeyword.query().with('article').where('theword', params.keyword).fetch()
+        articleKeyword = articleKeyword.toJSON()
+        let theArticleIds = []
+        for(let theArtKw of articleKeyword) {
+            theArticleIds.push(theArtKw.article_id)
+        }
+
+        //----ARTICLES
+        let pageNumber = 1
+        if(request.all()['page_number']) {
+            pageNumber = parseInt(request.all()['page_number'],10)
+            if(isNaN(pageNumber)) {
+                pageNumber = 1
+            }
+        }
+        if(request.all()['page_move']) {
+            let page_move = parseInt(request.all()['page_move'],10)
+            if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                pageNumber += page_move
+            }
+        }
+        let searchTitle = ''
+        if(request.all()['search_articles']){
+            searchTitle = request.all()['search_articles']
+        }
+        let sort = 'created_at';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
+        }
+        let articleIds = []
+        let articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).whereIn('id', theArticleIds).with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+        let recentPublished = articles.toJSON()
+        for(let tmp of recentPublished.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        recentPublished['pages'] = []
+        for(let i = 1;i <= recentPublished.lastPage;i++) {
+            recentPublished.pages.push(i)
+        }
+        sort = 'citiations';
+        if(request.all()['sort']){
+            sort = request.all()['sort']
+            console.log('Sort By', sort)
+        }
+        articles = await Artical.query().where(function () {
+            if(searchTitle!='') {
+                this
+                .where('running_title', 'like', '%' + searchTitle + '%')
+                .orWhere('full_title', 'like', '%' + searchTitle + '%')
+            }
+          }).whereIn('id', theArticleIds).with('journal').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+        let highlyCited = articles.toJSON()
+        for(let tmp of highlyCited.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        highlyCited['pages'] = []
+        for(let i = 1;i <= highlyCited.lastPage;i++) {
+            highlyCited.pages.push(i)
+        }
+        //\---ARTICLES
+
+        return view.render('journal.keyword', { 
+            isLogged: isLogged, 
+            user: user, 
+            title: params.keyword, 
+            keyword: params.keyword,
+            articles : {
+                recentPublished: recentPublished,
+                highlyCited: highlyCited
+            },
+            search_title: searchTitle,
+        })
     }
 }
 

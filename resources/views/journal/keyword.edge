@@ -47,11 +47,13 @@
                                         <ul class="c-content-recent-posts-1">
                                             @each(art in articles.recentPublished.data)
                                             <li>
+                                                <!--
                                                 <div class="c-image">
                                                     <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
                                                 </div>
+                                                -->
                                                 <div class="c-post">
-                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                                                    <a class="c-title" href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
                                                         {{ art.updated_at }}
                                                     </div>
@@ -79,11 +81,13 @@
                                         <ul class="c-content-recent-posts-1">
                                             @each(art in articles.highlyCited.data)
                                             <li>
+                                                <!--
                                                 <div class="c-image">
                                                     <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
                                                 </div>
+                                                -->
                                                 <div class="c-post">
-                                                    <a class="c-title" href="/article_id/{{ art.id }}">{{ art.full_title }}</a>
+                                                    <a class="c-title" href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                                                     <div class="c-date">
                                                         {{ art.updated_at }}
                                                     </div>

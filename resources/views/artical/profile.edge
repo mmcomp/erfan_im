@@ -88,12 +88,21 @@
                   <li>
                     <a href="#tab_1_3_content" data-toggle="tab">Introduction</a>
                   </li>
+                  @if(article.type=='research')
                   <li>
                     <a href="#tab_1_4_content" data-toggle="tab">Material/Methods</a>
                   </li>
                   <li>
                     <a href="#tab_1_5_content" data-toggle="tab">Results</a>
                   </li>
+                  @else
+                  <li>
+                    <a href="#tab_1_4_content" data-toggle="tab">Literature Review-1</a>
+                  </li>
+                  <li>
+                    <a href="#tab_1_5_content" data-toggle="tab">Literature Review-2</a>
+                  </li>
+                  @endif
                   <li>
                     <a href="#tab_1_6_content" data-toggle="tab">Disc./Conc.</a>
                   </li>

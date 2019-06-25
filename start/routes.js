@@ -39,6 +39,8 @@ Route.get('partners', 'JournalController.partners')
 Route.any('keyword/:keyword', 'JournalController.keyword')
 
 
+Route.any('newkeyword/:keyword', 'ArticalController.keyword')
+
 Route.any('artical_submission', 'ArticalController.create').as('artical_create')
 
 Route.any('journal_artical_submission/:journal_id', 'ArticalController.createForJournal')
