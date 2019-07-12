@@ -68,6 +68,10 @@ Route.any('profile/:author_id', 'UserController.profile')
 
 Route.get('aboutus', 'UserController.aboutUs')
 
+Route.get('revoke/:id', 'UserController.revoke')
+
+Route.get('enable/:id', 'UserController.enable')
+
 Route.any('privacy', async ({view, session}) => {
     let loggedIn = true, user = {}
     if(session.get('user')) {

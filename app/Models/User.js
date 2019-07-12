@@ -37,6 +37,10 @@ class User extends Model {
     return this.hasMany('App/Models/GroupPermission', 'group_id', 'users_group_id')
   }
 
+  groups () {
+    return this.hasMany('App/Models/JournalUserGroup', 'id', 'users_id')
+  }
+
   country () {
     return this.hasOne('App/Models/Country', 'country_id', 'id')
   }

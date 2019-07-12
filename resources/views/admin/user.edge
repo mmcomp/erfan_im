@@ -39,6 +39,28 @@
             </p>
             <a href="{{ (selected_user.academic_page)?selected_user.academic_page:'#' }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Academic
               Profile Page</a>
+            @if(selected_user.groups.length>0)
+              <br/>
+              <h3>Journals</h3>
+              @each(journalGroup in selected_user.groups)
+                <br/>
+                <h4 style="margin: 0 !important;">
+                  {{ journalGroup.journal.name }} [{{ journalGroup.group.name }}]
+                  @if(user.group_id == 1 || user.group_id == 2)
+                  <a href="/revoke/{{ journalGroup.id }}">Revoke</a>
+                    @if(selected_user.journal_id!=journalGroup.journal.id)
+                    <a href="/enable/{{ journalGroup.id }}">Enable</a>
+                    @endif
+                  @else
+                    @if(user.id == selected_user.id)
+                      @if(selected_user.journal_id!=journalGroup.journal.id)
+                      <a href="/enable/{{ journalGroup.id }}">Enable</a>
+                      @endif
+                    @endif
+                  @endif
+                </h4>
+              @endeach
+            @endif
           </div>
           <!-- End-->
         </div>
@@ -672,6 +694,11 @@
       $("#del-frm").submit();
     }
     return false;
+  }
+  let msg = '{{msg}}';
+  let msg_type = '{{msg_type}}';
+  if(msg.trim()!='') {
+      $('body').append('<div class="alert alert-' + ((msg_type!='')?msg_type:'success') + ' new-alert hideMe" role="alert" >' + msg + '</div>');
   }
 </script>
 </body>

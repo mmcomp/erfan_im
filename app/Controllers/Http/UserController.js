@@ -6,6 +6,7 @@ const Journal = use('App/Models/Journal')
 const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
 const UserKeyword = use('App/Models/UserKeyword')
+const JournalUserGroup = use('App/Models/JournalUserGroup')
 const Database = use('Database')
 const docx = require('./docx')
 const Randomatic = require('randomatic')
@@ -60,7 +61,7 @@ class UserController {
                     msg = 'Logged in successfully'
                     logedIn = true;
 
-                    let user = await User.query().where('id', auth.user.id).with('permissions').first()
+                    let user = await User.query().where('id', auth.user.id).with('permissions').with('groups.group').with('groups.journal').first()
                     // console.log('User', user.toJSON())
                     user = user.toJSON()
                     let permissions = {}
@@ -68,6 +69,15 @@ class UserController {
                         permissions[user.permissions[i].permission_key] = true
                     }
                     user.permissions = permissions
+                    // let journalGroups = {}
+                    // for(let i = 0;i < user.groups.length;i++) {
+                        // journalGroups[user.groups[i].journal_id] = {
+                        //     group: user.groups[i].group,
+                        //     journal: user.groups[i].journal,
+                        // }
+                        // console.log('Journal', user.groups[i].journal_id, user.groups[i].journal.name)
+                    // }
+                    // user.journalGroups = journalGroups
                     // console.log(user)
                     session.put('user', user)
                     
@@ -508,6 +518,75 @@ class UserController {
         }
     }
 
+    async revoke ({ response, session, params }) {
+        if(!session.get('user')) {
+            session.put('msg', 'Must Login')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
+
+        const jug = await JournalUserGroup.query().where({
+            id: params.id,
+        }).with('user').first()
+        const jugData = jug.toJSON()
+        if(!jug) {
+            session.put('msg', 'Not Found')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
+        const url = '/author/' + ((jugData.user.fname)?encodeURIComponent(jugData.user.fname.replace(/-/g, '_')) + '-':'') + encodeURIComponent(jugData.user.lname.replace(/-/g, '_'))
+        const user = jugData.user
+        const hasjug = await JournalUserGroup.query().where('users_id', user.id).where('journal_id', user.journal_id).where('id', '!=', params.id).first()
+        if(!hasjug) {
+            const newJug = await JournalUserGroup.query().where('id', '!=', params.id).where('users_id', user.id).first()
+            if(!newJug) {
+                session.put('msg', 'User must have atleast one Group')
+                session.put('msg_type', 'danger')
+                return response.redirect(url)
+            }
+            const uu = await User.query().where({
+                id: user.id,
+            }).first()
+            
+            uu.journal_id = newJug.journal_id,
+            uu.group_id = newJug.groups_id
+            
+            uu.save()
+            jug.delete()    
+        }
+        return response.redirect(url)
+    }
+
+    async enable ({ response, session, params }) {
+        if(!session.get('user')) {
+            session.put('msg', 'Must Login')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
+
+        const jug = await JournalUserGroup.query().where({
+            id: params.id,
+        }).with('user').first()
+        const jugData = jug.toJSON()
+        if(!jug) {
+            session.put('msg', 'Not Found')
+            session.put('msg_type', 'danger')
+            return response.redirect('/') 
+        }
+        const url = '/author/' + ((jugData.user.fname)?encodeURIComponent(jugData.user.fname.replace(/-/g, '_')) + '-':'') + encodeURIComponent(jugData.user.lname.replace(/-/g, '_'))
+        const user = jugData.user
+        const uu = await User.query().where({
+            id: user.id,
+        }).first()
+        
+        uu.journal_id = jugData.journal_id,
+        uu.group_id = jugData.groups_id
+        
+        uu.save()
+
+        return response.redirect(url)
+    }
+
     async profile ({ request, auth, view, response, session, params }) {
         let user = session.get('user')
         console.log('params', params)
@@ -530,9 +609,9 @@ class UserController {
                 name_index = 0
             }
             console.log('Fname', fname, 'Lname', lname, 'name_index', name_index)
-            selected_user = await User.query().where('status', 'enabled').where('fname', fname).where('lname', lname).where('name_index', name_index).first()
+            selected_user = await User.query().where('status', 'enabled').where('fname', fname).where('lname', lname).where('name_index', name_index).with('groups.group').with('groups.journal').first()
         }else if(params.author_id) {
-            selected_user = await User.query().where('id', params.author_id).where('status', 'enabled').first()
+            selected_user = await User.query().where('id', params.author_id).where('status', 'enabled').with('groups.group').with('groups.journal').first()
         }else {
             session.put('msg', 'Wrong Usage')
             session.put('msg_type', 'danger')
@@ -553,6 +632,8 @@ class UserController {
             return response.redirect('back')
         }
         if(request.all()['email']) {
+            await JournalUserGroup.grantAccess(selected_user.id, request.all()['group_id'], request.all()['journal_id'])
+            selected_user = await User.query().where('id', selected_user.id).where('status', 'enabled').with('groups.group').with('groups.journal').first()
             selected_user.email = request.all()['email']
             selected_user.academic_page = request.all()['academic_page']
             selected_user.group_id = request.all()['group_id']
@@ -599,19 +680,25 @@ class UserController {
         }
         let userArticles = await UserArticle.query().with('user').whereIn('article_id', articleIds).fetch()
         userArticles = userArticles.toJSON()
-        console.log('Recently : ', recentPublished)
+        // console.log('Recently : ', recentPublished)
         let allJournals = await Journal.all()
-        console.log('allJournals', allJournals)
+        // console.log('allJournals', allJournals)
+        let msg = session.get('msg')
+        let msg_type = (session.get('msg_type')?session.get('msg_type'):'')
+        session.forget('msg')
+        session.forget('msg_type')
         return view.render('admin.user', {
             isLogged: true, 
             user: user, 
-            selected_user: selected_user,
+            selected_user: selected_user.toJSON(),
             articles : {
                 recentPublished: recentPublished,
                 highlyCited: highlyCited
             },
             user_articles: userArticles,
             allJournals: allJournals.toJSON(),
+            msg,
+            msg_type
         })
     }
 
