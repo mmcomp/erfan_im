@@ -62,6 +62,8 @@ Route.get('logout', 'UserController.logout')
 
 Route.get('admin', 'UserController.admin')
 
+Route.get('dashboard', 'UserController.dashboard')
+
 Route.any('author/:author_name', 'UserController.profile')
 
 Route.any('profile/:author_id', 'UserController.profile')

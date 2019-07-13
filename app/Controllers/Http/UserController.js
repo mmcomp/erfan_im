@@ -42,48 +42,33 @@ class UserController {
     }
 
     async login ({ request, auth, response, session }) {
+        let user_id = 0
         try{
             const { email, password } = request.all()
             let msg_type ='', msg = 'Email or Password is not Correct',logedIn = true, rememberme = (request.all()['rememberme'])?true:false
             try{
                 await auth.check()
             }catch(e) {
-                // console.log('Check Error')
-                // console.log(e)
                 logedIn = false
             }
             if(!logedIn) {
                 session.clear()
 
                 try{
-                    // console.log('Remember Me : ', rememberme)
-                    await auth.remember(rememberme).attempt(email, password)
+                    const loginRes = await auth.remember(rememberme).attempt(email, password)
                     msg = 'Logged in successfully'
                     logedIn = true;
 
-                    let user = await User.query().where('id', auth.user.id).with('permissions').with('groups.group').with('groups.journal').first()
-                    // console.log('User', user.toJSON())
+                    let user = await User.query().where('id', auth.user.id).with('permissions').first()
                     user = user.toJSON()
                     let permissions = {}
                     for(let i = 0;i < user.permissions.length;i++) {
                         permissions[user.permissions[i].permission_key] = true
                     }
                     user.permissions = permissions
-                    // let journalGroups = {}
-                    // for(let i = 0;i < user.groups.length;i++) {
-                        // journalGroups[user.groups[i].journal_id] = {
-                        //     group: user.groups[i].group,
-                        //     journal: user.groups[i].journal,
-                        // }
-                        // console.log('Journal', user.groups[i].journal_id, user.groups[i].journal.name)
-                    // }
-                    // user.journalGroups = journalGroups
-                    // console.log(user)
                     session.put('user', user)
-                    
+                    user_id = user.id
                 }catch(e) {
-                    // console.log('Login Error')
-                    // console.log(e)
                     msg = 'Login information is wrong'
                     msg_type = 'danger'
                 }
@@ -94,8 +79,8 @@ class UserController {
 
             session.put('msg', msg)
             session.put('msg_type', msg_type)
-
-            return response.route('home', {message: msg, isLogged: logedIn})
+            // return response.redirect('/admin')//.route('home', {message: msg, isLogged: logedIn})
+            return response.redirect('/profile/' + user_id)
         }catch(e){
             console.log(e)
             session.put('msg', 'try again please')
@@ -336,7 +321,9 @@ class UserController {
     }
 
     async admin ({ request, auth, view, response, session }) {
-        if(!session.get('user')) {
+        try{
+            await auth.check()
+        }catch(e) {
             var msg = 'You must Login first', msg_type = 'danger'
 
             session.put('msg', msg)
@@ -575,14 +562,20 @@ class UserController {
         }
         const url = '/author/' + ((jugData.user.fname)?encodeURIComponent(jugData.user.fname.replace(/-/g, '_')) + '-':'') + encodeURIComponent(jugData.user.lname.replace(/-/g, '_'))
         const user = jugData.user
-        const uu = await User.query().where({
+        let uu = await User.query().where({
             id: user.id,
-        }).first()
+        }).with('permissions').first()
         
         uu.journal_id = jugData.journal_id,
         uu.group_id = jugData.groups_id
-        
-        uu.save()
+        await uu.save()
+        uu = uu.toJSON()
+        let permissions = {}
+        for(let i = 0;i < uu.permissions.length;i++) {
+            permissions[uu.permissions[i].permission_key] = true
+        }
+        uu.permissions = permissions
+        session.put('user', uu)
 
         return response.redirect(url)
     }

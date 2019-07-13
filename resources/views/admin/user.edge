@@ -39,6 +39,11 @@
             </p>
             <a href="{{ (selected_user.academic_page)?selected_user.academic_page:'#' }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Academic
               Profile Page</a>
+            @if(user.group_id!=5 && user.id == selected_user.id)
+            <a href="/admin" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">
+              Dashboard
+            </a>
+            @endif
             @if(selected_user.groups.length>0)
               <br/>
               <h3>Journals</h3>
@@ -46,15 +51,15 @@
                 <br/>
                 <h4 style="margin: 0 !important;">
                   {{ journalGroup.journal.name }} [{{ journalGroup.group.name }}]
-                  @if(user.group_id == 1 || user.group_id == 2)
-                  <a href="/revoke/{{ journalGroup.id }}">Revoke</a>
+                  @if(user.id == selected_user.id)
                     @if(selected_user.journal_id!=journalGroup.journal.id)
                     <a href="/enable/{{ journalGroup.id }}">Enable</a>
                     @endif
                   @else
-                    @if(user.id == selected_user.id)
-                      @if(selected_user.journal_id!=journalGroup.journal.id)
-                      <a href="/enable/{{ journalGroup.id }}">Enable</a>
+                    @if((user.group_id == 1) || (user.group_id == 2 && user.id!=selected_user.id && user.journal_id==journalGroup.journal.id))
+                      <a href="/revoke/{{ journalGroup.id }}" style="border: 1px solid #e4a9bc;padding: 3px;">Revoke</a>
+                      @if(selected_user.journal_id==journalGroup.journal.id)
+                      Enabled
                       @endif
                     @endif
                   @endif
@@ -92,7 +97,7 @@
                           placeholder="Academic Page" value="{{ selected_user.academic_page?selected_user.academic_page:'' }}">
                       </div>
                     </div>
-                    @if(user.group_id == 1 || user.group_id == 2)
+                    @if((user.group_id == 1) || (user.group_id == 2 && user.id!=selected_user.id && user.journal_id==selected_user.journal_id))
                     <div class="form-group">
                       <label for="inputPassword3" class="col-md-4 control-label">User Access Level</label>
                       <div class="col-md-6">
