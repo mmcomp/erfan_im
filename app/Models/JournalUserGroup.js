@@ -16,17 +16,22 @@ class JournalUserGroup extends Model {
   }
 
   static async grantAccess(users_id, groups_id, journal_id) {
-    console.log('Grant Access', users_id, groups_id, journal_id)
     let acc = await JournalUserGroup.query().where({
       users_id, 
-      groups_id, 
       journal_id,
     }).first()
     if(!acc) {
-      const res = await JournalUserGroup.create({
+      await JournalUserGroup.create({
         users_id, 
         groups_id, 
         journal_id,
+      })
+    }else {
+      await JournalUserGroup.query().where({
+        users_id, 
+        journal_id,
+      }).update({
+        groups_id,
       })
     }
   }

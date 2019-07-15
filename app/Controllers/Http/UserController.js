@@ -331,7 +331,6 @@ class UserController {
     
             return response.route('home', {message: msg, isLogged: false})
         }
-
         let user = session.get('user')
 
         if(user.group_id==1) {
