@@ -104,7 +104,7 @@
                 @endeach
                 @each(keyword in dkeywords)
                   @if(keyword)
-                    <a href="/newkeyword/{{ keyword.replace(/ /g,'-') }}">
+                    <a href="/newkeyword/{{ keyword.replace(/-/g,'_').replace(/ /g,'-') }}">
                       {{ keyword }}
                     </a>,
                   @endif

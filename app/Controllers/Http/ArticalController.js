@@ -1866,7 +1866,7 @@ class ArticalController {
             user = session.get('user')
         }
 
-        params.keyword = params.keyword.replace(/-/g, ' ')
+        params.keyword = params.keyword.replace(/-/g, ' ').replace(/_/g, '-')
         console.log('Keyword', params.keyword)
         let articleKeyword = await ArticleDefinedKeyword.query().with('article').where('theword', params.keyword).fetch()
         articleKeyword = articleKeyword.toJSON()
