@@ -292,7 +292,10 @@ class ArticalController {
             article.publish_date = moment(article.publish_date).format('YYYY-MM-DD')
         }
         var open_refs = false
+        let filename = `pre_${article.id}.docx`
+        var hasPre = (fs.existsSync(Helpers.publicPath('pdf') + '/' + filename))
         if(request.method()=='POST') {
+            let itsPre = false
             if(request.all()['position']) {
                 if(request.all()['position']=='corresponding') {
                     let author = await User.find(article.author_id)
@@ -322,14 +325,22 @@ class ArticalController {
                         theAuthor = new User
                         theAuthor.group_id = 5
                     }
-                    theAuthor.salutation = request.all()['salutation']
-                    theAuthor.fname = request.all()['fname']
-                    theAuthor.lname = request.all()['lname']
-                    theAuthor.department = request.all()['department']
-                    theAuthor.email = request.all()['email']
-                    theAuthor.password = request.all()['password']
-                    theAuthor.university_institute = request.all()['university_institute']
-                    theAuthor.tell = request.all()['tell']
+                    if(request.all()['salutation'] && request.all()['salutation']!='')
+                        theAuthor.salutation = request.all()['salutation']
+                    if(request.all()['fname'] && request.all()['fname']!='')
+                        theAuthor.fname = request.all()['fname']
+                    if(request.all()['lname'] && request.all()['lname']!='')
+                        theAuthor.lname = request.all()['lname']
+                    if(request.all()['department'] && request.all()['department']!='')
+                        theAuthor.department = request.all()['department']
+                    if(request.all()['email'] && request.all()['email']!='')
+                        theAuthor.email = request.all()['email']
+                    if(request.all()['password'] && request.all()['password']!='')
+                        theAuthor.password = request.all()['password']
+                    if(request.all()['university_institute'] && request.all()['university_institute']!='')
+                        theAuthor.university_institute = request.all()['university_institute']
+                    if(request.all()['tell'] && request.all()['tell']!='')
+                        theAuthor.tell = request.all()['tell']
                     await theAuthor.save()
                     await UserArticle.query().where('article_id', article.id).where('position', 'first').delete()
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
@@ -343,6 +354,7 @@ class ArticalController {
 
                     mainArticle.author_id = theAuthor.id
                     await mainArticle.save()
+                    mainArticle = await Artical.query().with('journal').with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
                     article = mainArticle.toJSON()
                 }else if(request.all()['position']=='co'){
                     let theAuthor = await User.query().where('fname', request.all()['fname']).where('lname', request.all()['lname']).first()
@@ -458,7 +470,7 @@ class ArticalController {
                     size: '2mb'
                 })
                 selected_editor = request.all()['selected_editor']
-                let filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                filename = `${new Date().getTime()}.${imageUpload.subtype}`
                 await imageUpload.move(Helpers.publicPath('static/img/uploads'), {
                     name: filename,
                     overwrite: true
@@ -468,6 +480,24 @@ class ArticalController {
                 }else {
                     uploadedImage = '/static/img/uploads/' + filename
                     console.log('Upload done', uploadedImage)
+                }
+            }else if(request.file('docx_upload')) {
+                console.log('uploading docx')
+                const docxUpload = request.file('docx_upload', {
+                    size: '20mb'
+                })
+                filename = `pre_${article.id}.docx`
+                if(fs.existsSync(Helpers.publicPath('pdf') + '/' + filename)) {
+                    fs.unlinkSync(Helpers.publicPath('pdf') + '/' + filename)
+                }
+                await docxUpload.move(Helpers.publicPath('pdf'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!docxUpload.moved()) {
+                    console.log(docxUpload.error())
+                }else {
+                    itsPre = true
                 }
             }else if(request.all()['doi']) {
                 mainArticle.doi = request.all()['doi']
@@ -592,7 +622,16 @@ class ArticalController {
                 }
                 await mainArticle.save()
             }
-            ArticalController.genPdf(mainArticle.id)
+            if(!itsPre) {
+                ArticalController.genPdf(mainArticle.id)
+            }else {
+                let baseDirAr = __dirname.split('/'), baseDir = ''
+                for(var i = baseDirAr.length - 4;i>=0;i--) {
+                  baseDir = '/' + baseDirAr[i] + baseDir
+                }
+                baseDir = baseDir.substring(1)
+                docx.docxToPdf(baseDir + '/public/pdf/' + filename, 'gen_' + article.id)
+            }
         }
 
 
@@ -711,6 +750,7 @@ class ArticalController {
             open_refs: open_refs,
             keyword: keyword,
             dkeywords: dkeywords,
+            hasPre,
         })
     }
 
@@ -1222,24 +1262,34 @@ class ArticalController {
             }
             
 
-
+            console.log('Check Images')
             theXML = ArticalController.html2xml(theArticle.introduction)
+            console.log('Introduction:')
+            console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_introduction = theXML.xml
             
             theXML = ArticalController.html2xml(theArticle.material)
+            console.log('material:')
+            console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_material = theXML.xml
 
             theXML = ArticalController.html2xml(theArticle.disc)
+            console.log('disc:')
+            console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_disc = theXML.xml
 
             theXML = ArticalController.html2xml(theArticle.ack)
+            console.log('ack:')
+            console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_ack = theXML.xml
 
             theXML = ArticalController.html2xml(theArticle.results)
+            console.log('results:')
+            console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_results = theXML.xml
             
@@ -1254,6 +1304,7 @@ class ArticalController {
             }
             // console.log('The Data')
             // console.log(theData)
+            console.log('All Images', allImages)
             let docxfile = await docx.fillTemplateWord(theData, 'gen_' + article_id, allImages)
             console.log('Docx file Result', docxfile)
             let pdfResult = await docx.docxToPdf(docxfile, 'gen_' + article_id)
@@ -1512,7 +1563,7 @@ class ArticalController {
         
         if(thisArticle.author_id>0) {
             articleAuthor = await User.find(thisArticle.author_id)
-            await articleAuthor.loadMany(['country'])
+            // await articleAuthor.loadMany(['country'])
             if(articleAuthor) {
                 authorsClassified = {
                     first: [

@@ -837,6 +837,31 @@
             Upload Image
           </button>
         </form>
+        <br/>
+        <hr/>
+        <h1>
+          Pre Build PDF and Word Doc
+        </h1>
+        <a target="_blank" href="/pdf/gen_{{ article.id }}.pdf">
+          PDF
+        </a>
+        |
+        <a target="_blank" href="/pdf/gen_{{ article.id }}.docx">
+          DOC
+        </a>
+        @if(hasPre)
+        |
+        <a target="_blank" href="/pdf/pre_{{ article.id }}.docx">
+          PreDOC
+        </a>
+        @endif
+        <form method="post"  enctype="multipart/form-data">
+          {{ csrfField() }}
+          <input type="file" name="docx_upload" />
+          <button class="btn btn-success pull-left">
+            Upload Prepared Docx
+          </button>
+        </form>
       </div>
       <br /><br />
       <div>
