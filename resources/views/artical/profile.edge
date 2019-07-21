@@ -691,6 +691,7 @@
                       <span class="input-group-addon" onclick="removeRef({{ $loop.index }});"><i class="fa fa-times" style="color: red;cursor: pointer;"></i></span>
                       <span class="input-group-addon" onclick="moveUp({{ $loop.index }});"><i class="fa fa-caret-up" style="color: green;cursor: pointer;"></i></span>
                       <span class="input-group-addon" onclick="moveDown({{ $loop.index }});"><i class="fa fa-caret-down" style="color: green;cursor: pointer;"></i></span>
+                      <span class="input-group-addon" onclick="selectRef({{ $loop.index }});"><i id="ref-chk-{{ $loop.index }}" class="fa fa-square" style="color: rgb(61, 186, 235);cursor: pointer;"></i></span>
                     </div>
                     @endeach
                     <div class="input-group">
@@ -701,6 +702,9 @@
                   <p>
                       <button onclick="saveRef();" type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
                         save
+                      </button>
+                      <button onclick="deleteRefs();" type="button" class="btn c-btn-red c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
+                        delete
                       </button>
                     <!--
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
@@ -1157,6 +1161,7 @@
     //   }catch(e){}
     // }
     var docReady = false;
+    var selectedRefs = [];
 
     function checkEmail(dobj) {
       console.log($(dobj).val());
@@ -1360,7 +1365,32 @@
       $("#therefs").val(JSON.stringify(arr));
       $("#ref-frm").submit();
     }
-
+    function selectRef(ref_id) {
+      if(selectedRefs.indexOf(ref_id)>=0) {
+        $("#ref-chk-" + ref_id).removeClass('fa-check-square').addClass('fa-square');
+        var indx = selectedRefs.indexOf(ref_id);
+        selectedRefs.splice(indx, 1);
+      }else {
+        $("#ref-chk-" + ref_id).removeClass('fa-square').addClass('fa-check-square');
+        selectedRefs.push(ref_id);
+      }
+    }
+    function deleteRefs() {
+      if(selectedRefs.length<=0) {
+        return alert('Nothing is selected!');
+      }
+      if(confirm('Are you sure?')) {
+        var arr = theArticle.refs;
+        var newArr = [];
+        for(var i = 0;i < arr.length;i++) {
+          if(selectedRefs.indexOf(i)<0) {
+            newArr.push(arr[i]);
+          }
+        }
+        $("#therefs").val(JSON.stringify(newArr));
+        $("#ref-frm").submit();
+      }
+    }
     function removeKeyword(keyword_id) {
       if(confirm('Are you sure?')) {
         console.log('remove keyword id', keyword_id);
