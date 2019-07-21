@@ -1867,8 +1867,11 @@ class ArticalController {
         }
 
         params.keyword = params.keyword.replace(/-/g, ' ')
+        console.log('Keyword', params.keyword)
         let articleKeyword = await ArticleDefinedKeyword.query().with('article').where('theword', params.keyword).fetch()
         articleKeyword = articleKeyword.toJSON()
+        console.log('Articles')
+        console.log(articleKeyword)
         let theArticleIds = []
         for(let theArtKw of articleKeyword) {
             theArticleIds.push(theArtKw.article_id)
