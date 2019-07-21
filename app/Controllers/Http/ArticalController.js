@@ -331,6 +331,7 @@ class ArticalController {
                     theAuthor.university_institute = request.all()['university_institute']
                     theAuthor.tell = request.all()['tell']
                     await theAuthor.save()
+                    await UserArticle.query().where('article_id', article.id).where('position', 'first').delete()
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
                         userArticle = new UserArticle
@@ -339,11 +340,10 @@ class ArticalController {
                     }
                     userArticle.position = request.all()['position']
                     await userArticle.save()
-                    if(mainArticle.author_id<=0) {
-                        mainArticle.author_id = theAuthor.id
-                        await mainArticle.save()
-                        article = mainArticle.toJSON()
-                    }
+
+                    mainArticle.author_id = theAuthor.id
+                    await mainArticle.save()
+                    article = mainArticle.toJSON()
                 }else if(request.all()['position']=='co'){
                     let theAuthor = await User.query().where('fname', request.all()['fname']).where('lname', request.all()['lname']).first()
                     if(!theAuthor) {
