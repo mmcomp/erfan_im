@@ -823,6 +823,35 @@
         </div>
         </form>
         <br />
+        <h1>
+          Edit Titles
+        </h1>
+        <form method="post">
+          {{ csrfField() }}
+          <label>
+            Full Title
+          </label>
+          <br/>
+          <textarea name="full_title" >{{ article.full_title }}</textarea>
+          <br/>
+          <label>
+            Running Title
+          </label>
+          <br/>
+          <textarea name="running_title" >{{ article.running_title }}</textarea>
+          <br/>
+          <label>
+            Summary
+          </label>
+          <br/>
+          <textarea name="summery" >{{ article.summery }}</textarea>
+          <br/>
+          <button class="btn btn-success pull-left">
+          Edit Titles
+          </button>
+        </form>
+        <br/>
+        <hr/>
         @if(uploadedImage)
         <h3 onclick="sendImage();" style="cursor: pointer;">
           <!--<img src="{{ uploadedImage }}" style="width: 30px;" />-->

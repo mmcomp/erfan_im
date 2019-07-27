@@ -5,6 +5,13 @@ const axios = require('axios')
 // let scholar = require('google-scholar')
 
 class Artical extends Model {
+  static boot () {
+    super.boot()
+    // this.addHook('afterCreate', 'ArticleHook.copy')
+    // this.addHook('afterUpdate', 'ArticleHook.copy')
+    this.addHook('afterSave', 'ArticleHook.copy')
+  }
+
   static get table () {
     return 'article'
   }
@@ -29,10 +36,11 @@ class Artical extends Model {
           tmp = 0
         }
       }
-      this.citiations = tmp
-      await this.save()
+      // this.citiations = tmp
+      // await this.save()
       // let resultObj = await scholar.search(this.full_title)
       // console.log('Scholar', resultObj)
+      return tmp
     }catch(e) {
       console.log('Scholar Error', e)
     }

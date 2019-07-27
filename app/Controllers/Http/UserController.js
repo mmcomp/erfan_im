@@ -333,7 +333,7 @@ class UserController {
         }
         let user = session.get('user')
 
-        if(user.group_id==1) {
+        if(user.group_id==1 || user.group_id==8) {
             // Admin
             let journals = await Journal.all()
             journals = journals.toJSON()
@@ -416,7 +416,7 @@ class UserController {
                 request_count: requestCount, 
                 statics: statics,
             })
-        }else if(user.group_id==2){
+        }else if(user.group_id==2 || user.group_id==7){
             let cities = [], countries = []
             let journals = await Journal.query().where('id', user.journal_id).fetch()
             journals = journals.toJSON()

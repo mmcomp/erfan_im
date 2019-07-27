@@ -240,6 +240,34 @@ class ArticalController {
             return response.redirect('/admin')
         }
 
+        const userEditor = await UserArticleEditor.query().where({
+            users_id: user.id,
+            article_id: mainArticle.id,
+        }).first()
+
+        if(user.group_id!==1 && user.group_id!==8) {
+            if((user.group_id===2 || user.group_id===7) && user.journal_id!==mainArticle.journal_id) {
+                session.put('msg', 'Article Is Not Accessable For You')
+                session.put('msg_type', 'danger')
+                return response.redirect('/')
+            }else if(user.group_id===6 && (user.journal_id!==mainArticle.journal_id || userEditor)) {
+                session.put('msg', 'Article Is Not Accessable For You')
+                session.put('msg_type', 'danger')
+                return response.redirect('/')
+            }else if(user.group_id===6 && user.journal_id===mainArticle.journal_id && userEditor && userEditor.status!='active') {
+                session.put('msg', 'You did not acsept to Edit this Aticle')
+                session.put('msg_type', 'danger')
+                return response.redirect('/')
+            }else if(user.group_id!==2 && user.group_id!==6 && user.group_id!==7) {
+                session.put('msg', 'Access Restricted')
+                session.put('msg_type', 'danger')
+                return response.redirect('/')
+            }
+        }
+
+
+        const citiations = await mainArticle.getScholar()
+
         let keyword = {
             full_title: 25,
             running_title: 25,
@@ -271,15 +299,17 @@ class ArticalController {
             let theFirstAuthor = await UserArticle.query().where('article_id', mainArticle.id).where('position', 'first').first()
             if(theFirstAuthor) {
                 mainArticle.author_id = theFirstAuthor.users_id
+                mainArticle.citiations = citiations
+                mainArticle.user_id = user.id
+                console.log('s17')
                 await mainArticle.save()
             }
         }
-        await mainArticle.getScholar()
-        if(user.group_id!=1 && user.journal_id!=mainArticle.journal_id) {
-            session.put('msg', 'You do not have permission to this article')
-            session.put('msg_type', 'danger')
-            return response.route('home', {isLogged: isLogged})
-        }
+        // if(user.group_id!=1 && user.journal_id!=mainArticle.journal_id) {
+        //     session.put('msg', 'You do not have permission to this article')
+        //     session.put('msg_type', 'danger')
+        //     return response.route('home', {isLogged: isLogged})
+        // }
 
         let dkeywords = await ArticleDefinedKeyword.query().where('article_id', mainArticle.id).pluck('theword')
 
@@ -351,8 +381,10 @@ class ArticalController {
                     }
                     userArticle.position = request.all()['position']
                     await userArticle.save()
-
+                    mainArticle.user_id = user.id
                     mainArticle.author_id = theAuthor.id
+                    mainArticle.citiations = citiations
+                    console.log('s1')
                     await mainArticle.save()
                     mainArticle = await Artical.query().with('journal').with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
                     article = mainArticle.toJSON()
@@ -377,30 +409,51 @@ class ArticalController {
                 }
             }else if(request.all()['abstract']) {
                 mainArticle.abstract = request.all()['abstract']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s2')
                 await mainArticle.save()
                 article.abstract = request.all()['abstract']
             }else if(request.all()['introduction']) {
                 mainArticle.introduction = request.all()['introduction']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s3')
                 await mainArticle.save()
                 article.introduction = request.all()['introduction']
             }else if(request.all()['material']) {
                 mainArticle.material = request.all()['material']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s4')
                 await mainArticle.save()
                 article.material = request.all()['material']
             }else if(request.all()['results']) {
                 mainArticle.results = request.all()['results']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s5')
                 await mainArticle.save()
                 article.results = request.all()['results']
             }else if(request.all()['disc']) {
                 mainArticle.disc = request.all()['disc']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s6')
                 await mainArticle.save()
                 article.disc = request.all()['disc']
             }else if(request.all()['ack']) {
                 mainArticle.ack = request.all()['ack']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s7')
                 await mainArticle.save()
                 article.ack = request.all()['ack']
             }else if(request.all()['ref']) {
                 mainArticle.ref = request.all()['ref']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s8')
                 await mainArticle.save()
                 article.ref = request.all()['ref']
             }else if(request.all()['check_editor_email']) {
@@ -435,6 +488,9 @@ class ArticalController {
                     article.editors.push(assignEditor.toJSON())
                     article.status = 'editor_assigned'
                     mainArticle.status = 'editor_assigned'
+                    mainArticle.citiations = citiations
+                    mainArticle.user_id = user.id
+                    console.log('s16')
                     await mainArticle.save()
                     try{
                         // await Mail.send('emails.welcome', {}, (message) => {
@@ -459,6 +515,9 @@ class ArticalController {
                 if(mainArticle.status=='published') {
                     mainArticle.publish_date = moment().format('YYYY-MM-DD HH:mm:ss')
                 }
+                mainArticle.citiations = citiations
+                mainArticle.user_id = user.id
+                console.log('s9')
                 await mainArticle.save()
                 article.status = mainArticle.status
                 article.publish_date = mainArticle.publish_date
@@ -505,12 +564,26 @@ class ArticalController {
                 mainArticle.publish_no = request.all()['publish_no']
                 mainArticle.publish_startpage = request.all()['publish_startpage']
                 mainArticle.publish_endpage = request.all()['publish_endpage']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s10')
                 await mainArticle.save()
                 article.doi = request.all()['doi']
                 article.publish_vol = request.all()['publish_vol']
                 article.publish_no = request.all()['publish_no']
                 article.publish_startpage = request.all()['publish_startpage']
                 article.publish_endpage = request.all()['publish_endpage']
+            }else if(request.all()['full_title']) {
+                mainArticle.full_title = request.all()['full_title']
+                mainArticle.running_title = request.all()['running_title']
+                mainArticle.summery = request.all()['summery']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s11')
+                await mainArticle.save()
+                article.full_title = request.all()['full_title']
+                article.running_title = request.all()['running_title']
+                article.summery = request.all()['summery']
             }else if(request.all()['editor-role']){
                 let editorType = request.all()['editor-role'], editorId = 0, assignEditor
                 if(request.all()['selected_id:']) {
@@ -547,6 +620,9 @@ class ArticalController {
                         article.editors.push(assignEditor.toJSON())
                         article.status = 'editor_assigned'
                         mainArticle.status = 'editor_assigned'
+                        mainArticle.citiations = citiations
+                        mainArticle.user_id = user.id
+                        console.log('s15')
                         await mainArticle.save()
                         try{
                             // let mailResult = await Mail.send('emails.welcome', {}, (message) => {
@@ -576,6 +652,9 @@ class ArticalController {
                     theRefs = JSON.parse(request.all()['therefs'])
                     console.log('which is ', theRefs)
                     mainArticle.refs = request.all()['therefs']
+                    mainArticle.user_id = user.id
+                    mainArticle.citiations = citiations
+                    console.log('s12')
                     await mainArticle.save()
                     // mainArticle.refs = theRefs
                     // article = mainArticle.toJSON()
@@ -605,6 +684,9 @@ class ArticalController {
                 }
             }else if(request.all()['the_doi']){
                 mainArticle.gdoi = request.all()['the_doi']
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s13')
                 await mainArticle.save()
                 article.gdoi = request.all()['the_doi']
             }else {
@@ -620,6 +702,9 @@ class ArticalController {
                     mainArticle.news_seo = 1
                     article.news_seo = 1
                 }
+                mainArticle.user_id = user.id
+                mainArticle.citiations = citiations
+                console.log('s14')
                 await mainArticle.save()
             }
             if(!itsPre) {

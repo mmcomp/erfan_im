@@ -104,9 +104,13 @@
                         <select class="form-control c-square c-theme" name="group_id">
                           <option value="0" disabled>Select Access Level</option>
                           @if(user.group_id == 1)
-                          <option value="1" {{ (selected_user.group_id == 1)?' selected':'' }}>Deputy Director</option>
-                          @endif
+                          <option value="1" {{ (selected_user.group_id == 1)?' selected':'' }}>Director</option>
+                          <option value="8" {{ (selected_user.group_id == 8)?' selected':'' }}>Managing Director</option>
                           <option value="2" {{ (selected_user.group_id == 2)?' selected':'' }}>Chief Editor</option>
+                          @endif
+                          @if(user.group_id == 2)
+                          <option value="7" {{ (selected_user.group_id == 7)?' selected':'' }}>Managing Editor</option>
+                          @endif
                           <option value="6" {{ (selected_user.group_id == 6)?' selected':'' }}>Associate Editor</option>
                           <option value="5" {{ (selected_user.group_id == 5)?' selected':'' }}>Author</option>
                           <!-- <option value="5">Partners Admin</option> -->
