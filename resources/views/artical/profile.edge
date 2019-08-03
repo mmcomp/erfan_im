@@ -155,6 +155,7 @@
                       @endif
                     </ul>
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#authorModel-1" data-whatever="bootstrap">Add/Edit Corresponding
@@ -253,98 +254,6 @@
                       </div>
                     </div>
                     -->
-                    <!-- BEGIN: ArticleProcessingPage/Reviewer-Selection-Form -->
-                    <div class="modal fade c-content-login-form" id="assignModal" role="dialog">
-                      <div class="modal-dialog">
-                        <div class="modal-content c-square">
-                          <div class="modal-header c-no-border">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                          </div>
-                          <div class="modal-body">
-                            <h3 class="c-font-24 c-font-sbold">Assign or Invite Editor / Reviewer for Article ID {{ article.id }} </h3>
-                            <p>
-                              Percentage (%) shows the matching ratio of Editor / Reviewer based on their keywords
-                            </p>
-                            <form method="post">
-                              {{ csrfField() }}
-                              <div class="form-group">
-                                <label class="col-md-4 control-label">Choose Role</label>
-                                <div class="col-md-6">
-                                  <select class="paper-role c-square c-theme" name="editor-role">
-                                    <option value="editor">Editor</option>
-                                    <option value="reviewer">Reviewer</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <br>
-                              <div class="form-group">
-                                <label for="available-reviewer" class="col-md-4 control-label">Available Reviewers</label>
-                                <div class="col-md-8">
-                                  <select class="form-control c-square c-theme" multiple id="selected_id" name="selected_id">
-                                    @each(editor in preeditors)
-                                    <option value="{{ editor.id }}">{{ editor.fname }} {{ editor.lname }} ({{ editor.percent }})</option>
-                                    <!--
-                                    <option value="1">Option 1 (95%)</option>
-                                    <option value="2">Option 2 (90%)</option>
-                                    <option value="3">Option 3 (85%)</option>
-                                    <option value="4">Option 4 (80%)</option>
-                                    <option value="5">Option 5 (75%)</option>
-                                    -->
-                                    @endeach
-                                  </select>
-                                </div>
-                              </div>
-                              <br><br><br>
-                              <div class="form-group">
-                                <label for="reviewer-email" class="show">Search by Email</label>
-                                <input type="Email" class="form-control input-lg c-square" id="reviewer-email" name="reviewer-email"
-                                  placeholder="Email">
-                              </div>
-
-                              <div class="form-group">
-
-                                <div class="c-checkbox">
-                                  <input type="checkbox" id="invite-new-reviewer" class="c-check" onclick="notInList(this);">
-                                  <label for="invite-new-reviewer" class="c-font-thin c-font-17">
-                                    <span></span>
-                                    <span class="check"></span>
-                                    <span class="box"></span>
-                                    Not in list, invite reviewer </label>
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <label class="col-md-4 control-label">Salutation</label>
-                                <div class="col-md-8">
-                                  <select class="form-control c-square c-theme new-editor" name="new-editor-salut">
-                                    <option value="Dr">Dr. </option>
-                                    <option value="Prof">Prof. </option>
-                                    <option value="">None</option>
-                                  </select>
-                                </div>
-                              </div><br>
-                              <div class="form-group">
-                                <label for="login-password" class="hide">First and Last Name Camma seperated</label>
-                                <input type="test" class="form-control input-lg c-square new-editor" id="name-of-invited-reviewer"
-                                  placeholder="First Name,Last Name" name="new-editor-name">
-                              </div>
-                              <div class="form-group">
-                                <label for="login-password" class="hide">Email</label>
-                                <input type="email" class="form-control input-lg c-square new-editor" id="email-invited-reviewer"
-                                  placeholder="Email" name="new-editor-email">
-                              </div>
-
-                              <div class="form-group">
-                                <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Send
-                                  Invitation</button>
-                              </div>
-
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <!-- END: ArticleProcessingPage/Reviewer-Selection-Form -->
                   </p>
 
                   <p>
@@ -457,8 +366,100 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
-
+                    <!-- BEGIN: ArticleProcessingPage/Reviewer-Selection-Form -->
+                    <div class="modal fade c-content-login-form" id="assignModal" role="dialog">
+                        <div class="modal-dialog">
+                          <div class="modal-content c-square">
+                            <div class="modal-header c-no-border">
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                  aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body">
+                              <h3 class="c-font-24 c-font-sbold">Assign or Invite Editor / Reviewer for Article ID {{ article.id }} </h3>
+                              <p>
+                                Percentage (%) shows the matching ratio of Editor / Reviewer based on their keywords
+                              </p>
+                              <form method="post">
+                                {{ csrfField() }}
+                                <div class="form-group">
+                                  <label class="col-md-4 control-label">Choose Role</label>
+                                  <div class="col-md-6">
+                                    <select class="paper-role c-square c-theme" name="editor-role">
+                                      <option value="editor">Associate Editor</option>
+                                      <option value="reviewer">Reviewer</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                  <label for="available-reviewer" class="col-md-4 control-label">Available Reviewers</label>
+                                  <div class="col-md-8">
+                                    <select class="form-control c-square c-theme" multiple id="selected_id" name="selected_id">
+                                      @each(editor in preeditors)
+                                      <option value="{{ editor.id }}">{{ editor.fname }} {{ editor.lname }} ({{ editor.percent }})</option>
+                                      <!--
+                                      <option value="1">Option 1 (95%)</option>
+                                      <option value="2">Option 2 (90%)</option>
+                                      <option value="3">Option 3 (85%)</option>
+                                      <option value="4">Option 4 (80%)</option>
+                                      <option value="5">Option 5 (75%)</option>
+                                      -->
+                                      @endeach
+                                    </select>
+                                  </div>
+                                </div>
+                                <br><br><br>
+                                <div class="form-group">
+                                  <label for="reviewer-email" class="show">Search by Email</label>
+                                  <input type="Email" class="form-control input-lg c-square" id="reviewer-email" name="reviewer-email"
+                                    placeholder="Email">
+                                </div>
+  
+                                <div class="form-group">
+  
+                                  <div class="c-checkbox">
+                                    <input type="checkbox" id="invite-new-reviewer" class="c-check" onclick="notInList(this);">
+                                    <label for="invite-new-reviewer" class="c-font-thin c-font-17">
+                                      <span></span>
+                                      <span class="check"></span>
+                                      <span class="box"></span>
+                                      Not in list, invite reviewer </label>
+                                  </div>
+                                </div>
+                                <div class="form-group">
+                                  <label class="col-md-4 control-label">Salutation</label>
+                                  <div class="col-md-8">
+                                    <select class="form-control c-square c-theme new-editor" name="new-editor-salut">
+                                      <option value="Dr">Dr. </option>
+                                      <option value="Prof">Prof. </option>
+                                      <option value="">None</option>
+                                    </select>
+                                  </div>
+                                </div><br>
+                                <div class="form-group">
+                                  <label for="login-password" class="hide">First and Last Name Camma seperated</label>
+                                  <input type="test" class="form-control input-lg c-square new-editor" id="name-of-invited-reviewer"
+                                    placeholder="First Name,Last Name" name="new-editor-name">
+                                </div>
+                                <div class="form-group">
+                                  <label for="login-password" class="hide">Email</label>
+                                  <input type="email" class="form-control input-lg c-square new-editor" id="email-invited-reviewer"
+                                    placeholder="Email" name="new-editor-email">
+                                </div>
+  
+                                <div class="form-group">
+                                  <button type="submit" class="btn c-theme-btn btn-md c-btn-uppercase c-btn-bold c-btn-square c-btn-login">Send
+                                    Invitation</button>
+                                </div>
+  
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END: ArticleProcessingPage/Reviewer-Selection-Form -->
                 <div class="tab-pane" id="tab_1_2_content">
                   <p>
                     {{ article.abstract }}
@@ -866,6 +867,7 @@
             Upload Image
           </button>
         </form>
+        @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8)
         <br/>
         <hr/>
         <h1>
@@ -911,6 +913,8 @@
               </button><br/><br/>
           </form>
       </div>
+      @endif
+      <br/><br/>
       <div class="c-content-panel">
         <div class="c-label">
           Article's Review Panel
@@ -1002,6 +1006,7 @@
         </div>
       </div>
 
+      @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8)
       <div class="c-content-panel">
         <div class="c-label">
           Current Status of the Paper
@@ -1154,6 +1159,7 @@
         </div>
       </div>
 
+      @endif
 
     </div>
     <!-- END: CONTENT/MISC/SERVICES-1-1 -->

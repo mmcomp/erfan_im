@@ -82,7 +82,28 @@
                     <div class="c-line-center c-theme-bg">
                     </div>
                   </div>
-                  <form class="form-horizontal" method="post" id="frm1">
+                  <form class="form-horizontal" method="post" id="frm1" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">First Name</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="fname" id="fname3"
+                          placeholder="First name" value="{{ selected_user.fname }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">Last Name</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="lname" id="lname3"
+                          placeholder="Last Name" value="{{ selected_user.lname }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">Institute</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="university_institute" id="university_institute3"
+                          placeholder="Institute" value="{{ (selected_user.university_institute)?selected_user.university_institute:'' }}">
+                      </div>
+                    </div>
                     <div class="form-group">
                       <label for="inputEmail3" class="col-md-4 control-label">Email</label>
                       <div class="col-md-6">
@@ -95,6 +116,26 @@
                       <div class="col-md-6">
                         <input type="text" class="form-control c-square c-theme" name="academic_page" id="inputPassword3"
                           placeholder="Academic Page" value="{{ selected_user.academic_page?selected_user.academic_page:'' }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">FaceBook Link</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="facebook" id="facebook3"
+                          placeholder="FaceBook Link" value="{{ selected_user.facebook }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputEmail3" class="col-md-4 control-label">Twitter Link</label>
+                      <div class="col-md-6">
+                        <input type="text" class="form-control c-square c-theme" name="twitter" id="twitter3"
+                          placeholder="Twitter Link" value="{{ selected_user.twitter }}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-md-4 control-label">Profile Picture</label>
+                      <div class="col-md-6">
+                        <input type="file" class="form-control c-square c-theme" name="image_path" id="image_path3">
                       </div>
                     </div>
                     @if((user.group_id == 1) || (user.group_id == 2 && user.id!=selected_user.id && user.journal_id==selected_user.journal_id))
@@ -183,13 +224,13 @@
                   </div>
                   <ul class="c-socials c-theme-ul">
                     <li>
-                      <a href="http://twitter.com"><i class="icon-social-twitter"></i></a>
+                      <a href="{{ selected_user.twitter }}"><i class="icon-social-twitter"></i></a>
                     </li>
                     <li>
-                      <a href="http://facebook.com"><i class="icon-social-facebook"></i></a>
+                      <a href="{{ selected_user.facebook }}"><i class="icon-social-facebook"></i></a>
                     </li>
                     <li>
-                      <a href="http://mysite.com"><i class="icon-social-dribbble"></i></a>
+                      <a href="{{ selected_user.academic_page }}"><i class="icon-social-dribbble"></i></a>
                     </li>
                   </ul>
                 </div>

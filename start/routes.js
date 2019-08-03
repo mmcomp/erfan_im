@@ -114,10 +114,14 @@ Route.get('email_exists/:email', 'UserController.emailExists')
 
 Route.get('/', 'UserController.home').as('home')
 
-Route.get('*', async ({response, session}) => {
-    session.put('msg', 'URL not found')
-    session.put('msg_type', 'danger')
-    return response.redirect('/')
+Route.get('*', async ({response, session, request}) => {
+    const url = request.url()
+    if(url.indexOf('/static/')!==0) {
+        session.put('msg', 'URL not found')
+        session.put('msg_type', 'danger')
+        console.log('URL Not Found', )
+        // return response.redirect('/')
+    }
 })
 
 /*

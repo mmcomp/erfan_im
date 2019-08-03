@@ -250,14 +250,14 @@ class ArticalController {
                 session.put('msg', 'Article Is Not Accessable For You')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
-            }else if(user.group_id===6 && (user.journal_id!==mainArticle.journal_id || userEditor)) {
+            }else if(user.group_id===6 && (user.journal_id!==mainArticle.journal_id || !userEditor)) {
                 session.put('msg', 'Article Is Not Accessable For You')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
-            }else if(user.group_id===6 && user.journal_id===mainArticle.journal_id && userEditor && userEditor.status!='active') {
-                session.put('msg', 'You did not acsept to Edit this Aticle')
-                session.put('msg_type', 'danger')
-                return response.redirect('/')
+            // }else if(user.group_id===6 && user.journal_id===mainArticle.journal_id && userEditor && userEditor.status!='active') {
+            //     session.put('msg', 'You did not accept to Edit this Aticle')
+            //     session.put('msg_type', 'danger')
+            //     return response.redirect('/')
             }else if(user.group_id!==2 && user.group_id!==6 && user.group_id!==7) {
                 session.put('msg', 'Access Restricted')
                 session.put('msg_type', 'danger')
@@ -502,7 +502,7 @@ class ArticalController {
                             `<h1>iMaqPress</h1>
                             <p>
                             Dear ${ assignEditor.fname } ${ assignEditor.lname }<br/>
-                            You are assigned as editor for ${ article.running_title }. Please sign in the <a href="${ Env.get('APP_URL') }">iMaqPress</a> 
+                            You are assigned as associate editor for ${ article.running_title }. Please sign in the <a href="${ Env.get('APP_URL') }">iMaqPress</a> 
                             with this email and in case you did not register on our site, you shall login with password of <b>123456</b>.<br/>
                             </p>`)
                     }catch(e) {

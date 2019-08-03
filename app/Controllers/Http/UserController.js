@@ -5,22 +5,25 @@ const User = use('App/Models/User')
 const Journal = use('App/Models/Journal')
 const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
+const UserArticleEditor = use('App/Models/UserArticleEditor')
 const UserKeyword = use('App/Models/UserKeyword')
 const JournalUserGroup = use('App/Models/JournalUserGroup')
 const Database = use('Database')
+const Helpers = use('Helpers')
 const docx = require('./docx')
 const Randomatic = require('randomatic')
 const Env = use('Env')
 
 class UserController {
     async logout ({ auth, response, session }) {
-        // console.log('Log Out')
+        console.log('Log Out')
         session.clear()
-        // console.log('session', session.all())
+        console.log('session', session.all())
         try{
             await auth.logout()
         }catch(e) {
-
+            console.log('Log out Error')
+            console.log(e)
         }
         // return view.render('main.index')
         return response.redirect('/')
@@ -494,13 +497,97 @@ class UserController {
                 msg: msg,
                 msg_type: msg_type,
             })
+        }else if(user.group_id==4 || user.group_id==6){
+            let pageNumber = 1
+            if(request.all()['page_number']) {
+                pageNumber = parseInt(request.all()['page_number'],10)
+                if(isNaN(pageNumber)) {
+                    pageNumber = 1
+                }
+            }
+            if(request.all()['page_move']) {
+                let page_move = parseInt(request.all()['page_move'],10)
+                if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                    pageNumber += page_move
+                }
+            }
+            let searchTitle = ''
+            if(request.all()['search_articles']){
+                searchTitle = request.all()['search_articles']
+            }
+            let sort = 'created_at';
+            if(request.all()['sort']){
+                sort = request.all()['sort']
+                console.log('Sort By', sort)
+            }
+            let articleIds = []
+            let userArticles = await UserArticleEditor.query().where('users_id', user.id).pluck('article_id')
+            let articles = await Artical.query().where(function () {
+                if(searchTitle!='') {
+                    this
+                    .where('running_title', 'like', '%' + searchTitle + '%')
+                    .orWhere('full_title', 'like', '%' + searchTitle + '%')
+                }
+            }).whereIn('id', userArticles).whereNot('status', 'published').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+            let recentPublished = articles.toJSON()
+            for(let tmp of recentPublished.data) {
+                if(articleIds.indexOf(tmp.id)<0) {
+                    articleIds.push(tmp.id)
+                }
+            }
+            recentPublished['pages'] = []
+            for(let i = 1;i <= recentPublished.lastPage;i++) {
+                recentPublished.pages.push(i)
+            }
+            sort = 'citiations';
+            if(request.all()['sort']){
+                sort = request.all()['sort']
+                console.log('Sort By', sort)
+            }
+            articles = await Artical.query().where(function () {
+                if(searchTitle!='') {
+                    this
+                    .where('running_title', 'like', '%' + searchTitle + '%')
+                    .orWhere('full_title', 'like', '%' + searchTitle + '%')
+                }
+            }).whereIn('id', userArticles).whereNot('status', 'published').with('journal').with('comments').orderBy(sort, 'desc').paginate(pageNumber, 10)
+            let highlyCited = articles.toJSON()
+            for(let tmp of highlyCited.data) {
+                if(articleIds.indexOf(tmp.id)<0) {
+                    articleIds.push(tmp.id)
+                }
+            }
+            highlyCited['pages'] = []
+            for(let i = 1;i <= highlyCited.lastPage;i++) {
+                highlyCited.pages.push(i)
+            }
+            //\---ARTICLES
+
+            let msg = session.get('msg')
+            let msg_type = session.get('msg_type')
+            session.forget('msg')
+            session.forget('msg_type')
+            return view.render('admin.editor', { 
+                isLogged: true, 
+                user: user, 
+                articles : {
+                    recentPublished: recentPublished,
+                    highlyCited: highlyCited
+                },
+                articles_text: JSON.stringify({
+                    recentPublished: recentPublished,
+                    highlyCited: highlyCited
+                }),
+                msg: msg,
+                msg_type: msg_type,
+            })
         }else if(user.group_id==5){
             return response.redirect('/profile/' + user.id)
         }else {
             session.put('msg', 'You Are Not Authorized to use Dashboard')
             session.put('msg_type', 'danger')
     
-            return response.route('home')
+            return response.redirect('/profile/' + user.id)
         }
     }
 
@@ -624,12 +711,36 @@ class UserController {
             return response.redirect('back')
         }
         if(request.all()['email']) {
-            await JournalUserGroup.grantAccess(selected_user.id, request.all()['group_id'], request.all()['journal_id'])
+            if(request.all()['group_id'] && request.all()['journal_id']) {
+                await JournalUserGroup.grantAccess(selected_user.id, request.all()['group_id'], request.all()['journal_id'])
+            }
             selected_user = await User.query().where('id', selected_user.id).where('status', 'enabled').with('groups.group').with('groups.journal').first()
             selected_user.email = request.all()['email']
             selected_user.academic_page = request.all()['academic_page']
             selected_user.group_id = request.all()['group_id']
             selected_user.journal_id = request.all()['journal_id']
+            selected_user.university_institute = request.all()['university_institute']
+            selected_user.fname = request.all()['fname']
+            selected_user.lname = request.all()['lname']
+            selected_user.facebook = request.all()['facebook']
+            selected_user.twitter = request.all()['twitter']
+            if(request.file('image_path')) {
+                const imageUpload = request.file('image_path', {
+                    types: ['image'],
+                    size: '2mb'
+                })
+                const filename = `${new Date().getTime()}.${imageUpload.subtype}`
+                await imageUpload.move(Helpers.publicPath('static/img/users'), {
+                    name: filename,
+                    overwrite: true
+                })
+                if(!imageUpload.moved()) {
+                    console.log(imageUpload.error())
+                }else {
+                    selected_user.image_path = '/static/img/users/' + filename
+                    console.log('Upload done', selected_user.image_path)
+                }
+            }
             await selected_user.save()
         }
 
