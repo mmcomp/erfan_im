@@ -331,24 +331,24 @@ class ArticalController {
                 if(!theAuthor) {
                     theAuthor = new User
                     theAuthor.group_id = 5
+                    if(request.all()['salutation'] && request.all()['salutation']!='')
+                        theAuthor.salutation = request.all()['salutation']
+                    if(request.all()['fname'] && request.all()['fname']!='')
+                        theAuthor.fname = request.all()['fname']
+                    if(request.all()['lname'] && request.all()['lname']!='')
+                        theAuthor.lname = request.all()['lname']
+                    if(request.all()['department'] && request.all()['department']!='')
+                        theAuthor.department = request.all()['department']
+                    if(request.all()['email'] && request.all()['email']!='')
+                        theAuthor.email = request.all()['email']
+                    if(request.all()['password'] && request.all()['password']!='')
+                        theAuthor.password = request.all()['password']
+                    if(request.all()['university_institute'] && request.all()['university_institute']!='')
+                        theAuthor.university_institute = request.all()['university_institute']
+                    if(request.all()['tell'] && request.all()['tell']!='')
+                        theAuthor.tell = request.all()['tell']
+                    await theAuthor.save()
                 }
-                if(request.all()['salutation'] && request.all()['salutation']!='')
-                    theAuthor.salutation = request.all()['salutation']
-                if(request.all()['fname'] && request.all()['fname']!='')
-                    theAuthor.fname = request.all()['fname']
-                if(request.all()['lname'] && request.all()['lname']!='')
-                    theAuthor.lname = request.all()['lname']
-                if(request.all()['department'] && request.all()['department']!='')
-                    theAuthor.department = request.all()['department']
-                if(request.all()['email'] && request.all()['email']!='')
-                    theAuthor.email = request.all()['email']
-                if(request.all()['password'] && request.all()['password']!='')
-                    theAuthor.password = request.all()['password']
-                if(request.all()['university_institute'] && request.all()['university_institute']!='')
-                    theAuthor.university_institute = request.all()['university_institute']
-                if(request.all()['tell'] && request.all()['tell']!='')
-                    theAuthor.tell = request.all()['tell']
-                await theAuthor.save()
                 if(request.all()['position']=='corresponding') {
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
