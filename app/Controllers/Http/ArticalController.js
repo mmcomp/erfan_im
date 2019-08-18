@@ -327,51 +327,38 @@ class ArticalController {
         if(request.method()=='POST') {
             let itsPre = false
             if(request.all()['position']) {
+                let theAuthor = await User.query().where('email', request.all()['email']).first()
+                if(!theAuthor) {
+                    theAuthor = new User
+                    theAuthor.group_id = 5
+                }
+                if(request.all()['salutation'] && request.all()['salutation']!='')
+                    theAuthor.salutation = request.all()['salutation']
+                if(request.all()['fname'] && request.all()['fname']!='')
+                    theAuthor.fname = request.all()['fname']
+                if(request.all()['lname'] && request.all()['lname']!='')
+                    theAuthor.lname = request.all()['lname']
+                if(request.all()['department'] && request.all()['department']!='')
+                    theAuthor.department = request.all()['department']
+                if(request.all()['email'] && request.all()['email']!='')
+                    theAuthor.email = request.all()['email']
+                if(request.all()['password'] && request.all()['password']!='')
+                    theAuthor.password = request.all()['password']
+                if(request.all()['university_institute'] && request.all()['university_institute']!='')
+                    theAuthor.university_institute = request.all()['university_institute']
+                if(request.all()['tell'] && request.all()['tell']!='')
+                    theAuthor.tell = request.all()['tell']
+                await theAuthor.save()
                 if(request.all()['position']=='corresponding') {
-                    let author = await User.find(article.author_id)
-                    if(!author) {
-                        author = new User
-                        author.group_id = 5
-                    }
-                    author.salutation = request.all()['salutation']
-                    author.fname = request.all()['fname']
-                    author.lname = request.all()['lname']
-                    author.department = request.all()['department']
-                    author.email = request.all()['email']
-                    author.password = request.all()['password']
-                    author.university_institute = request.all()['university_institute']
-                    author.tell = request.all()['tell']
-                    await author.save()
-                    let userArticle = await UserArticle.query().where('users_id', author.id).where('article_id', article.id).first()
+                    let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
                         userArticle = new UserArticle
-                        userArticle.users_id = author.id
+                        userArticle.users_id = theAuthor.id
                         userArticle.article_id = article.id
-                        await userArticle.save()
                     }
+                    userArticle.position =  'corresponding'
+                    await userArticle.save()
                 }else if(request.all()['position']=='first'){
-                    let theAuthor = await User.query().where('email', request.all()['email']).first()
-                    if(!theAuthor) {
-                        theAuthor = new User
-                        theAuthor.group_id = 5
-                    }
-                    if(request.all()['salutation'] && request.all()['salutation']!='')
-                        theAuthor.salutation = request.all()['salutation']
-                    if(request.all()['fname'] && request.all()['fname']!='')
-                        theAuthor.fname = request.all()['fname']
-                    if(request.all()['lname'] && request.all()['lname']!='')
-                        theAuthor.lname = request.all()['lname']
-                    if(request.all()['department'] && request.all()['department']!='')
-                        theAuthor.department = request.all()['department']
-                    if(request.all()['email'] && request.all()['email']!='')
-                        theAuthor.email = request.all()['email']
-                    if(request.all()['password'] && request.all()['password']!='')
-                        theAuthor.password = request.all()['password']
-                    if(request.all()['university_institute'] && request.all()['university_institute']!='')
-                        theAuthor.university_institute = request.all()['university_institute']
-                    if(request.all()['tell'] && request.all()['tell']!='')
-                        theAuthor.tell = request.all()['tell']
-                    await theAuthor.save()
                     await UserArticle.query().where('article_id', article.id).where('position', 'first').delete()
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
@@ -389,15 +376,6 @@ class ArticalController {
                     mainArticle = await Artical.query().with('journal').with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
                     article = mainArticle.toJSON()
                 }else if(request.all()['position']=='co'){
-                    let theAuthor = await User.query().where('fname', request.all()['fname']).where('lname', request.all()['lname']).first()
-                    if(!theAuthor) {
-                        theAuthor = new User
-                        theAuthor.group_id = 5
-                    }
-                    theAuthor.fname = request.all()['fname']
-                    theAuthor.lname = request.all()['lname']
-                    theAuthor.university_institute = request.all()['university_institute']
-                    await theAuthor.save()
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
                         userArticle = new UserArticle
