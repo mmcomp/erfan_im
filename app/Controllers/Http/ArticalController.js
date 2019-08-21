@@ -1085,11 +1085,13 @@ class ArticalController {
                 if(tmp.length>1) {
                     tmp = tmp[1].split('"')[0]
                     href= tmp
-                    retmp = new RegExp(m[0], 'g')
-                    imageTmp = imageTemp.replace(/#index#/g, index)
-                    out = out.replace(retmp, `${ imageTmp}`)
-                    index++
-                    images.push(href)
+                    if(href.indexOf('data')<0 && href!='') {
+                        retmp = new RegExp(m[0], 'g')
+                        imageTmp = imageTemp.replace(/#index#/g, index)
+                        out = out.replace(retmp, `${ imageTmp}`)
+                        index++
+                        images.push(href)
+                    }
                 }
             }
         } while (m)
