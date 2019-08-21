@@ -904,7 +904,7 @@ class ArticalController {
             article.refs = []
         }
         if(article.author) {
-            otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id)/*.whereNot('users_id', article.author.id)*/.whereNot('position', 'corresponding').fetch()
+            otherAuthors = await UserArticle.query().with('user').where('article_id', theArticle.id)/*.whereNot('users_id', article.author.id)*/.whereNot('position', 'corresponding').whereNot('position', 'first').fetch()
             otherAuthors = otherAuthors.toJSON()
 
             corAuthors = await UserArticle.query().with('user').with('user.country').where('article_id', theArticle.id)/*.whereNot('users_id', article.author.id)*/.where('position', 'corresponding').fetch()

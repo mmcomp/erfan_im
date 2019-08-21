@@ -53,23 +53,38 @@
               </p>
               <h3 class="c-font-sentence c-font-bold">{{ article.full_title }}</h3>
               <span class="item"><span aria-hidden="true" class="icon-users">&nbsp;Authors:</span> 
-                <!--
-                <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">
+                @if(article.author.name_index==0)
+                <a href="/author/{{ article.author.fname.replace(/-/g,'_') }}-{{ article.author.lname.replace(/-/g,'_') }}">
                   {{ article.author.fname }} {{ article.author.lname }}
-                </a>
-                -->
-                @each(aut in otherAuthors)
-                @if($loop.index>0)
-                , 
+                </a> 
+                @else
+                <a href="/author/{{ article.author.fname.replace(/-/g,'_') }}-{{ article.author.lname.replace(/-/g,'_') }}-{{ article.author.name_index }}">
+                  {{ article.author.fname }} {{ article.author.lname }}
+                </a> 
                 @endif
-                <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
+                @each(aut in otherAuthors)
+                ,
+                @if(aut.user.name_index==0)
+                <a href="/author/{{ aut.user.fname.replace(/-/g,'_') }}-{{ aut.user.lname.replace(/-/g,'_') }}">
                   {{ aut.user.fname }} {{ aut.user.lname }}
                 </a>
+                @else
+                <a href="/author/{{ aut.user.fname.replace(/-/g,'_') }}-{{ aut.user.lname.replace(/-/g,'_') }}-{{ aut.user.name_index }}">
+                  {{ aut.user.fname }} {{ aut.user.lname }}
+                </a>
+                @endif
                 @endeach
                 @each(aut in corAuthors)
-                , <a href="/author/{{ aut.user.fname }}-{{ aut.user.lname }}">
+                ,
+                @if(aut.user.name_index==0) 
+                <a href="/author/{{ aut.user.fname.replace(/-/g,'_') }}-{{ aut.user.lname.replace(/-/g,'_') }}">
                   {{ aut.user.fname }} {{ aut.user.lname }} {{ aut.stars }}
                 </a>
+                @else
+                <a href="/author/{{ aut.user.fname.replace(/-/g,'_') }}-{{ aut.user.lname.replace(/-/g,'_') }}-{{ aut.user.name_index }}">
+                  {{ aut.user.fname }} {{ aut.user.lname }}
+                </a>
+                @endif
                 @endeach
                 <!--
                   , <a href="http://imaqpress.com/authors/">Mahdi Mirahmadi </a>
