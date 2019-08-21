@@ -362,11 +362,11 @@ class UserController {
             let countries = []
 
             for(let theUser of users) {
-                if(theUser.group_id == 1) {
+                if(theUser.group_id == 1 || theUser.group_id == 8) {
                     directors.push(theUser)
                 }else if(theUser.group_id == 2) {
                     chiefEditors.push(theUser)
-                }else if(theUser.group_id == 3) {
+                }else if(theUser.group_id == 7) {
                     managingEditors.push(theUser)
                 }else if(theUser.group_id == 4) {
                     editorials.push(theUser)
@@ -457,7 +457,7 @@ class UserController {
                 authors: []
             }
             for(let user of users) {
-                if(user.group_id==4) {
+                if(user.group_id==7) {
                     statics.managingEdiors.push(user)
                 }else if(user.group_id==3) {
                     statics.reviewers.push(user)
