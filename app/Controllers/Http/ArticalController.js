@@ -1521,18 +1521,20 @@ class ArticalController {
                     tmp = tmp[1].split('"')[0]
                     href= tmp
                 }
-                extension = (href.split('.')[1])?href.split('.')[1]:'png'
-                alt = ''
-                tmp = out.substring(m.index+1).toLowerCase().split('alt="')
-                if(tmp.length>1) {
-                    tmp = tmp[1].split('"')[0]
-                    alt= tmp
+                if(href.indexOf('data')<0 && href!='') {
+                    extension = (href.split('.')[1])?href.split('.')[1]:'png'
+                    alt = ''
+                    tmp = out.substring(m.index+1).toLowerCase().split('alt="')
+                    if(tmp.length>1) {
+                        tmp = tmp[1].split('"')[0]
+                        alt= tmp
+                    }
+                    retmp = new RegExp(m[0], 'g')
+                    imageTmp = imageTemp.replace(/#index#/g, index).replace(/#src#/g, baseDir + href)
+                    .replace(/#title#/g, alt).replace(/#extension#/g, extension)
+                    out = out.replace(retmp, `${ imageTmp}`)
+                    index++                            
                 }
-                retmp = new RegExp(m[0], 'g')
-                imageTmp = imageTemp.replace(/#index#/g, index).replace(/#src#/g, baseDir + href)
-                .replace(/#title#/g, alt).replace(/#extension#/g, extension)
-                out = out.replace(retmp, `${ imageTmp}`)
-                index++
             }
         } while (m)
         //\images
