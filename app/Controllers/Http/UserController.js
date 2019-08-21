@@ -717,8 +717,10 @@ class UserController {
             selected_user = await User.query().where('id', selected_user.id).where('status', 'enabled').with('groups.group').with('groups.journal').first()
             selected_user.email = request.all()['email']
             selected_user.academic_page = request.all()['academic_page']
-            selected_user.group_id = request.all()['group_id']
-            selected_user.journal_id = request.all()['journal_id']
+            if(request.all()['group_id'])
+                selected_user.group_id = request.all()['group_id']
+            if(request.all()['journal_id'])
+                selected_user.journal_id = request.all()['journal_id']
             selected_user.university_institute = request.all()['university_institute']
             selected_user.fname = request.all()['fname']
             selected_user.lname = request.all()['lname']
