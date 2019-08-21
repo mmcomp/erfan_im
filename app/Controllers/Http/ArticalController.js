@@ -2,6 +2,7 @@
 
 const Artical = use('App/Models/Artical')
 const ArticleKeyword = use('App/Models/ArticleKeyword')
+const ArticleComment = use('App/Models/ArticleComment')
 const Journal = use('App/Models/Journal')
 const JournalKeyword = use('App/Models/JournalKeyword')
 const User = use('App/Models/User')
@@ -267,26 +268,19 @@ class ArticalController {
             article_id: mainArticle.id,
         }).first()
 
-        if(user.group_id!==1 && user.group_id!==8) {
+        if(user.group_id!==1 && user.group_id!==8 && !userEditor) {
             if((user.group_id===2 || user.group_id===7) && user.journal_id!==mainArticle.journal_id) {
                 session.put('msg', 'Article Is Not Accessable For You')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
-            }else if(user.group_id===6 && (user.journal_id!==mainArticle.journal_id || !userEditor)) {
-                session.put('msg', 'Article Is Not Accessable For You')
-                session.put('msg_type', 'danger')
-                return response.redirect('/')
-            // }else if(user.group_id===6 && user.journal_id===mainArticle.journal_id && userEditor && userEditor.status!='active') {
-            //     session.put('msg', 'You did not accept to Edit this Aticle')
-            //     session.put('msg_type', 'danger')
-            //     return response.redirect('/')
-            }else if(user.group_id!==2 && user.group_id!==6 && user.group_id!==7) {
+            }else{
                 session.put('msg', 'Access Restricted')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
             }
         }
 
+        let articleComment = await ArticleComment.query().where('users_edits_id', userEditor.id).first()
 
         const citiations = await mainArticle.getScholar()
 
@@ -699,6 +693,26 @@ class ArticalController {
                 console.log('s13')
                 await mainArticle.save()
                 article.gdoi = request.all()['the_doi']
+            }else if(request.all()['review']) {
+                if(user.group_id!=5 && user.group_id!=6 && user.group_id!=4) {
+                    session.put('msg', 'You can not comment on this article')
+                    session.put('msg_type', 'danger')
+                    return response.redirect('/article_id/' + article.id)
+                }
+                const review = request.all()['review']
+                if(!review || review=='') {
+                    session.put('msg', 'Your comment is not acceptable')
+                    session.put('msg_type', 'danger')
+                    return response.redirect('/article_id/' + article.id)
+                }
+                    
+                if(!articleComment) {
+                    articleComment = new ArticleComment
+                    articleComment.users_edits_id = userEditor.id
+                }
+                articleComment.comment = review
+                await articleComment.save()
+
             }else {
                 if(request.all()['shared_on_social']) {
                     mainArticle.shared_on_social = 1
@@ -846,6 +860,7 @@ class ArticalController {
             keyword: keyword,
             dkeywords: dkeywords,
             hasPre,
+            review: (articleComment)?articleComment.comment:'',
         })
     }
 
