@@ -717,7 +717,6 @@ class ArticalController {
                 console.log('s14')
                 await mainArticle.save()
             }
-            /*
             if(!itsPre) {
                 ArticalController.genPdf(mainArticle.id)
             }else {
@@ -728,7 +727,6 @@ class ArticalController {
                 baseDir = baseDir.substring(1)
                 docx.docxToPdf(baseDir + '/public/pdf/' + filename, 'gen_' + article.id)
             }
-            */
         }
 
 
