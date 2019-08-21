@@ -138,7 +138,7 @@
                         <input type="file" class="form-control c-square c-theme" name="image_path" id="image_path3">
                       </div>
                     </div>
-                    @if((user.group_id == 1) || (user.group_id == 2 && user.id!=selected_user.id && user.journal_id==selected_user.journal_id))
+                    @if((user.group_id == 1) || (user.group_id == 2 && user.id!=selected_user.id && user.journal_id==selected_user.journal_id) || (user.group_id == 7 && user.id!=selected_user.id && user.journal_id==selected_user.journal_id))
                     <div class="form-group">
                       <label for="inputPassword3" class="col-md-4 control-label">User Access Level</label>
                       <div class="col-md-6">
