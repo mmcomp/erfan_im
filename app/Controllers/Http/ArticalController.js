@@ -213,6 +213,28 @@ class ArticalController {
         return response.route('artical_create', {isLogged: isLogged})
     }
 
+    async removeAuthor ({ response, session, params}) {
+        let isLogged = false, user = {}
+        if(session.get('user')) {
+            isLogged = true
+            user = session.get('user')
+            if(user.group_id!=1 && user.group_id!=2) {
+                session.put('msg', 'You do not have sufficient access to revoke an author from an article')
+                session.put('msg_type', 'danger')
+                return response.route('home', {isLogged: isLogged})
+            }
+        }else {
+            session.put('msg', 'You need to Login or Signup first')
+            session.put('msg_type', 'danger')
+            return response.route('home', {isLogged: isLogged})
+        }
+
+        let userArticle = await UserArticle.query().where('article_id', params.article_id).where('users_id', params.user_id).delete()
+        console.log(userArticle)
+
+        return response.redirect('/article_id/' + params.article_id)
+    }
+
     async profile ({ view, response, session, request, params }) {
         let isLogged = false, user = {}
         if(session.get('user')) {
@@ -327,6 +349,13 @@ class ArticalController {
         if(request.method()=='POST') {
             let itsPre = false
             if(request.all()['position']) {
+                console.log('Authors change')
+                console.log(request.all())
+                if(!request.all()['email']) {
+                    session.put('msg', 'Email is required')
+                    session.put('msg_type', 'danger')
+                    return response.redirect('/article_id/' + article.id)
+                }
                 let theAuthor = await User.query().where('email', request.all()['email']).first()
                 if(!theAuthor) {
                     theAuthor = new User
@@ -349,6 +378,8 @@ class ArticalController {
                         theAuthor.tell = request.all()['tell']
                     await theAuthor.save()
                 }
+                console.log('the author')
+                console.log(theAuthor.toJSON())
                 if(request.all()['position']=='corresponding') {
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
                     if(!userArticle) {
@@ -358,6 +389,7 @@ class ArticalController {
                     }
                     userArticle.position =  'corresponding'
                     await userArticle.save()
+                    console.log('user editor id', userArticle.id)
                 }else if(request.all()['position']=='first'){
                     await UserArticle.query().where('article_id', article.id).where('position', 'first').delete()
                     let userArticle = await UserArticle.query().where('users_id', theAuthor.id).where('article_id', article.id).first()
@@ -371,7 +403,7 @@ class ArticalController {
                     mainArticle.user_id = user.id
                     mainArticle.author_id = theAuthor.id
                     mainArticle.citiations = citiations
-                    console.log('s1')
+                    // console.log('s1')
                     await mainArticle.save()
                     mainArticle = await Artical.query().with('journal').with('author').with('editors').where('id', parseInt(params.article_id, 10)).first()
                     article = mainArticle.toJSON()
@@ -685,6 +717,7 @@ class ArticalController {
                 console.log('s14')
                 await mainArticle.save()
             }
+            /*
             if(!itsPre) {
                 ArticalController.genPdf(mainArticle.id)
             }else {
@@ -695,6 +728,7 @@ class ArticalController {
                 baseDir = baseDir.substring(1)
                 docx.docxToPdf(baseDir + '/public/pdf/' + filename, 'gen_' + article.id)
             }
+            */
         }
 
 

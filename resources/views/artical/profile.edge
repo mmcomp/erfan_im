@@ -131,28 +131,66 @@
                     <ul>
                       @if(article.author)
                       <li>
-                        First Author : <a href="/author/{{ article.author.fname }}-{{ article.author.lname }}">
-                        {{ article.author.fname }} {{ article.author.lname }}</a>
+                        First Author : 
+                        @if(article.author.name_index==0)
+                        <a href="/author/{{ article.author.fname.replace(/-/g,'_') }}-{{ article.author.lname.replace(/-/g,'_') }}">
+                          {{ article.author.fname }} {{ article.author.lname }}
+                        </a>
+                        @else
+                        <a href="/author/{{ article.author.fname.replace(/-/g,'_') }}-{{ article.author.lname.replace(/-/g,'_') }}-{{ article.author.name_index }}">
+                          {{ article.author.fname }} {{ article.author.lname }}
+                        </a>
+                        @endif
                       </li>
                       @endif
                       @each(artco in article.co)
                       <li>
-                        Co-Author : <a href="/author/{{ artco.fname }}-{{ artco.lname }}">
-                        {{ artco.fname }} {{ artco.lname }}</a>
+                        Co-Author : 
+                        @if(artco.name_index==0)
+                        <a href="/author/{{ artco.fname.replace(/-/g,'_') }}-{{ artco.lname.replace(/-/g,'_') }}">
+                          {{ artco.fname }} {{ artco.lname }}
+                        </a>
+                        @else
+                        <a href="/author/{{ artco.fname.replace(/-/g,'_') }}-{{ artco.lname.replace(/-/g,'_') }}-{{ artco.name_index }}">
+                          {{ artco.fname }} {{ artco.lname }}
+                        </a>
+                        @endif
+                        @if(user.group_id===1 || user.group_id===2)
+                        <a href="/remove_author/{{article.id}}/{{artco.id}}" class="del-btn" style="color: red;">
+                          <i class="fa fa-minus-circle"></i>
+                        </a>
+                        @endif
                       </li>
                       @endeach
-                      @if(article.corresponding.length==1)
+                      @each(cores in article.corresponding)
                       <li>
-                        Corresponding Author * : <a href="/author/{{ article.corresponding[0].fname }}-{{ article.corresponding[0].lname }}">
-                        {{ article.corresponding[0].fname }} {{ article.corresponding[0].lname }} *</a>
+                        Corresponding Author 
+                        @each(counts in range($loop.index+1))
+                          *
+                        @endeach
+                         : 
+                          @if(cores.name_index==0)
+                          <a href="/author/{{ cores.fname.replace(/-/g,'_') }}-{{ cores.lname.replace(/-/g,'_') }}">
+                            {{ cores.fname }} {{ cores.lname }} 
+                            @each(counts in range($loop.index+1))
+                              *
+                            @endeach
+                          </a>
+                          @else
+                          <a href="/author/{{ cores.fname.replace(/-/g,'_') }}-{{ cores.lname.replace(/-/g,'_') }}-{{ cores.name_index }}">
+                            {{ cores.fname }} {{ cores.lname }} 
+                            @each(counts in range($loop.index+1))
+                              *
+                            @endeach
+                          </a>
+                          @endif
+                          @if(user.group_id===1 || user.group_id===2)
+                          <a href="/remove_author/{{article.id}}/{{cores.id}}" class="del-btn" style="color: red;">
+                            <i class="fa fa-minus-circle"></i>
+                          </a>
+                          @endif
                       </li>
-                      @endif
-                      @if(article.corresponding.length==2)
-                      <li>
-                        Corresponding Author ** : <a href="/author/{{ article.corresponding[1].fname }}-{{ article.corresponding[1].lname }}">
-                        {{ article.corresponding[1].fname }} {{ article.corresponding[1].lname }} **</a>
-                      </li>
-                      @endif
+                      @endeach
                     </ul>
                   </p>
                   @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8)
@@ -277,40 +315,40 @@
                                 <label for="corresponding-salut" class="control-label">Write Salutation here e.g.
                                   Dr./Prof./Prof.Dr./Mr</label>
                                 <input name="salutation" type="text" class="form-control c-square" id="corresponding-salut"
-                                  value="{{ (article.first.salutation)?article.first.salutation:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> First Name e.g. Muhammad</label>
                                 <input name="fname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ (article.first.fname)?article.first.fname:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-name" class="control-label"> Last Name e.g. Irfan</label>
                                 <input name="lname" type="text" class="form-control c-square" id="corresponding-name"
-                                  value="{{ (article.first.lname)?article.first.lname:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-department" class="control-label">Department e.g. Department
                                   of Biology</label>
                                 <input name="department" type="text" class="form-control c-square" id="corresponding-department"
-                                  value="{{ (article.first.department)?article.first.department:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-university" class="control-label">Institute/University e.g.
                                   University of Oxford</label>
                                 <input name="university_institute" type="text" class="form-control c-square" id="corresponding-university"
-                                  value="{{ (article.first.university_institute)? article.author.university_institute:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
                                 <input name="email" type="text" class="form-control c-square" id="corresponding-email"
-                                  value="{{ (article.first.email)?article.first.email:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="corresponding-number" class="control-label">Corresponding number e.g.
                                   +10123456789</label>
                                 <input name="tell" type="text" class="form-control c-square" id="corresponding-number"
-                                  value="{{ (article.first.tell)?article.first.tell:'' }}">
+                                  value="">
                               </div>
                             </form>
                           </div>
@@ -340,20 +378,25 @@
                               {{ csrfField() }}
                               <input type="hidden" name="position" value="co" />
                               <div class="form-group">
+                                <label for="coauthor-email" class="control-label">Email e.g. abc@abc.ac.uk</label>
+                                <input name="email" type="text" class="form-control c-square" id="coauthor-email"
+                                  value="">
+                              </div>
+                              <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> First Name e.g. Muhammad</label>
                                 <input name="fname" type="text" class="form-control c-square" id="coauthor-1-name"
-                                  value="{{ (article.co.fname)?article.co.fname:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="coauthor-1-name" class="control-label"> Last Name e.g. Irfan</label>
                                 <input name="lname" type="text" class="form-control c-square" id="coauthor-1-name"
-                                  value="{{ (article.co.lname)?article.co.lname:'' }}">
+                                  value="">
                               </div>
                               <div class="form-group">
                                 <label for="coauthor-1-university" class="control-label">Institute/University e.g.
                                   University of Oxford</label>
                                 <input name="university_institute" type="text" class="form-control c-square" id="coauthor-1-university"
-                                  value="{{ (article.co.university_institute)?article.co.university_institute:'' }}">
+                                  value="">
                               </div>
                             </form>
                           </div>
@@ -1375,6 +1418,9 @@
     $(".new-editor").prop('disabled', true);
     $(document).ready(function () {
       docReady = true;
+      $('a.del-btn').click(function() {
+        return confirm('Are you sure?')
+      })
     });
     function removeRef(ref_id) {
       if(confirm('Are you sure?')) {

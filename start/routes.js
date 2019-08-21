@@ -51,6 +51,8 @@ Route.any('article/:article_name', 'ArticalController.publish')
 
 Route.any('keyword_check/:journal_id', 'ArticalController.keywordCheck')
 
+Route.get('remove_author/:article_id/:user_id', 'ArticalController.removeAuthor')
+
 
 Route.get('test/:id', 'UserController.test')
 
