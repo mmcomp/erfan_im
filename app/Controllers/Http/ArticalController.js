@@ -273,11 +273,11 @@ class ArticalController {
                 session.put('msg', 'Article Is Not Accessable For You')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
-            }else{
+            }/*else{
                 session.put('msg', 'Access Restricted')
                 session.put('msg_type', 'danger')
                 return response.redirect('/')
-            }
+            }*/
         }
 
         let articleComment = await ArticleComment.query().where('users_edits_id', userEditor.id).first()
