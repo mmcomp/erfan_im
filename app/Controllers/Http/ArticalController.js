@@ -280,7 +280,10 @@ class ArticalController {
             }*/
         }
 
-        let articleComment = await ArticleComment.query().where('users_edits_id', userEditor.id).first()
+        let articleComment
+        if(userEditor) {
+            articleComment = await ArticleComment.query().where('users_edits_id', userEditor.id).first()
+        }
 
         const citiations = await mainArticle.getScholar()
 
