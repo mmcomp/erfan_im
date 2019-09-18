@@ -11,6 +11,7 @@ const word2pdf = require('word2pdf')
 const pandoc = require('node-pandoc')
 const { exec } = require('child_process');
 const pdfZam = require('./pdf')
+const Helpers = use('Helpers')
 let addressIndex = 0
 
 module.exports = {
@@ -193,12 +194,13 @@ module.exports = {
     },
     // PDF
     fillTemplateWord: function(data, outputname, images) {
-      let baseDirAr = __dirname.split('/'), baseDir = ''
-      let theImages = images
-      for(var i = baseDirAr.length - 4;i>=0;i--) {
-        baseDir = '/' + baseDirAr[i] + baseDir
-      }
-      baseDir = baseDir.substring(1)
+      // let baseDirAr = __dirname.split('/'), baseDir = ''
+      // let theImages = images
+      // for(var i = baseDirAr.length - 4;i>=0;i--) {
+      //   baseDir = '/' + baseDirAr[i] + baseDir
+      // }
+      // baseDir = baseDir.substring(1)
+      const baseDir = Helpers.publicPath().replace('/public', '')
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.docx')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.docx')
       }
@@ -285,11 +287,12 @@ module.exports = {
           cb(tmp)
         }
       }
-      let baseDirAr = __dirname.split('/'), baseDir = ''
-      for(var i = baseDirAr.length - 4;i>=0;i--) {
-        baseDir = '/' + baseDirAr[i] + baseDir
-      }
-      baseDir = baseDir.substring(1)
+      // let baseDirAr = __dirname.split('/'), baseDir = ''
+      // for(var i = baseDirAr.length - 4;i>=0;i--) {
+      //   baseDir = '/' + baseDirAr[i] + baseDir
+      // }
+      // baseDir = baseDir.substring(1)
+      const baseDir = Helpers.publicPath().replace('/public', '')
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.pdf')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.pdf')
       }
@@ -343,11 +346,12 @@ module.exports = {
     },
 
     docxToEpub: function(docxfile, outputname) {
-      let baseDirAr = __dirname.split('/'), baseDir = ''
-      for(var i = baseDirAr.length - 4;i>=0;i--) {
-        baseDir = '/' + baseDirAr[i] + baseDir
-      }
-      baseDir = baseDir.substring(1)
+      // let baseDirAr = __dirname.split('/'), baseDir = ''
+      // for(var i = baseDirAr.length - 4;i>=0;i--) {
+      //   baseDir = '/' + baseDirAr[i] + baseDir
+      // }
+      // baseDir = baseDir.substring(1)
+      const baseDir = Helpers.publicPath().replace('/public', '')
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.epub')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.epub')
       }
