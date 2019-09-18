@@ -1301,8 +1301,8 @@ class ArticalController {
                     })
                 }
                 affIndex++
+                authorsClassified.first[0]['aff_index'] = affIndex
             }
-            authorsClassified.first[0]['aff_index'] = affIndex
             theData.author_affs = authorAffs
             theData.authors = []
             let firstAuthor = true
