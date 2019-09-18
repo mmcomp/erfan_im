@@ -280,7 +280,7 @@ module.exports = {
       async function checkStatus(jobId, cb) {
         const tmp = await pdfConverter.checkStatus(jobId)
         console.log('Check Status', tmp)
-        if(tmp.status!='successful') {
+        if(tmp.status!='successful' && tmp.status!='failed') {
           setTimeout(async function() {
             await checkStatus(jobId, cb)
           }, 10000)

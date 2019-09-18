@@ -1422,10 +1422,10 @@ class ArticalController {
             console.log('All Images', allImages)
             let docxfile = await docx.fillTemplateWord(theData, 'gen_' + article_id, allImages)
             console.log('Docx file Result', docxfile)
-            let pdfResult = await docx.docxToPdf(docxfile, 'gen_' + article_id)
-            console.log('Pdf Result', pdfResult)
-            let epubResult = await docx.docxToEpub(docxfile, 'gen_' + article_id)
-            console.log('Epub Result', epubResult)
+            // let pdfResult = await docx.docxToPdf(docxfile, 'gen_' + article_id)
+            // console.log('Pdf Result', pdfResult)
+            // let epubResult = await docx.docxToEpub(docxfile, 'gen_' + article_id)
+            // console.log('Epub Result', epubResult)
             return true
         }catch(e) {
             console.log('Pdf Error')
