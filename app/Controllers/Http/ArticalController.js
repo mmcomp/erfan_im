@@ -1130,7 +1130,7 @@ class ArticalController {
         let out = '<w:p>', refName = ''
         for(let i = 0;i < refs.length;i++) {
             refName = '#_ENREF_' + (i+1)
-            out += `<w:bookmarkStart w:id="0" w:name="${ refName }"/><w:r><w:t>${i+1} - ${ refs[i] }</w:t></w:r><w:bookmarkEnd w:id="0"/><w:br/><w:br/>`
+            out += `<w:bookmarkStart w:id="0" w:name="${ refName }"/><w:r><w:t>${i+1} - ${ refs[i].replace(/&/g, '') }</w:t></w:r><w:bookmarkEnd w:id="0"/><w:br/><w:br/>`
         }
         out += '</w:p>'
         return out
