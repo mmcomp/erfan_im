@@ -195,7 +195,7 @@ module.exports = {
     // PDF
     fillTemplateWord: function(data, outputname, images) {
       // let baseDirAr = __dirname.split('/'), baseDir = ''
-      // let theImages = images
+      let theImages = images
       // for(var i = baseDirAr.length - 4;i>=0;i--) {
       //   baseDir = '/' + baseDirAr[i] + baseDir
       // }
