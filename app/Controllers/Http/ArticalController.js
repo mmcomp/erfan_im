@@ -1290,7 +1290,7 @@ class ArticalController {
                     authorsClassified[userArticle.position].push(userArticle.user)
                 // }
             }
-            if(authorsClassified.first[0]) {
+            if(authorsClassified.first) {
                 affIndex = affs.indexOf(authorsClassified.first[0].department + ((authorsClassified.first[0].university_institute && authorsClassified.first[0].university_institute!='')?' ,' + authorsClassified.first[0].university_institute:'') + ((authorsClassified.first[0].country)?' ,' + authorsClassified.first[0].country.COUNTRY_NAME:''))
                 if(affIndex<0) {
                     affIndex = affs.length
