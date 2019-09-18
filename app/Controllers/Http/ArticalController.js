@@ -1383,7 +1383,7 @@ class ArticalController {
             console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_introduction = theXML.xml
-            
+            /*
             theXML = ArticalController.html2xml(theArticle.material)
             console.log('material:')
             console.log(theXML.images)
@@ -1412,7 +1412,7 @@ class ArticalController {
             if(theArticle.refs.length>0) {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }
-
+            */
             theData.the_doi = theData.global_doi + '/' + theData.journal_doi + '.' + theData.article_doi
             if(theData.gdoi) {
                 theData.the_doi = theData.gdoi
