@@ -1396,13 +1396,13 @@ class ArticalController {
             console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_disc = theXML.xml
-            */
 
             theXML = ArticalController.html2xml(theArticle.ack)
             console.log('ack:')
             console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_ack = theXML.xml
+            */
 
             theXML = ArticalController.html2xml(theArticle.results)
             console.log('results:')
