@@ -1408,13 +1408,9 @@ class ArticalController {
             allImages = allImages.concat(theXML.images)
             theData.article_material = theXML.xml
 
-            /*
-            
-
             if(theArticle.refs.length>0) {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }
-            */
             
             theData.the_doi = theData.global_doi + '/' + theData.journal_doi + '.' + theData.article_doi
             if(theData.gdoi) {
