@@ -293,7 +293,6 @@
                     </div>
                     -->
                   </p>
-
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#authorModel-2" data-whatever="bootstrap">Add/Edit First Author</button>
@@ -507,6 +506,7 @@
                   <p>
                     {{ article.abstract }}
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#abstractModel" data-whatever="bootstrap">Add/Edit Abstract</button>
@@ -538,9 +538,11 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_3_content">
                   <p>{{{ article.introduction }}}</p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#introductionModel" data-whatever="bootstrap">Add/Edit
@@ -573,11 +575,13 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_4_content">
                   <p>
                     {{{ article.material }}}
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#materialModel" data-whatever="bootstrap">Add/Edit
@@ -610,11 +614,13 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_5_content">
                   <p>
                     {{{ article.results }}}
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#resultModel" data-whatever="bootstrap">Add/Edit Results</button>
@@ -646,11 +652,13 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_6_content">
                   <p>
                     {{{ article.disc }}}
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#discussionModel" data-whatever="bootstrap">Add/Edit
@@ -683,11 +691,13 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_7_content">
                   <p>
                     {{{ article.ack }}}
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase"
                       data-toggle="modal" data-target="#acknowledgeModel" data-whatever="bootstrap">Add/Edit
@@ -719,6 +729,7 @@
                       </div>
                     </div>
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane
                 @if(open_refs==true)
@@ -729,6 +740,7 @@
                   <p>
                     {{--{ article.ref }--}}
                     @each(theRef in article.refs)
+                    @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                     <div class="input-group">
                       <span class="input-group-addon">{{ $loop.index+1 }}</span>
                       <input id="ref_{{ $loop.index }}" name="ref_{{ $loop.index }}" value="{{ theRef }}" type="text" class="form-control ref-data" placeholder="Username" aria-describedby="basic-addon1">
@@ -737,12 +749,20 @@
                       <span class="input-group-addon" onclick="moveDown({{ $loop.index }});"><i class="fa fa-caret-down" style="color: green;cursor: pointer;"></i></span>
                       <span class="input-group-addon" onclick="selectRef({{ $loop.index }});"><i id="ref-chk-{{ $loop.index }}" class="fa fa-square" style="color: rgb(61, 186, 235);cursor: pointer;"></i></span>
                     </div>
+                    @else
+                    <div>
+                      {{ theRef }}
+                    </div>
+                    @endif
                     @endeach
+                    @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1">+</span>
                       <input id="ref_new" name="ref_new" value="" type="text" class="form-control" placeholder="New Reference" aria-describedby="basic-addon1">
                     </div>
+                    @endif
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                       <button onclick="saveRef();" type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
                         save
@@ -791,10 +811,12 @@
                     </div>
                     -->
                   </p>
+                  @endif
                 </div>
                 <div class="tab-pane" id="tab_1_9_content">
                   <p>
                     @each(theKeyword in dkeywords)
+                    @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                     <div class="input-group">
                       <span class="input-group-addon">{{ $loop.index+1 }}</span>
                       <input id="keyword_{{ $loop.index }}" name="keyword_{{ $loop.index }}" value="{{ theKeyword }}" type="text" class="form-control keyword-data" aria-describedby="basic-addon1">
@@ -802,22 +824,32 @@
                       <span class="input-group-addon" onclick="moveUpK({{ $loop.index }});"><i class="fa fa-caret-up" style="color: green;cursor: pointer;"></i></span>
                       <span class="input-group-addon" onclick="moveDownK({{ $loop.index }});"><i class="fa fa-caret-down" style="color: green;cursor: pointer;"></i></span>
                     </div>
+                    @else
+                    <div>
+                      {{ theKeyword }}
+                    </div>
+                    @endif
                     @endeach
+                    @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                     <div class="input-group">
                       <span class="input-group-addon" id="basic-addon1">+</span>
                       <input id="keyword_new" name="keyword_new" value="" type="text" class="form-control" placeholder="New Keyword" aria-describedby="basic-addon1">
                     </div>
+                    @endif
                   </p>
+                  @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
                   <p>
                     <button onclick="saveKeyword();" type="button" class="btn c-btn-green c-btn-border-2x c-btn-square c-btn-bold c-btn-uppercase">
                       save
                     </button>
                   </p>
+                  @endif
                 </div>
               </div>
             </div>
           </div>
         </div>
+        @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8 || user.group_id===6)
         <div class="c-content-panel">
           <form method="post" enctype="multipart/form-data">
             {{ csrfField() }}
@@ -864,8 +896,8 @@
                 </div>
               </div>
             </div>
+          </form>
         </div>
-        </form>
         <br />
         <h1>
           Edit Titles
@@ -910,6 +942,7 @@
             Upload Image
           </button>
         </form>
+        @endif
         @if(user.group_id===1 || user.group_id===2 || user.group_id===7 || user.group_id===8)
         <br/>
         <hr/>
@@ -994,7 +1027,7 @@
                 @each(editor in article.editors)
                 @if(editor.comments.length>0)
                 <li>
-                  <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
+                  <a onclick="$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
                     ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
                   <div id="comment_{{ editor.id }}" style="display:none;">
                     @each(commnt in editor.comments)
@@ -1023,7 +1056,7 @@
                 @each(editor in article.reviewers)
                 @if(editor.comments.length>0)
                 <li>
-                  <a href="javascript:$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
+                  <a onclick="$('#comment_{{ editor.id }}').toggle()">1. {{ editor.fname }} {{ editor.lname }}
                     ({{ editor.comments[editor.comments.length-1].created_at }}) </a>
                   <div id="comment_{{ editor.id }}" style="display:none;">
                     @each(commnt in editor.comments)

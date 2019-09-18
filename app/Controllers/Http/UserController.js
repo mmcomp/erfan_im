@@ -446,7 +446,10 @@ class UserController {
                 }
             }
             console.log('ArticleViews', articleViews)
-            let users = await User.query().whereNotIn('group_id', [1]).where('journal_id', user.journal_id).where('journal_id', '>', 0).fetch()
+            const journalUsers = await JournalUserGroup.query().where('journal_id', user.journal_id).pluck('users_id')
+            let users = await User.query().whereNotIn('group_id', [1]).where(function (query) {
+                query.where('journal_id', user.journal_id).orWhereIn('id', journalUsers)
+            }).fetch()
             users = users.toJSON()
             let statics = {
                 registeredUsers: users,
@@ -497,7 +500,7 @@ class UserController {
                 msg: msg,
                 msg_type: msg_type,
             })
-        }else if(user.group_id==4 || user.group_id==6){
+        }else if(user.group_id==4 || user.group_id==6 || user.group_id==5){
             let pageNumber = 1
             if(request.all()['page_number']) {
                 pageNumber = parseInt(request.all()['page_number'],10)
@@ -667,8 +670,14 @@ class UserController {
     }
 
     async profile ({ request, auth, view, response, session, params }) {
-        let user = session.get('user')
-        console.log('params', params)
+        let user, isLogged = false
+        try{
+            await auth.check()
+            user = session.get('user')
+            isLogged = true
+        }catch(e) {
+        }
+                console.log('params', params)
         console.log('URL', request.url())
         if(!params) {
             session.put('msg', 'Wrong Usage')
@@ -772,7 +781,7 @@ class UserController {
         for(let i = 1;i <= recentPublished.lastPage;i++) {
             recentPublished.pages.push(i)
         }
-        articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('citiations', 'desc').paginate(pageNumber, 10)
+        articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at').paginate(pageNumber, 10)
         let highlyCited = articles.toJSON()
         for(let tmp of highlyCited.data) {
             if(articleIds.indexOf(tmp.id)<0) {
@@ -782,6 +791,17 @@ class UserController {
         highlyCited['pages'] = []
         for(let i = 1;i <= highlyCited.lastPage;i++) {
             highlyCited.pages.push(i)
+        }
+        articles = await Artical.query().where('status', '!=', 'published').whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at').paginate(pageNumber, 10)
+        let newArticles = articles.toJSON()
+        for(let tmp of newArticles.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        newArticles['pages'] = []
+        for(let i = 1;i <= newArticles.lastPage;i++) {
+            newArticles.pages.push(i)
         }
         let userArticles = await UserArticle.query().with('user').whereIn('article_id', articleIds).fetch()
         userArticles = userArticles.toJSON()
@@ -793,12 +813,13 @@ class UserController {
         session.forget('msg')
         session.forget('msg_type')
         return view.render('admin.user', {
-            isLogged: true, 
-            user: user, 
+            isLogged, 
+            user, 
             selected_user: selected_user.toJSON(),
             articles : {
                 recentPublished: recentPublished,
-                highlyCited: highlyCited
+                highlyCited: highlyCited,
+                newArticles,
             },
             user_articles: userArticles,
             allJournals: allJournals.toJSON(),

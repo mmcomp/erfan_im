@@ -16,7 +16,10 @@
           /
         </li>
         <li class="c-state_active">
-          {{ selected_user.fname }}-{{ selected_user.lname }} <a id="edit-save" href="javascript:changeMode();">(Edit)</a>
+          {{ selected_user.fname }}-{{ selected_user.lname }} 
+          @if(isLogged)
+          <a id="edit-save" href="javascript:changeMode();">(Edit)</a>
+          @endif
         </li>
       </ul>
     </div>
@@ -39,7 +42,7 @@
             </p>
             <a href="{{ (selected_user.academic_page)?selected_user.academic_page:'#' }}" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">Academic
               Profile Page</a>
-            @if(user.group_id!=5 && user.id == selected_user.id)
+            @if(user.id == selected_user.id)
             <a href="/admin" class="btn btn-md c-btn-border-2x c-btn-square c-theme-btn c-btn-uppercase c-btn-bold">
               Dashboard
             </a>
@@ -70,6 +73,7 @@
           <!-- End-->
         </div>
         <div class="col-md-6">
+          @if(isLogged)
           <div class="edit-mode c-content-v-center c-bg-red" data-height="height">
             <div class="c-wrapper">
               <div class="c-content-panel">
@@ -190,6 +194,7 @@
               </div>
             </div>
           </div>
+          @endif
           <div class="view-mode c-content-v-center c-bg-red" data-height="height">
               <div class="c-wrapper">
                   <div class="c-body">
@@ -258,6 +263,9 @@
                     <li>
                       <a href="#blog_popular_posts_2" data-toggle="tab">Highly Cited</a>
                     </li>
+                    <li>
+                      <a href="#blog_new_posts_2" data-toggle="tab">New Submitted</a>
+                    </li>
                   </ul>
                   <div class="tab-content">
                     <div id="blog_recent_posts_2" class="tab-pane fade in active">
@@ -272,8 +280,8 @@
                               <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                             </div>
                             <div class="c-author">
-                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
-                                  art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">
+                                {{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
                               <div class="c-comments">
                                 <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
                                 &nbsp&nbsp
@@ -337,8 +345,8 @@
                               <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
                             </div>
                             <div class="c-author">
-                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">{{
-                                  art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                              By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">
+                                {{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
                               <div class="c-comments">
                                 <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
                                 &nbsp&nbsp
@@ -366,6 +374,48 @@
                         </ul>
                       </div>
                     </div>
+                    <div id="blog_new_posts_2" class="tab-pane fade">
+                        @each(art in articles.newArticles.data)
+                        <div class="item">
+                          <div class="c-content-blog-post-card-1 c-option-2">
+                            <div class="c-body">
+                              <div class="c-panel">
+                                DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{art.doi?artdoi:'' }}</span>
+                              </div>
+                              <div class="c-title c-font-uppercase c-font-bold">
+                                <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
+                                <span style="color: rgb(166, 166, 255);">[{{ art.status }}]</span>
+                              </div>
+                              <div class="c-author">
+                                By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">
+                                  {{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                                <div class="c-comments">
+                                  <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
+                                  &nbsp&nbsp
+                                  <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length}} </a>&nbsp&nbsp
+                                  <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{art.downloads }}</a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        @endeach
+                        <div class="c-body">
+                          <ul class="c-content-pagination c-theme">
+                            <li class="c-prev">
+                              <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                            </li>
+                            @each(pg in articles.newArticles.pages)
+                            <li @if(pg==articles.newArticles.page) class="c-active" @endif>
+                              <a href="?page_number={{ pg }}">{{ pg }}</a>
+                            </li>
+                            @endeach
+                            <li class="c-next">
+                              <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
                   </div>
                 </div>
               </div>
@@ -731,6 +781,7 @@
 @!component('components.scripts')
 <script>
   function changeMode() {
+    @if(isLogged)
     if($("#edit-save").text()=='(Edit)') {
       $("#edit-save").text('(Save)');
       $(".view-mode").hide();
@@ -738,6 +789,17 @@
     }else {
       $("#frm1").submit();
     }
+    @else
+    if($("#edit-save").text()=='(View)') {
+      $("#edit-save").text('(Hide)');
+      $(".view-mode").hide();
+      $(".edit-mode").show();
+    }else {
+      $("#edit-save").text('(View)');
+      $(".view-mode").show();
+      $(".edit-mode").hide();
+    }
+    @endif
   }
   function deleteUser(user_id) {
     if(confirm('Are You sure?!')) {

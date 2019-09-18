@@ -615,6 +615,8 @@ class ArticalController {
                     editorId = assignEditor.id
                 }
                 if(editorId>0) {
+                    assignEditor.journal_id = mainArticle.journal_id
+                    await assignEditor.save()
                     let userArticleEditor = await UserArticleEditor.query().where('users_id', editorId).where('article_id', article.id).first()
                     if(!userArticleEditor) {
                         userArticleEditor = new UserArticleEditor
@@ -1719,7 +1721,7 @@ class ArticalController {
                 authorAffs.push({
                     index: affIndex+1,
                     name: authorsClassified.first[0].department,
-                    country: authorsClassified.first[0].country.COUNTRY_NAME,
+                    country: (authorsClassified.first[0].country)?authorsClassified.first[0].country.COUNTRY_NAME:'',
                 })
             }
             affIndex++
