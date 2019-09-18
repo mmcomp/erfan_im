@@ -519,12 +519,12 @@ class JournalController {
             await partner.save()
         }
         partner = partner.toJSON()
-        console.log('The Partner', partner)
+        // console.log('The Partner', partner)
         let top_users = await Database.raw(`select id uid, users.*, (select count(*) from users_article where users_id = uid) aid from users where university_institute = '${ partnerName }' and status = 'enabled'`)
         top_users = top_users[0]
         const userIds = await User.query().where('university_institute', partnerName).pluck('id')
-        console.log('top users')
-        console.log(top_users)
+        // console.log('top users')
+        // console.log(top_users)
 
         let pageNumber = 1
         if(request.all()['page_number']) {
@@ -541,6 +541,7 @@ class JournalController {
         }
         let articleIds = []
         let otherUserArticles = await UserArticle.query().whereIn('users_id', userIds).pluck('article_id')
+
         let articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {
@@ -564,15 +565,19 @@ class JournalController {
             highlyCited.pages.push(i)
         }
 
+        let citation = await Artical.query().whereIn('id', articleIds).sum('citiations')
+        citation = citation[0]['sum(`citiations`)']
+        // console.log('citation', citation)
+
         return view.render('journal.partner', {
             top_users,
             partner,
             isLogged: isLogged,
             user: user,
             partners: [partner],
-            number_of_articles: 0,
-            number_of_authers: 0,
-            number_of_citiations: 0,
+            number_of_articles: articleIds.length,
+            number_of_authers: userIds.length,
+            number_of_citiations: citation,
             articles : {
                 recentPublished: recentPublished,
                 highlyCited: highlyCited,
