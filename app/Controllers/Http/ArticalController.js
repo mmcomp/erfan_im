@@ -1265,9 +1265,9 @@ class ArticalController {
             theData.header_author = theArticle.author.lname
             let authorCount = 1
             let authorsClassified = {
-                // first: [
-                //     theArticle.author,
-                // ],
+                first: [
+                    theArticle.author,
+                ],
             }
             let authorAffs = [], affs = [], affIndex
             for(let userArticle of theAuthors) {
