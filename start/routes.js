@@ -36,6 +36,8 @@ Route.post('journal_remove', 'JournalController.remove')
 
 Route.get('partners', 'JournalController.partners')
 
+Route.any('partner/:partner', 'JournalController.partner')
+
 Route.any('keyword/:keyword', 'JournalController.keyword')
 
 

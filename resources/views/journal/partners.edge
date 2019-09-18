@@ -55,18 +55,18 @@
         <div class="cbp-item">
           <div class="cbp-caption">
             <div class="cbp-caption-defaultWrap">
-              <img src="assets/base/img/content/stock/60.jpg" alt="">
+              <img src="assets/base/img/content/stock2/04.jpg" alt="">
             </div>
             <div class="cbp-caption-activeWrap">
               <div class="cbp-l-caption-alignCenter">
                 <div class="cbp-l-caption-body">
-                  <a href="ajax/projects/project1.html" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
+									<a href="/partner/{{ urlEncode(partner.university_institute) }}" class="cbp-singlePage cbp-l-caption-buttonLeft btn btn-sm c-btn-square c-btn-border-1x c-btn-white c-btn-uppercase">See Details</a>
                 </div>
               </div>
             </div>
           </div>
           <div class="cbp-l-grid-projects-title">
-            {{ partner.university_institute }}
+							<a href="/partner/{{ urlEncode(partner.university_institute) }}" >{{ partner.university_institute }}</a>
           </div>
           <div class="cbp-l-grid-projects-desc">
             @if(partner.country)

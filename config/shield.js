@@ -109,7 +109,7 @@ module.exports = {
   | Learn more at https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   |
   */
-  nosniff: true,
+  nosniff: false,
 
   /*
   |--------------------------------------------------------------------------

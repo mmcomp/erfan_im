@@ -9,6 +9,8 @@ const Database = use('Database')
 const Helpers = use('Helpers')
 const User = use('App/Models/User')
 const Artical = use('App/Models/Artical')
+const UserArticle = use('App/Models/UserArticle')
+const Partner = use('App/Models/Partner')
 const docx = require('./docx')
 
 class JournalController {
@@ -509,38 +511,72 @@ class JournalController {
             user = session.get('user')
         }
 
-        let partners = await User.query().select('university_institute').groupBy('university_institute').fetch()
-        partners =  partners.toJSON()
+        const partnerName = decodeURIComponent(params.partner)
+        let partner = await Partner.query().where('name', partnerName).with('user').first()
+        if(!partner) {
+            partner = new Partner
+            partner.name = partnerName
+            await partner.save()
+        }
+        partner = partner.toJSON()
+        console.log('The Partner', partner)
+        let top_users = await Database.raw(`select id uid, users.*, (select count(*) from users_article where users_id = uid) aid from users where university_institute = '${ partnerName }' and status = 'enabled'`)
+        top_users = top_users[0]
+        const userIds = await User.query().where('university_institute', partnerName).pluck('id')
+        console.log('top users')
+        console.log(top_users)
 
-        params.partner = params.partner.replace(/-/g, ' ')
-        // let users = await User.query().where('university_institute', params.partner).pluck('id')
-        let theQuery = "select users.id uid, fname, lname, count(article.id) aid from article left join users on (users.id=author_id) where university_institute = '" + params.partner + "' order by count(article.id) desc limit 10"
-        let result = await Database.raw(theQuery)
-        result = result[0]
-        let numberOfArticles = 0
-        for(let res of result) {
-            numberOfArticles += res.aid
+        let pageNumber = 1
+        if(request.all()['page_number']) {
+            pageNumber = parseInt(request.all()['page_number'],10)
+            if(isNaN(pageNumber)) {
+                pageNumber = 1
+            }
         }
-        theQuery = "select sum('citiation') sc from article left join users on (author_id=users.id) where university_institute = '" + params.partner + "'"
-        let citResult = await Database.raw(theQuery)
-        citResult = citResult[0][0]['sc']
-        // console.log('Cit Result', theQuery, citResult)
-        if(citResult === null){
-            citResult = '0'
+        if(request.all()['page_move']) {
+            let page_move = parseInt(request.all()['page_move'],10)
+            if(!isNaN(page_move) && (pageNumber + page_move) >= 1) {
+                pageNumber += page_move
+            }
         }
-        numberOfArticles = String(numberOfArticles)
-        let numberOfAuthers = await User.query().where('university_institute', params.partner).count()
-        numberOfAuthers = numberOfAuthers[0]['count(*)']
-        // console.log(numberOfAuthers)
+        let articleIds = []
+        let otherUserArticles = await UserArticle.query().whereIn('users_id', userIds).pluck('article_id')
+        let articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
+        let recentPublished = articles.toJSON()
+        for(let tmp of recentPublished.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        recentPublished['pages'] = []
+        for(let i = 1;i <= recentPublished.lastPage;i++) {
+            recentPublished.pages.push(i)
+        }
+        articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at').paginate(pageNumber, 10)
+        let highlyCited = articles.toJSON()
+        for(let tmp of highlyCited.data) {
+            if(articleIds.indexOf(tmp.id)<0) {
+                articleIds.push(tmp.id)
+            }
+        }
+        highlyCited['pages'] = []
+        for(let i = 1;i <= highlyCited.lastPage;i++) {
+            highlyCited.pages.push(i)
+        }
+
         return view.render('journal.partner', {
-            top_users: result,
-            partner: params.partner,
+            top_users,
+            partner,
             isLogged: isLogged,
             user: user,
-            partners: partners,
-            number_of_articles: numberOfArticles,
-            number_of_authers: numberOfAuthers,
-            number_of_citiations: citResult
+            partners: [partner],
+            number_of_articles: 0,
+            number_of_authers: 0,
+            number_of_citiations: 0,
+            articles : {
+                recentPublished: recentPublished,
+                highlyCited: highlyCited,
+            },
         })
     }
 

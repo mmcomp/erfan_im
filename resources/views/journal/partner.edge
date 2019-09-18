@@ -6,7 +6,7 @@
   <div class="c-layout-breadcrumbs-1 c-fonts-uppercase c-fonts-bold c-bordered c-bordered-both" style="margin-top: 150px;">
     <div class="container">
       <div class="c-page-title c-pull-left">
-        <h3 class="c-font-uppercase c-font-bold">{{ partner }}</h3>
+        <h3 class="c-font-uppercase c-font-bold">{{ partner.name }}</h3>
       </div>
       <ul class="c-page-breadcrumbs c-theme-nav c-pull-right c-fonts-regular">
         <li>
@@ -16,7 +16,7 @@
           /
         </li>
         <li class="c-state_active">
-          Publishing Partners
+          {{ partner.name }}
         </li>
       </ul>
     </div>
@@ -41,39 +41,24 @@
                 </div>
               </div>
               <div class="c-title c-font-bold c-font-uppercase">
-                <p>{{ partner }}</p>
+                <p>{{ partner.name }}</p>
               </div>
               <div class="c-panel c-margin-b-30">
                 <div class="c-author">
-                  <a href="#">Muhammad Irfan, <span class="c-font-uppercase">International Relation Officer</span></a>
+                  @if(partner.user)
+                    <a href="/profile/{{ partner.user.id }}">{{ partner.user.fname }} {{ partner.user.lname }} ,<span class="c-font-uppercase">International Relation Officer</span></a>
+                  @endif
                 </div>
                 <div class="c-comments">
-                  <a href="#"><i class="icon-globe"></i> http://intr.um.ac.ir</a>
+                  @if(partner.url)
+                    <a href="{{ partner.url }}"><i class="icon-globe"></i> {{ partner.url }}</a>
+                  @endif
                 </div>
               </div>
               <div class="c-desc">
-                <p>
-                  Lorem ipsum dolor sit amet, coectetuer diam ipsum dolor sit amet nonummy coectetuer diam ipsum dolor
-                  sit coectetuer adipiscing elit amipiscing elit sit adipiscing consectetuer ipsum dolor sit amipiscing
-                  elit sit amet, sit amet, coectetuer adipiscing elit adipiscing consectetuer ipsum dolor sit amet diam
-                  nonummy adipiscing elit sit amet, sit ame.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, coectetuer diam ipsum dolor sit amet nonummy coectetuer diam ipsum dolor
-                  sit coectetuer adipiscing elit adipiscing consectetuer ipsum dolor sit amipiscing elit sit amet, sit
-                  amet, coectetuer adipiscing elit adipiscing consectetuer ipsum dolor sit amet diam nonummy adipiscing
-                  elit sit amet, sit ame.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, coectetuer diam ipsum dolor sit amet nonummy coectetuer diam ipsum dolor
-                  sit coectetuer adipiscing elit adipiscing const sit amet, sit amet, coectetuer adipiscing elit
-                  adipiscing consectetuer ipsum dolor sit amet diam nonummy adipiscing elit sit amet, sit ame.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, coe coectetuer diam ipsum dolor sit coectetuer adipiscing elit adipiscing
-                  consectetuer ipsum dolor sit amipiscing elit sit amet, sit amet, coectetuer adipiscing elit
-                  adipiscing consectetuer ipsum dolor sit amet diam nonummy adipiscing elit sit amet, sit ame.
-                </p>
+                  @if(partner.description)
+                  {{ partner.description }}
+                  @endif
               </div>
             </div>
           </div>
@@ -98,164 +83,110 @@
                 @each(us in top_users)
                 @if(us.lname && us.aid > 0)
                 <li>
-                <a href="/author/{{ us.fname }}-{{ us.lname }}">{{ us.fname }} {{ us.lname }} ({{ us.aid }})</a>
+                @if(us.name_index==0)
+                <a href="/author/{{ us.fname.replace(/-/g,'_') }}-{{ us.lname.replace(/-/g,'_') }}">{{ us.fname }} {{ us.lname }} ({{ us.aid }})</a>
+                @else
+                <a href="/author/{{ us.fname.replace(/-/g,'_') }}-{{ us.lname.replace(/-/g,'_') }}-{{ us.name_index }}">{{ us.fname }} {{ us.lname }} ({{ us.aid }})</a>
+                @endif
                 </li>
                 @endif
                 @endeach
-                <!--
-              <li>
-                <a href="#">Mehrdad Mirsamei (13)</a>
-              </li>
-              <li>
-                <a href="#">Mohsin Karimi (11)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (10)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (9)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (8)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (5)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (3)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan (2)</a>
-              </li>
-              <li>
-                <a href="#">Muhammad Irfan(2)</a>
-              </li>
-                -->
             </ul>
           </div>
           <div class="c-content-tab-1 c-theme c-margin-t-30">
-            <div class="nav-justified">
-              <ul class="nav nav-tabs nav-justified">
-                <li class="active">
-                  <a href="#blog_recent_posts" data-toggle="tab">Recent Articles</a>
-                </li>
-                <li>
-                  <a href="#blog_popular_posts" data-toggle="tab">Highly Cited</a>
-                </li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane active" id="blog_recent_posts">
-                    Recent
-                <!--
-                  <ul class="c-content-recent-posts-1">
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/09.jpg" alt="" class="img-responsive">
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
+              <div class="nav-justified">
+                <ul class="nav nav-tabs nav-justified">
+                  <li class="active">
+                    <a href="#blog_recent_posts_2" data-toggle="tab">Recent Published</a>
+                  </li>
+                  <li>
+                    <a href="#blog_popular_posts_2" data-toggle="tab">Highly Cited</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div id="blog_recent_posts_2" class="tab-pane fade in active">
+                    @each(art in articles.recentPublished.data)
+                    <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                        <div class="c-body">
+                          <div class="c-panel">
+                            DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{art.doi?artdoi:'' }}</span>
+                          </div>
+                          <div class="c-title c-font-uppercase c-font-bold">
+                            <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
+                          </div>
+                          <div class="c-author">
+                            By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">
+                              {{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                            <div class="c-comments">
+                              <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
+                              &nbsp&nbsp
+                              <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length}} </a>&nbsp&nbsp
+                              <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{art.downloads }}</a>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/08.jpg" alt="" class="img-responsive">
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
+                    </div>
+                    @endeach
+                    <div class="c-body">
+                      <ul class="c-content-pagination c-theme">
+                        <li class="c-prev">
+                          <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        @each(pg in articles.recentPublished.pages)
+                        <li @if(pg==articles.recentPublished.page) class="c-active" @endif>
+                          <a href="?page_number={{ pg }}">{{ pg }}</a>
+                        </li>
+                        @endeach
+                        <li class="c-next">
+                          <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div id="blog_popular_posts_2" class="tab-pane fade">
+                    @each(art in articles.highlyCited.data)
+                    <div class="item">
+                      <div class="c-content-blog-post-card-1 c-option-2">
+                        <div class="c-body">
+                          <div class="c-panel">
+                            DOI <a href="https://doi.org/{{ art.doi?artdoi:'' }}"><span class="c-font-uppercase">{{art.doi?artdoi:'' }}</span>
+                          </div>
+                          <div class="c-title c-font-uppercase c-font-bold">
+                            <a href="/article/{{ art.running_title.replace(/ /g, '-') }}">{{ art.full_title }}</a>
+                          </div>
+                          <div class="c-author">
+                            By <a href="/journal_request/{{ art.journal_id }}"><span class="c-font-uppercase">
+                              {{ art.journal.name }}</span></a> on <span class="c-font-uppercase">{{ art.updated_at }}</span>
+                            <div class="c-comments">
+                              <a href="#"><span class="icon-eye" aria-hidden="true"></span> {{ art.views }} </a>
+                              &nbsp&nbsp
+                              <a href="#"><span class="icon-note" aria-hidden="true"></span> {{ art.comments.length}} </a>&nbsp&nbsp
+                              <a href="#"><span class="icon-cloud-download " aria-hidden="true"></span> {{art.downloads }}</a>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/07.jpg" alt="" class="img-responsive">
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/32.jpg" alt="" class="img-responsive">
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                -->
-                </div>
-                <div class="tab-pane fade" id="blog_popular_posts">
-                    Pop
-                <!--
-                  <ul class="c-content-recent-posts-1">
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/34.jpg" class="img-responsive" alt="" />
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2017... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/37.jpg" class="img-responsive" alt="" />
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/32.jpg" class="img-responsive" alt="" />
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="c-image">
-                        <img src="assets/base/img/content/stock/54.jpg" class="img-responsive" alt="" />
-                      </div>
-                      <div class="c-post">
-                        <a href="" class="c-title">
-                          UX Design Expo 2015... </a>
-                        <div class="c-date">
-                          27 Jan 2015
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                -->
-                </div>
+                    </div>
+                    @endeach
+                    <div class="c-body">
+                      <ul class="c-content-pagination c-theme">
+                        <li class="c-prev">
+                          <a href="?page_move=-1"><i class="fa fa-angle-left"></i></a>
+                        </li>
+                        @each(pg in articles.highlyCited.pages)
+                        <li @if(pg==articles.highlyCited.page) class="c-active" @endif>
+                          <a href="?page_number={{ pg }}">{{ pg }}</a>
+                        </li>
+                        @endeach
+                        <li class="c-next">
+                          <a href="?page_move=1"><i class="fa fa-angle-right"></i></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
               </div>
-            </div>
           </div>
           <div class="c-content-ver-nav">
             <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">

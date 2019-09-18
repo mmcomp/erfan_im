@@ -677,7 +677,7 @@ class UserController {
             isLogged = true
         }catch(e) {
         }
-                console.log('params', params)
+        console.log('params', params)
         console.log('URL', request.url())
         if(!params) {
             session.put('msg', 'Wrong Usage')
@@ -698,6 +698,7 @@ class UserController {
             }
             console.log('Fname', fname, 'Lname', lname, 'name_index', name_index)
             selected_user = await User.query().where('status', 'enabled').where('fname', fname).where('lname', lname).where('name_index', name_index).with('groups.group').with('groups.journal').first()
+            console.log('Selected User', selected_user)
         }else if(params.author_id) {
             selected_user = await User.query().where('id', params.author_id).where('status', 'enabled').with('groups.group').with('groups.journal').first()
         }else {
