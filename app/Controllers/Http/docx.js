@@ -201,6 +201,7 @@ module.exports = {
       // }
       // baseDir = baseDir.substring(1)
       const baseDir = Helpers.publicPath().replace('/public', '')
+      console.log('BASE DIR', baseDir)
       if(fs.existsSync(baseDir + '/public/pdf/' + outputname + '.docx')) {
         fs.unlinkSync(baseDir + '/public/pdf/' + outputname + '.docx')
       }
