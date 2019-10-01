@@ -325,6 +325,18 @@ class ArticalController {
                 console.log('s17')
                 await mainArticle.save()
             }
+        }else {
+            let theFirstAuthor = await UserArticle.query().where('article_id', mainArticle.id).where('position', 'first').first()
+            if(!theFirstAuthor) {
+                theFirstAuthor = new UserArticle
+                theFirstAuthor.article_id = mainArticle.id
+                theFirstAuthor.position = 'first'
+                theFirstAuthor.users_id = mainArticle.author_id
+                await theFirstAuthor.save()
+            }else if(theFirstAuthor.users_id != mainArticle.author_id) {
+                mainArticle.author_id = theFirstAuthor.users_id
+                await mainArticle.save()
+            }
         }
         // if(user.group_id!=1 && user.journal_id!=mainArticle.journal_id) {
         //     session.put('msg', 'You do not have permission to this article')
