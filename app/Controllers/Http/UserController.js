@@ -461,7 +461,7 @@ class UserController {
                 institutesUniversities: [],
                 authors: []
             }
-            const reviewerEditors = await JournalUserGroup.query().whereIn('article_id', artIds).pluck('users_id')
+            const reviewerEditors = await UserArticleEditor.query().whereIn('article_id', artIds).pluck('users_id')
             for(let user of users) {
                 if(user.group_id==7) {
                     statics.managingEdiors.push(user)
