@@ -45,6 +45,7 @@
     "node-pandoc": "^0.3.0",
     "node-stream-zip": "^1.8.0",
     "nodemailer": "^5.1.1",
+    "nodepie": "^0.7.0",
     "open-docxtemplater-image-module": "^1.0.3",
     "phantom": "^6.0.3",
     "randomatic": "^3.1.1",

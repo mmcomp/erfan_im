@@ -12,6 +12,8 @@ const Artical = use('App/Models/Artical')
 const UserArticle = use('App/Models/UserArticle')
 const Partner = use('App/Models/Partner')
 const docx = require('./docx')
+const NodePie = require("nodepie")
+const axios = require('axios')
 
 class JournalController {
     async index ({ view, session }) {
@@ -512,13 +514,59 @@ class JournalController {
         }
 
         const partnerName = decodeURIComponent(params.partner)
-        let partner = await Partner.query().where('name', partnerName).with('user').first()
-        if(!partner) {
-            partner = new Partner
-            partner.name = partnerName
-            await partner.save()
+        let thePartner = await Partner.query().where('name', partnerName).with('user').first()
+        if(!thePartner) {
+            thePartner = new Partner
+            thePartner.name = partnerName
+            await thePartner.save()
         }
-        partner = partner.toJSON()
+        console.log('method', request.method())
+        if(request.method()=='POST') {
+            let officer
+            if(request.input('officer')) {
+                officer = await User.query().where('email', request.input('officer')).first()
+                if(!officer) {
+                    officer = new User
+                    officer.university_institute = thePartner.name
+                    officer.fname = 'Officer of'
+                    officer.lname = thePartner.name
+                    officer.email = request.input('officer')
+                    await officer.save()
+                }
+            }
+            thePartner.url = request.input('url', '')
+            thePartner.description = request.input('description', '')
+            thePartner.rss = request.input('rss', null)
+            if(officer) {
+                thePartner.officer_id = officer.id
+            }
+            await thePartner.save()
+            thePartner = await Partner.query().where('id', thePartner.id).with('user').first()
+        }
+        let feedData = []
+        if(thePartner.rss && thePartner.rss!='') {
+            try {
+                const res = await axios(thePartner.rss)
+                let xml, feed
+                xml = res.data
+                feed = new NodePie(xml)
+                feed.init()
+                // console.log(feed.getTitle());
+                feed.getItems(0, 3).forEach(function(item){
+                  // console.log(item.getTitle());
+                  // console.log(feed.getPermalink());
+                  feedData.push({
+                    title: item.getTitle(),
+                    link: item.getPermalink()
+                  })
+                })
+                console.log('Feed Data', feedData)   
+            }catch(e) {
+                console.log('Rss Error', e)
+            }
+        }
+
+        let partner = thePartner.toJSON()
         // console.log('The Partner', partner)
         let top_users = await Database.raw(`select id uid, users.*, (select count(*) from users_article where users_id = uid) aid from users where university_institute = '${ partnerName }' and status = 'enabled'`)
         top_users = top_users[0]
@@ -582,6 +630,8 @@ class JournalController {
                 recentPublished: recentPublished,
                 highlyCited: highlyCited,
             },
+            user,
+            feedData,
         })
     }
 

@@ -776,7 +776,7 @@ class UserController {
         }
         let articleIds = []
         let otherUserArticles = await UserArticle.query().where('users_id', selected_user.id).pluck('article_id')
-        console.log('Article Ids', otherUserArticles)
+        // console.log('Article Ids', otherUserArticles)
         let articles = await Artical.query().where('status', 'published')/*.where('author_id', selected_user.id)*/.whereIn('id', otherUserArticles).with('journal').with('comments').orderBy('created_at', 'desc').paginate(pageNumber, 10)
         let recentPublished = articles.toJSON()
         for(let tmp of recentPublished.data) {

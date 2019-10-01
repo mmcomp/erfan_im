@@ -42,6 +42,20 @@
               </div>
               <div class="c-title c-font-bold c-font-uppercase">
                 <p>{{ partner.name }}</p>
+                @if(user.group_id==1)
+                <form method="post">
+                  {{ csrfField() }}
+                  <label>Description:<label><br/>
+                  <textarea name="description" class="editor">{{ partner.description }}</textarea><br/>
+                  <input type="hidden" name="partner_id" value="{{ partner.id }}" />
+                  <input id="rss" name="rss" placeholder="RSS" value="{{ partner.rss }}" />
+                  <input id="url" name="url" placeholder="Partner URL" value="{{ partner.url }}" />
+                  <input id="officer" name="officer" placeholder="Officer Email Address" value="{{ partner.user.email }}" />
+                  <button>
+                    Save
+                  </button>
+                </form>
+                @endif
               </div>
               <div class="c-panel c-margin-b-30">
                 <div class="c-author">
@@ -57,7 +71,7 @@
               </div>
               <div class="c-desc">
                   @if(partner.description)
-                  {{ partner.description }}
+                  {{{ partner.description }}}
                   @endif
               </div>
             </div>
@@ -190,11 +204,18 @@
           </div>
           <div class="c-content-ver-nav">
             <div class="c-content-title-1 c-theme c-title-md c-margin-t-40">
-              <h3 class="c-font-bold c-font-uppercase">News from {{ partner }}</h3>
+              <h3 class="c-font-bold c-font-uppercase">News from {{ partner.name }}</h3>
               <div class="c-line-left c-theme-bg">
               </div>
             </div>
             <ul class="c-menu c-arrow-dot c-theme">
+
+              @each(rs in feedData)
+                <li>
+                  <a href="{{ rs.link }}">{{ rs.title }}</a>
+                </li>
+              @endeach
+              <!--
               <li>
                 <a href="#">Fasion & Arts</a>
               </li>
@@ -210,6 +231,7 @@
               <li>
                 <a href="#">Frontend Development</a>
               </li>
+              -->
             </ul>
           </div>
           <!-- END: CONTENT/BLOG/BLOG-SIDEBAR-1 -->
@@ -260,6 +282,15 @@
 @!component('components.foot')
 
 @!component('components.articals_create_scripts', {msg: msg, msg_type: msg_type})
+<script src="/assets/plugins/ckeditor/ckeditor.js"></script>
+<script src="/assets/plugins/jquery-ui.js"></script>
+<script>
+  CKEDITOR.disableAutoInline = true;
+  var ckIns;
+  $(".editor").each(function (id, field) {
+    CKEDITOR.replace( field )
+  });
+</script>
 </body>
 
 </html>
