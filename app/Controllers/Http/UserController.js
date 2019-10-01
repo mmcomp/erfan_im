@@ -433,6 +433,7 @@ class UserController {
             articles = articles.toJSON()
             let newlySubmitedArticles = [], underReviewArticles = [], publishedArticles = [], articleViews = 0
             let articleDownloads = 0, articleCitiations = 0
+            let artIds = []
             for(let art of articles) {
                 if(art.status == 'submitted') {
                     newlySubmitedArticles.push(art)
@@ -444,6 +445,7 @@ class UserController {
                 }else {// if(art.status == 'under_review') {
                     underReviewArticles.push(art)
                 }
+                artIds.push(art.id)
             }
             console.log('ArticleViews', articleViews)
             const journalUsers = await JournalUserGroup.query().where('journal_id', user.journal_id).pluck('users_id')
@@ -459,11 +461,10 @@ class UserController {
                 institutesUniversities: [],
                 authors: []
             }
+            const reviewerEditors = await JournalUserGroup.query().whereIn('article_id', artIds).pluck('users_id')
             for(let user of users) {
                 if(user.group_id==7) {
                     statics.managingEdiors.push(user)
-                }else if(user.group_id==3) {
-                    statics.reviewers.push(user)
                 }else if(user.group_id==5) {
                     statics.authors.push(user)
                 }else if(user.group_id==6) {
@@ -474,6 +475,9 @@ class UserController {
                 }
                 if(countries.indexOf(user.country_id)<0) {
                     countries.push(user.country_id)
+                }
+                if(reviewerEditors.indexOf(user.id)) {
+                    statics.reviewers.push(user)
                 }
             }
             console.log('Countries', countries)
