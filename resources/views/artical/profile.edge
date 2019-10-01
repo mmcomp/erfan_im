@@ -1009,6 +1009,11 @@
                   <a href="/author/{{ editor.fname}}-{{ editor.lname}}">{{ editor.fname}} {{ editor.lname}}</a>
                 </li>
                 @endeach
+                @each(editor in article.reviewers)
+                <li>
+                  <a href="/author/{{ editor.fname}}-{{ editor.lname}}">{{ editor.fname}} {{ editor.lname}}</a>
+                </li>
+                @endeach
                 <li>
                   <a href="#" data-toggle="modal" data-target="#assignModal" data-whatever="bootstrap">
                     <span class="label label-danger c-font-slim c-font-uppercase c-font-bold">
