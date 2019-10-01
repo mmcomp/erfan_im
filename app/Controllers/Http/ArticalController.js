@@ -263,6 +263,8 @@ class ArticalController {
             return response.redirect('/admin')
         }
 
+        console.log(mainArticle.toJSON())
+
         const userEditor = await UserArticleEditor.query().where({
             users_id: user.id,
             article_id: mainArticle.id,
