@@ -529,6 +529,7 @@ class UserController {
             }
             let articleIds = []
             let userArticles = await UserArticleEditor.query().where('users_id', user.id).pluck('article_id')
+            console.log('Article Ids', userArticles)
             let articles = await Artical.query().where(function () {
                 if(searchTitle!='') {
                     this
