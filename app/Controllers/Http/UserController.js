@@ -810,7 +810,7 @@ class UserController {
         for(let i = 1;i <= newArticles.lastPage;i++) {
             newArticles.pages.push(i)
         }
-        let userArticles = await UserArticle.query().with('user').whereIn('article_id', articleIds).fetch()
+        let userArticles = await UserArticle.query().with('user').where('users_id', '!=', selected_user.id).whereIn('article_id', articleIds).fetch()
         userArticles = userArticles.toJSON()
         // console.log('Recently : ', recentPublished)
         let allJournals = await Journal.all()
