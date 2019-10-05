@@ -1045,11 +1045,11 @@ class ArticalController {
                 tmp = out.substring(m.index+1).toLowerCase().split('href="')
                 if(tmp.length>1) {
                     tmp = tmp[1].split('"')[0]
-                    if(tmp.indexOf('#')==0) {
+                    // if(tmp.indexOf('#')==0) {
                         href= tmp
                         retmp = new RegExp(m[0], 'g')
                         out = out.replace(retmp, `</w:t></w:r><w:hyperlink w:anchor="${ href }"><w:r><w:rPr><w:rStyle w:val="Hyperlink"/></w:rPr><w:t>`)
-                    }
+                    // }
                 }
             }
         } while (m)
