@@ -452,6 +452,8 @@ class UserController {
             let users = await User.query().whereNotIn('group_id', [1]).where(function (query) {
                 query.where('journal_id', user.journal_id).orWhereIn('id', journalUsers)
             }).fetch()
+            console.log('Journal Users')
+            console.log(users)
             users = users.toJSON()
             let statics = {
                 registeredUsers: users,
