@@ -387,6 +387,7 @@ class ArticalController {
                         theAuthor.university_institute = request.all()['university_institute']
                     if(request.all()['tell'] && request.all()['tell']!='')
                         theAuthor.tell = request.all()['tell']
+                    theAuther.journal_id = mainArticle.journal_id
                     await theAuthor.save()
                 }
                 console.log('the author')
@@ -496,6 +497,7 @@ class ArticalController {
                     assignEditor.lname = request.all()['editor_lname']
                     assignEditor.email = request.all()['editor_email']
                     assignEditor.password = '123456'
+                    assignEditor.journal_id = mainArticle.journal_id
                     await assignEditor.save()
                 }
                 let userArticleEditor = await UserArticleEditor.query().where('users_id', assignEditor.id).where('article_id', article.id).first()
