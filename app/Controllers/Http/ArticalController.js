@@ -1392,7 +1392,7 @@ class ArticalController {
                 theData.article_keywords = '<w:p><w:r><w:t></w:t></w:r></w:p>'
             }
             
-
+            /*
             console.log('Check Images')
             theXML = ArticalController.html2xml(theArticle.introduction)
             console.log('Introduction:')
@@ -1423,7 +1423,7 @@ class ArticalController {
             console.log(theXML.images)
             allImages = allImages.concat(theXML.images)
             theData.article_material = theXML.xml
-
+            */
             if(theArticle.refs.length>0) {
                 theData.article_references = ArticalController.ref2xml(theArticle.refs)
             }

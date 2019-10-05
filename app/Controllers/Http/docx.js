@@ -280,7 +280,7 @@ module.exports = {
       async function checkStatus(jobId, cb) {
         const tmp = await pdfConverter.checkStatus(jobId)
         console.log('Check Status', tmp)
-        if(tmp.status!='successful' && tmp.status!='failed') {
+        if(tmp.status!='successful' && tmp.status!='failed' && tmp.status!='error') {
           setTimeout(async function() {
             await checkStatus(jobId, cb)
           }, 10000)
@@ -303,8 +303,10 @@ module.exports = {
       jobID = jobID.id
       await checkStatus(jobID, function(tmp) {
         console.log('Downloading ', tmp)
-        let fileId = tmp.target_files[0].id
-        pdfConverter.getPdf(fileId, baseDir + '/public/pdf/' + outputname + '.pdf')
+        if(tmp.target_files && tmp.target_files[0]) {
+          let fileId = tmp.target_files[0].id
+          pdfConverter.getPdf(fileId, baseDir + '/public/pdf/' + outputname + '.pdf')  
+        }
       })
       // return await pdfConverter.convertDocxToPdf(docxfile, baseDir + '/public/pdf/' + outputname + '.pdf')
       /*
