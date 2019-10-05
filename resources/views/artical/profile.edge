@@ -1389,7 +1389,7 @@
       CKEDITOR.disableAutoInline = true;
       var ckIns;
       $(".editor").each(function (id, field) {
-        ckIns = CKEDITOR.replace( field.id )/*.on('dialogHide', function(evt) {
+        ckIns = CKEDITOR.replace( field )/*.on('dialogHide', function(evt) {
           console.log('dialog hide', evt);
           $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('show');
         }).on('dialogShow', function(evt) {
@@ -1397,7 +1397,7 @@
           $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('hide');
         });*/
         console.log('Ckeditor Instance', ckIns);
-        /*
+        
         ckIns.on('dialogHide', function(evt) {
           console.log('dialog hide', evt);
           $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('show');
@@ -1406,7 +1406,7 @@
           console.log('dialog show', evt);
           $(evt.sender.element.$).parent().parent().parent().parent().parent().parent().modal('hide');
         });
-        */
+        
         // ClassicEditor
         //   .create(field)
         //   .then(theEditor => {
