@@ -51,7 +51,7 @@
     "randomatic": "^3.1.1",
     "request": "^2.88.0",
     "sqlite3": "^4.0.2",
-    "striptags": "^3.1.1",
+    "striptags": "^3.2.0",
     "unescape": "^1.0.1",
     "word2pdf": "^1.0.7"
   },
