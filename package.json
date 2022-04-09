@@ -39,7 +39,7 @@
     "html-entities": "^1.2.1",
     "jszip": "^2.6.1",
     "match-all": "^1.2.5",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "mysql": "^2.16.0",
     "node-html-parser": "^1.1.15",
     "node-pandoc": "^0.3.0",
