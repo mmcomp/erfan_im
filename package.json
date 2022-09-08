@@ -37,7 +37,7 @@
     "entities": "^1.1.2",
     "google-scholar": "^1.5.1",
     "html-entities": "^1.2.1",
-    "jszip": "^2.6.1",
+    "jszip": "^2.7.0",
     "match-all": "^1.2.5",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
